@@ -1,0 +1,54 @@
+
+# 1. 并发压力测试
+## 1.1 fasthttp(协程把cpu跑满)
+#Running 10s test @ http://localhost:9999/
+  1 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    76.03ms   32.01ms 327.89ms   77.08%
+    Req/Sec    82.71k    13.07k  106.74k    72.50%
+  Latency Distribution
+     50%   61.89ms
+     75%   96.88ms
+     90%  115.18ms
+     99%  187.35ms
+  806159 requests in 10.06s, 516.05MB read
+Requests/sec:  80133.43
+Transfer/sec:     51.30MB
+
+## 1.2 nginx (4 worker, 进程把cpu跑满)
+root@fanpf-VirtualBox:~/go/src/github.com/fasthttp_hyperscan/test# ./wrk.sh
+Running 10s test @ http://localhost/
+  1 threads and 10000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    99.18ms   35.32ms 401.78ms   67.59%
+    Req/Sec    84.87k     8.39k   98.36k    81.61%
+  824176 requests in 10.09s, 670.45MB read
+Requests/sec:  81672.29
+Transfer/sec:     66.44MB
+
+# 2. 延迟测试(几乎相等) nginx延迟50us < fasthttp(75us)
+## 2.1 nginx (1.58ms)
+### wrk -t 1 -c 1 -d 20s --latency  http://localhost/
+Latency    52.83us   82.21us   4.80ms   97.89%
+Requests/sec:  20451.81
+
+## 2.2 fast_hypersacan  (2.13ms)
+#Running 20s test @ http://localhost:9999/
+Latency    75.00us  197.11us   8.72ms   99.33%
+Requests/sec:  15263.14
+
+# 3. nginx反向代理 + socket + fast_http
+## 3.1 延迟测试-1(延迟 211us) NGX -> HTTP协议 -> fasthttp
+Running 20s test @ http://localhost/
+    Latency   211.50us  187.18us   7.91ms   98.37%
+    Req/Sec     4.93k   593.98     6.20k    80.00%
+
+## 3.2 延迟测试-2 (延迟 177us) NGX -> UNIX_DOMAIN -> fasthttp
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   177.42us  242.11us  11.54ms   99.04%
+    Req/Sec     6.10k   682.07     7.73k    78.11%
+
+# 总结:
++ nginx和fasthttp性能几乎相等，并发 && 延迟
++ nginx通过本机socket和unix socket延迟几乎相等（相差30us)
+
