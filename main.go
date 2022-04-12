@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+	"strconv"
 	"syscall"
 
 	"github.com/flier/gohs/hyperscan"
@@ -16,6 +17,12 @@ var (
 	addr     = flag.String("addr", ":9999", "TCP address to listen to")
 	compress = flag.Bool("compress", false, "Whether to enable transparent response compression")
 )
+
+var hsMatcher HSMatcher
+
+func init() {
+	hsMatcher.Init()
+}
 
 func main() {
 
@@ -42,6 +49,8 @@ func main() {
 		//if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
 		log.Fatalf("Error in ListenAndServeUNIX: %v", err)
 	}
+
+	hsMatcher.Fini()
 }
 
 func requestHandler(ctx *fasthttp.RequestCtx) {
@@ -60,8 +69,13 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
-	//TODO: for test
-	gohs_test(ctx.RequestURI())
+	hsctx := HSContext{Data: ctx.RequestURI()}
+
+	hsMatcher.Match(&hsctx)
+	if hsctx.Id > 0 {
+		ctx.Response.Header.Set("waf-hit-id", strconv.Itoa(int(hsctx.Id)))
+		ctx.Response.SetStatusCode(403)
+	}
 
 	ctx.SetContentType("text/plain; charset=utf8")
 
@@ -75,7 +89,7 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 	ctx.Response.Header.SetCookie(&c)
 }
 
-func on_match(id uint, from, to uint64, flags uint, context interface{}) error {
+func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
 	hsctx := context.(*HSContext)
 	hsctx.Id = id
 	hsctx.From = from
@@ -91,28 +105,46 @@ type HSContext struct {
 	To   uint64
 }
 
-// Test: curl http://localhost:9999/0123456
-func gohs_test(inputData []byte) {
+type HSMatcher struct {
+	HSDB      hyperscan.BlockDatabase
+	HSScratch *hyperscan.Scratch
+}
+
+func (self *HSMatcher) Init() (err error) {
 	pattern := hyperscan.NewPattern("1234", hyperscan.DotAll|hyperscan.SomLeftMost)
-	database, err := hyperscan.NewBlockDatabase(pattern)
+	pattern.Id = 10001
+
+	self.HSDB, err = hyperscan.NewBlockDatabase(pattern)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "ERROR: Unable to compile pattern \"%s\": %s\n", pattern, err.Error())
-		os.Exit(-1)
+		return err
 	}
-	defer database.Close()
-	scratch, err := hyperscan.NewScratch(database)
+
+	self.HSScratch, err = hyperscan.NewScratch(self.HSDB)
 	if err != nil {
 		fmt.Fprint(os.Stderr, "ERROR: Unable to allocate scratch space. Exiting.\n")
-		os.Exit(-1)
+		return err
 	}
-	defer scratch.Free()
 
-	hsctx := HSContext{Data: inputData}
-	if err := database.Scan(inputData, scratch, on_match, &hsctx); err != nil {
+	return nil
+}
+
+func (self *HSMatcher) Fini() error {
+
+	self.HSDB.Close()
+	self.HSScratch.Free()
+
+	return nil
+}
+
+// Test: curl http://localhost:9999/0123456
+func (self *HSMatcher) Match(ctx *HSContext) (err error) {
+	err = self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx)
+	if err != nil {
 		fmt.Fprint(os.Stderr, "ERROR: Unable to scan input buffer. Exiting.\n")
-		os.Exit(-1)
+		return err
 	}
-	fmt.Printf("Scanning %d bytes %s with Hyperscan Id:%d from:%d to:%d hit:[%s]\n", len(hsctx.Data), hsctx.Data, hsctx.Id, hsctx.From, hsctx.To, hsctx.Data[hsctx.From:hsctx.To])
+	//fmt.Printf("Scanning %d bytes %s with Hyperscan Id:%d from:%d to:%d hit:[%s]\n", len(hsctx.Data), hsctx.Data, hsctx.Id, hsctx.From, hsctx.To, hsctx.Data[hsctx.From:hsctx.To])
 
-	return
+	return nil
 }

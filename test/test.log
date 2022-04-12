@@ -32,10 +32,13 @@ Transfer/sec:     66.44MB
 Latency    52.83us   82.21us   4.80ms   97.89%
 Requests/sec:  20451.81
 
-## 2.2 fast_hypersacan  (2.13ms)
+## 2.2 fasthttp
 #Running 20s test @ http://localhost:9999/
 Latency    75.00us  197.11us   8.72ms   99.33%
 Requests/sec:  15263.14
+
+Latency    83.58us  270.72us  11.81ms   98.99%
+Req/Sec    15.37k     4.51k   29.69k    80.00%
 
 # 3. nginx反向代理 + socket + fast_http
 ## 3.1 延迟测试-1(延迟 211us) NGX -> HTTP协议 -> fasthttp
@@ -48,7 +51,16 @@ Running 20s test @ http://localhost/
     Latency   177.42us  242.11us  11.54ms   99.04%
     Req/Sec     6.10k   682.07     7.73k    78.11%
 
-# 总结:
+## 3.3 延迟测试-3  fasthttp + gohs  (vs http 80us ~= fasthttp + gshs )
+## Running 20s test @ http://localhost:9999/0123456
+Running 20s test @ http://localhost:9999/0123456
+  1 threads and 1 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    80.38us  264.58us  14.08ms   99.30%
+    Req/Sec    14.95k     4.29k   26.14k    77.50%
+
+## 总结:
 + nginx和fasthttp性能几乎相等，并发 && 延迟
 + nginx通过本机socket和unix socket延迟几乎相等（相差30us)
++ hyperscan + fasthttp 耗时小于1us
 

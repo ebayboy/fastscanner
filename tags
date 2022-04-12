@@ -15,6 +15,7 @@ CRITERION_THROUGHPUT	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^ 
 Clock	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Clock {$/;"	c	file:
 Clock	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^class Clock {$/;"	c	file:
 Criterion	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^enum Criterion {$/;"	g	file:
+Fini	main.go	/^func (self *HSMatcher) Fini() error {$/;"	f
 FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    FiveTuple(const struct ip *iphdr) {$/;"	f	struct:FiveTuple
 FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^struct FiveTuple {$/;"	s	file:
 FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    FiveTuple(const struct ip *iphdr) {$/;"	f	struct:FiveTuple
@@ -22,6 +23,7 @@ FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveT
 FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^struct FiveTupleHash {$/;"	s	file:
 FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTupleHash {$/;"	s	file:
 HSContext	main.go	/^type HSContext struct {$/;"	t
+HSMatcher	main.go	/^type HSMatcher struct {$/;"	t
 HS_ARCH_ERROR	libs/hyperscan/include/hs/hs_common.h	566;"	d
 HS_BAD_ALIGN	libs/hyperscan/include/hs/hs_common.h	529;"	d
 HS_BAD_ALLOC	libs/hyperscan/include/hs/hs_common.h	536;"	d
@@ -83,6 +85,8 @@ HS_TUNE_FAMILY_SKX	libs/hyperscan/include/hs/hs_compile.h	1116;"	d
 HS_TUNE_FAMILY_SLM	libs/hyperscan/include/hs/hs_compile.h	1092;"	d
 HS_TUNE_FAMILY_SNB	libs/hyperscan/include/hs/hs_compile.h	1068;"	d
 HS_UNKNOWN_ERROR	libs/hyperscan/include/hs/hs_common.h	588;"	d
+Init	main.go	/^func (self *HSMatcher) Init() (err error) {$/;"	f
+Match	main.go	/^func (self *HSMatcher) Match(ctx *HSContext) (err error) {$/;"	f
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata() {}$/;"	f	class:Sigdata
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata(const char *filename) {$/;"	f	class:Sigdata
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Sigdata {$/;"	c	file:
@@ -118,9 +122,9 @@ flags	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<unsig
 getDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    const hs_database_t *getDatabase() const {$/;"	f	class:Benchmark
 getScratchSize	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    size_t getScratchSize() const {$/;"	f	class:Benchmark
 get_original	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    const string &get_original(unsigned index) const {$/;"	f	class:Sigdata
-gohs_test	main.go	/^func gohs_test(inputData []byte) {$/;"	f
 hamming_distance	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned hamming_distance;$/;"	m	struct:hs_expr_ext
 higher_is_better	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^static bool higher_is_better(Criterion c) {$/;"	f	file:
+hsMatcher	main.go	/^var hsMatcher HSMatcher$/;"	v
 hs_alloc_t	libs/hyperscan/include/hs/hs_common.h	/^typedef void *(HS_CDECL *hs_alloc_t)(size_t size);$/;"	t
 hs_compile_error	libs/hyperscan/include/hs/hs_compile.h	/^typedef struct hs_compile_error {$/;"	s
 hs_compile_error_t	libs/hyperscan/include/hs/hs_compile.h	/^} hs_compile_error_t;$/;"	t	typeref:struct:hs_compile_error
@@ -136,6 +140,7 @@ hs_platform_info_t	libs/hyperscan/include/hs/hs_compile.h	/^} hs_platform_info_t
 hs_scratch_t	libs/hyperscan/include/hs/hs_runtime.h	/^typedef struct hs_scratch hs_scratch_t;$/;"	t	typeref:struct:hs_scratch
 hs_stream_t	libs/hyperscan/include/hs/hs_runtime.h	/^typedef struct hs_stream hs_stream_t;$/;"	t	typeref:struct:hs_stream
 ids	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<unsigned> ids;$/;"	m	class:Sigdata	file:
+init	main.go	/^func init() {$/;"	f
 main	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int main(int argc, char **argv) {$/;"	f
 main	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int main(int argc, char **argv) {$/;"	f
 main	libs/hyperscan/share/doc/hyperscan/examples/simplegrep.c	/^int main(int argc, char *argv[]) {$/;"	f
@@ -158,7 +163,7 @@ min_offset	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long min_o
 min_width	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned int min_width;$/;"	m	struct:hs_expr_info
 onMatch	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
 onMatch	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
-on_match	main.go	/^func on_match(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
+onMatch	main.go	/^func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
 openStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void openStreams() {$/;"	f	class:Benchmark
 openStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void openStreams() {$/;"	f	class:Benchmark
 operator ()	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    size_t operator()(const FiveTuple &x) const {$/;"	f	struct:FiveTupleHash
