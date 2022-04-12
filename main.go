@@ -61,7 +61,7 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
 	//TODO: for test
-	gohs_test()
+	gohs_test(ctx.RequestURI())
 
 	ctx.SetContentType("text/plain; charset=utf8")
 
@@ -76,17 +76,23 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 }
 
 func on_match(id uint, from, to uint64, flags uint, context interface{}) error {
-	inputData := context.([]byte)
+	hsctx := context.(*HSContext)
+	hsctx.Id = id
+	hsctx.From = from
+	hsctx.To = to
 
-	//pattern: 1234
-	//from:1 to:5 inputData:0123456
-
-	fmt.Printf("from:%d to:%d inputData:%s match_data:%s\n", from, to, string(inputData), inputData[from:to])
-	//fmt.Printf("%s%s%s\n", inputData[start:from], string(inputData[from:to]), inputData[to:end])
 	return nil
 }
 
-func gohs_test() {
+type HSContext struct {
+	Data []byte
+	Id   uint
+	From uint64
+	To   uint64
+}
+
+// Test: curl http://localhost:9999/0123456
+func gohs_test(inputData []byte) {
 	pattern := hyperscan.NewPattern("1234", hyperscan.DotAll|hyperscan.SomLeftMost)
 	database, err := hyperscan.NewBlockDatabase(pattern)
 	if err != nil {
@@ -101,12 +107,12 @@ func gohs_test() {
 	}
 	defer scratch.Free()
 
-	inputData := []byte("0123456")
-	fmt.Printf("Scanning %d bytes with Hyperscan\n", len(inputData))
-	if err := database.Scan(inputData, scratch, on_match, inputData); err != nil {
+	hsctx := HSContext{Data: inputData}
+	if err := database.Scan(inputData, scratch, on_match, &hsctx); err != nil {
 		fmt.Fprint(os.Stderr, "ERROR: Unable to scan input buffer. Exiting.\n")
 		os.Exit(-1)
 	}
+	fmt.Printf("Scanning %d bytes %s with Hyperscan Id:%d from:%d to:%d hit:[%s]\n", len(hsctx.Data), hsctx.Data, hsctx.Id, hsctx.From, hsctx.To, hsctx.Data[hsctx.From:hsctx.To])
 
 	return
 }

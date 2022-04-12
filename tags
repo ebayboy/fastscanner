@@ -21,6 +21,7 @@ FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    FiveTupl
 FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTuple {$/;"	s	file:
 FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^struct FiveTupleHash {$/;"	s	file:
 FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTupleHash {$/;"	s	file:
+HSContext	main.go	/^type HSContext struct {$/;"	t
 HS_ARCH_ERROR	libs/hyperscan/include/hs/hs_common.h	566;"	d
 HS_BAD_ALIGN	libs/hyperscan/include/hs/hs_common.h	529;"	d
 HS_BAD_ALLOC	libs/hyperscan/include/hs/hs_common.h	536;"	d
@@ -117,7 +118,7 @@ flags	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<unsig
 getDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    const hs_database_t *getDatabase() const {$/;"	f	class:Benchmark
 getScratchSize	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    size_t getScratchSize() const {$/;"	f	class:Benchmark
 get_original	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    const string &get_original(unsigned index) const {$/;"	f	class:Sigdata
-gohs_test	main.go	/^func gohs_test() {$/;"	f
+gohs_test	main.go	/^func gohs_test(inputData []byte) {$/;"	f
 hamming_distance	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned hamming_distance;$/;"	m	struct:hs_expr_ext
 higher_is_better	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^static bool higher_is_better(Criterion c) {$/;"	f	file:
 hs_alloc_t	libs/hyperscan/include/hs/hs_common.h	/^typedef void *(HS_CDECL *hs_alloc_t)(size_t size);$/;"	t
