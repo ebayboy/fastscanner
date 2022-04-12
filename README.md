@@ -20,3 +20,9 @@ fasthttp + hyperscan
     + cmake .. -G Ninja -DBUILD_STATIC_LIBS=on
     + ninja && ninja install
     + go get -u -tags chimera github.com/flier/gohs/hyperscan
+
+
++ gohs使用
+    + 需要指定hyerscan 安装的libhs.pc路径， libhs.pc文件包含库和头文件的路径, 默认安装到/usr/local/hyperscan
+    + export PKG_CONFIG_PATH=/usrl/local/hyperscan
+

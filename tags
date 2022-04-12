@@ -4,8 +4,216 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Benchmark	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Benchmark {$/;"	c	file:
+Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    Benchmark(const hs_database_t *streaming, const hs_database_t *block)$/;"	f	class:Benchmark
+Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^class Benchmark {$/;"	c	file:
+CRITERION_BYTECODE_SIZE	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    CRITERION_BYTECODE_SIZE,$/;"	e	enum:Criterion	file:
+CRITERION_COMPILE_TIME	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    CRITERION_COMPILE_TIME,$/;"	e	enum:Criterion	file:
+CRITERION_SCRATCH_SIZE	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    CRITERION_SCRATCH_SIZE$/;"	e	enum:Criterion	file:
+CRITERION_STREAM_STATE	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    CRITERION_STREAM_STATE,$/;"	e	enum:Criterion	file:
+CRITERION_THROUGHPUT	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    CRITERION_THROUGHPUT,$/;"	e	enum:Criterion	file:
+Clock	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Clock {$/;"	c	file:
+Clock	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^class Clock {$/;"	c	file:
+Criterion	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^enum Criterion {$/;"	g	file:
+FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    FiveTuple(const struct ip *iphdr) {$/;"	f	struct:FiveTuple
+FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^struct FiveTuple {$/;"	s	file:
+FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    FiveTuple(const struct ip *iphdr) {$/;"	f	struct:FiveTuple
+FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTuple {$/;"	s	file:
+FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^struct FiveTupleHash {$/;"	s	file:
+FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTupleHash {$/;"	s	file:
+HS_ARCH_ERROR	libs/hyperscan/include/hs/hs_common.h	566;"	d
+HS_BAD_ALIGN	libs/hyperscan/include/hs/hs_common.h	529;"	d
+HS_BAD_ALLOC	libs/hyperscan/include/hs/hs_common.h	536;"	d
+HS_CDECL	libs/hyperscan/include/hs/hs_common.h	33;"	d
+HS_CDECL	libs/hyperscan/include/hs/hs_common.h	35;"	d
+HS_COMMON_H_	libs/hyperscan/include/hs/hs_common.h	30;"	d
+HS_COMPILER_ERROR	libs/hyperscan/include/hs/hs_common.h	507;"	d
+HS_COMPILE_H_	libs/hyperscan/include/hs/hs_compile.h	30;"	d
+HS_CPU_FEATURES_AVX2	libs/hyperscan/include/hs/hs_compile.h	1027;"	d
+HS_CPU_FEATURES_AVX512	libs/hyperscan/include/hs/hs_compile.h	1035;"	d
+HS_CPU_FEATURES_AVX512VBMI	libs/hyperscan/include/hs/hs_compile.h	1044;"	d
+HS_DB_MODE_ERROR	libs/hyperscan/include/hs/hs_common.h	524;"	d
+HS_DB_PLATFORM_ERROR	libs/hyperscan/include/hs/hs_common.h	517;"	d
+HS_DB_VERSION_ERROR	libs/hyperscan/include/hs/hs_common.h	512;"	d
+HS_EXT_FLAG_EDIT_DISTANCE	libs/hyperscan/include/hs/hs_compile.h	289;"	d
+HS_EXT_FLAG_HAMMING_DISTANCE	libs/hyperscan/include/hs/hs_compile.h	292;"	d
+HS_EXT_FLAG_MAX_OFFSET	libs/hyperscan/include/hs/hs_compile.h	283;"	d
+HS_EXT_FLAG_MIN_LENGTH	libs/hyperscan/include/hs/hs_compile.h	286;"	d
+HS_EXT_FLAG_MIN_OFFSET	libs/hyperscan/include/hs/hs_compile.h	280;"	d
+HS_FLAG_ALLOWEMPTY	libs/hyperscan/include/hs/hs_compile.h	929;"	d
+HS_FLAG_CASELESS	libs/hyperscan/include/hs/hs_compile.h	875;"	d
+HS_FLAG_COMBINATION	libs/hyperscan/include/hs/hs_compile.h	1003;"	d
+HS_FLAG_DOTALL	libs/hyperscan/include/hs/hs_compile.h	885;"	d
+HS_FLAG_MULTILINE	libs/hyperscan/include/hs/hs_compile.h	896;"	d
+HS_FLAG_PREFILTER	libs/hyperscan/include/hs/hs_compile.h	977;"	d
+HS_FLAG_QUIET	libs/hyperscan/include/hs/hs_compile.h	1011;"	d
+HS_FLAG_SINGLEMATCH	libs/hyperscan/include/hs/hs_compile.h	917;"	d
+HS_FLAG_SOM_LEFTMOST	libs/hyperscan/include/hs/hs_compile.h	989;"	d
+HS_FLAG_UCP	libs/hyperscan/include/hs/hs_compile.h	949;"	d
+HS_FLAG_UTF8	libs/hyperscan/include/hs/hs_compile.h	939;"	d
+HS_H_	libs/hyperscan/include/hs/hs.h	30;"	d
+HS_INSUFFICIENT_SPACE	libs/hyperscan/include/hs/hs_common.h	578;"	d
+HS_INVALID	libs/hyperscan/include/hs/hs_common.h	487;"	d
+HS_MAJOR	libs/hyperscan/include/hs/hs.h	44;"	d
+HS_MINOR	libs/hyperscan/include/hs/hs.h	45;"	d
+HS_MODE_BLOCK	libs/hyperscan/include/hs/hs_compile.h	1162;"	d
+HS_MODE_NOSTREAM	libs/hyperscan/include/hs/hs_compile.h	1167;"	d
+HS_MODE_SOM_HORIZON_LARGE	libs/hyperscan/include/hs/hs_compile.h	1190;"	d
+HS_MODE_SOM_HORIZON_MEDIUM	libs/hyperscan/include/hs/hs_compile.h	1203;"	d
+HS_MODE_SOM_HORIZON_SMALL	libs/hyperscan/include/hs/hs_compile.h	1216;"	d
+HS_MODE_STREAM	libs/hyperscan/include/hs/hs_compile.h	1172;"	d
+HS_MODE_VECTORED	libs/hyperscan/include/hs/hs_compile.h	1177;"	d
+HS_NOMEM	libs/hyperscan/include/hs/hs_common.h	492;"	d
+HS_OFFSET_PAST_HORIZON	libs/hyperscan/include/hs/hs_runtime.h	615;"	d
+HS_PATCH	libs/hyperscan/include/hs/hs.h	46;"	d
+HS_RUNTIME_H_	libs/hyperscan/include/hs/hs_runtime.h	30;"	d
+HS_SCAN_TERMINATED	libs/hyperscan/include/hs/hs_common.h	501;"	d
+HS_SCRATCH_IN_USE	libs/hyperscan/include/hs/hs_common.h	555;"	d
+HS_SUCCESS	libs/hyperscan/include/hs/hs_common.h	478;"	d
+HS_TUNE_FAMILY_BDW	libs/hyperscan/include/hs/hs_compile.h	1100;"	d
+HS_TUNE_FAMILY_GENERIC	libs/hyperscan/include/hs/hs_compile.h	1060;"	d
+HS_TUNE_FAMILY_GLM	libs/hyperscan/include/hs/hs_compile.h	1124;"	d
+HS_TUNE_FAMILY_HSW	libs/hyperscan/include/hs/hs_compile.h	1084;"	d
+HS_TUNE_FAMILY_ICL	libs/hyperscan/include/hs/hs_compile.h	1132;"	d
+HS_TUNE_FAMILY_ICX	libs/hyperscan/include/hs/hs_compile.h	1140;"	d
+HS_TUNE_FAMILY_IVB	libs/hyperscan/include/hs/hs_compile.h	1076;"	d
+HS_TUNE_FAMILY_SKL	libs/hyperscan/include/hs/hs_compile.h	1108;"	d
+HS_TUNE_FAMILY_SKX	libs/hyperscan/include/hs/hs_compile.h	1116;"	d
+HS_TUNE_FAMILY_SLM	libs/hyperscan/include/hs/hs_compile.h	1092;"	d
+HS_TUNE_FAMILY_SNB	libs/hyperscan/include/hs/hs_compile.h	1068;"	d
+HS_UNKNOWN_ERROR	libs/hyperscan/include/hs/hs_common.h	588;"	d
+Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata() {}$/;"	f	class:Sigdata
+Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata(const char *filename) {$/;"	f	class:Sigdata
+Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Sigdata {$/;"	c	file:
+__FAVOR_BSD	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	129;"	d	file:
+__FAVOR_BSD	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	64;"	d	file:
 addr	main.go	/^	addr     = flag.String("addr", ":9999", "TCP address to listen to")$/;"	v
+buildDatabase	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static hs_database_t *buildDatabase(const vector<const char *> &expressions,$/;"	f	file:
+bytes	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    size_t bytes() const {$/;"	f	class:Benchmark
+bytes	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    size_t bytes() const {$/;"	f	class:Benchmark
+clearMatches	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void clearMatches() {$/;"	f	class:Benchmark
+clearMatches	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void clearMatches() {$/;"	f	class:Benchmark
+cloneExclude	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata cloneExclude(const set<unsigned> &excludeIndexSet) const {$/;"	f	class:Sigdata
+closeStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void closeStreams() {$/;"	f	class:Benchmark
+closeStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void closeStreams() {$/;"	f	class:Benchmark
+compileDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_database_t *compileDatabase(unsigned mode, double *compileTime) const {$/;"	f	class:Sigdata
 compress	main.go	/^	compress = flag.Bool("compress", false, "Whether to enable transparent response compression")$/;"	v
+cpu_features	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long cpu_features;$/;"	m	struct:hs_platform_info
+databasesFromFile	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void databasesFromFile(const char *filename,$/;"	f	file:
+db	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_database_t *db = nullptr;$/;"	m	class:Benchmark	file:
+db_block	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    const hs_database_t *db_block;$/;"	m	class:Benchmark	file:
+db_streaming	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    const hs_database_t *db_streaming;$/;"	m	class:Benchmark	file:
+displayStats	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void displayStats() {$/;"	f	class:Benchmark
+dstAddr	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int dstAddr;$/;"	m	struct:FiveTuple	file:
+dstAddr	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int dstAddr;$/;"	m	struct:FiveTuple	file:
+dstPort	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int dstPort;$/;"	m	struct:FiveTuple	file:
+dstPort	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int dstPort;$/;"	m	struct:FiveTuple	file:
+edit_distance	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned edit_distance;$/;"	m	struct:hs_expr_ext
+eval_set	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^double eval_set(Benchmark &bench, Sigdata &sigs, unsigned int mode,$/;"	f	file:
+eventHandler	libs/hyperscan/share/doc/hyperscan/examples/simplegrep.c	/^static int eventHandler(unsigned int id, unsigned long long from,$/;"	f	file:
+expression	libs/hyperscan/include/hs/hs_compile.h	/^    int expression;$/;"	m	struct:hs_compile_error
+flags	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long flags;$/;"	m	struct:hs_expr_ext
+flags	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<unsigned> flags;$/;"	m	class:Sigdata	file:
+getDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    const hs_database_t *getDatabase() const {$/;"	f	class:Benchmark
+getScratchSize	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    size_t getScratchSize() const {$/;"	f	class:Benchmark
+get_original	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    const string &get_original(unsigned index) const {$/;"	f	class:Sigdata
+gohs_test	main.go	/^func gohs_test() {$/;"	f
+hamming_distance	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned hamming_distance;$/;"	m	struct:hs_expr_ext
+higher_is_better	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^static bool higher_is_better(Criterion c) {$/;"	f	file:
+hs_alloc_t	libs/hyperscan/include/hs/hs_common.h	/^typedef void *(HS_CDECL *hs_alloc_t)(size_t size);$/;"	t
+hs_compile_error	libs/hyperscan/include/hs/hs_compile.h	/^typedef struct hs_compile_error {$/;"	s
+hs_compile_error_t	libs/hyperscan/include/hs/hs_compile.h	/^} hs_compile_error_t;$/;"	t	typeref:struct:hs_compile_error
+hs_database_t	libs/hyperscan/include/hs/hs_common.h	/^typedef struct hs_database hs_database_t;$/;"	t	typeref:struct:hs_database
+hs_error_t	libs/hyperscan/include/hs/hs_common.h	/^typedef int hs_error_t;$/;"	t
+hs_expr_ext	libs/hyperscan/include/hs/hs_compile.h	/^typedef struct hs_expr_ext {$/;"	s
+hs_expr_ext_t	libs/hyperscan/include/hs/hs_compile.h	/^} hs_expr_ext_t;$/;"	t	typeref:struct:hs_expr_ext
+hs_expr_info	libs/hyperscan/include/hs/hs_compile.h	/^typedef struct hs_expr_info {$/;"	s
+hs_expr_info_t	libs/hyperscan/include/hs/hs_compile.h	/^} hs_expr_info_t;$/;"	t	typeref:struct:hs_expr_info
+hs_free_t	libs/hyperscan/include/hs/hs_common.h	/^typedef void (HS_CDECL *hs_free_t)(void *ptr);$/;"	t
+hs_platform_info	libs/hyperscan/include/hs/hs_compile.h	/^typedef struct hs_platform_info {$/;"	s
+hs_platform_info_t	libs/hyperscan/include/hs/hs_compile.h	/^} hs_platform_info_t;$/;"	t	typeref:struct:hs_platform_info
+hs_scratch_t	libs/hyperscan/include/hs/hs_runtime.h	/^typedef struct hs_scratch hs_scratch_t;$/;"	t	typeref:struct:hs_scratch
+hs_stream_t	libs/hyperscan/include/hs/hs_runtime.h	/^typedef struct hs_stream hs_stream_t;$/;"	t	typeref:struct:hs_stream
+ids	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<unsigned> ids;$/;"	m	class:Sigdata	file:
+main	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int main(int argc, char **argv) {$/;"	f
+main	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int main(int argc, char **argv) {$/;"	f
+main	libs/hyperscan/share/doc/hyperscan/examples/simplegrep.c	/^int main(int argc, char *argv[]) {$/;"	f
 main	main.go	/^func main() {$/;"	f
 main	main.go	/^package main$/;"	p
+matchCount	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    size_t matchCount = 0;$/;"	m	class:Benchmark	file:
+matchCount	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    size_t matchCount;$/;"	m	class:Benchmark	file:
+match_event_handler	libs/hyperscan/include/hs/hs_runtime.h	/^typedef int (HS_CDECL *match_event_handler)(unsigned int id,$/;"	t
+matches	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    size_t matches() const {$/;"	f	class:Benchmark
+matches	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    size_t matches() const {$/;"	f	class:Benchmark
+matches_at_eod	libs/hyperscan/include/hs/hs_compile.h	/^    char matches_at_eod;$/;"	m	struct:hs_expr_info
+matches_only_at_eod	libs/hyperscan/include/hs/hs_compile.h	/^    char matches_only_at_eod;$/;"	m	struct:hs_expr_info
+max_offset	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long max_offset;$/;"	m	struct:hs_expr_ext
+max_width	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned int max_width;$/;"	m	struct:hs_expr_info
+measure_block_time	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^double measure_block_time(Benchmark &bench, unsigned int repeatCount) {$/;"	f	file:
+measure_stream_time	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^double measure_stream_time(Benchmark &bench, unsigned int repeatCount) {$/;"	f	file:
+message	libs/hyperscan/include/hs/hs_compile.h	/^    char *message;$/;"	m	struct:hs_compile_error
+min_length	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long min_length;$/;"	m	struct:hs_expr_ext
+min_offset	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long min_offset;$/;"	m	struct:hs_expr_ext
+min_width	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned int min_width;$/;"	m	struct:hs_expr_info
+onMatch	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
+onMatch	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
+on_match	main.go	/^func on_match(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
+openStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void openStreams() {$/;"	f	class:Benchmark
+openStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void openStreams() {$/;"	f	class:Benchmark
+operator ()	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    size_t operator()(const FiveTuple &x) const {$/;"	f	struct:FiveTupleHash
+operator ()	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    size_t operator()(const FiveTuple &x) const {$/;"	f	struct:FiveTupleHash
+operator ==	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    bool operator==(const FiveTuple &a) const {$/;"	f	struct:FiveTuple
+operator ==	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    bool operator==(const FiveTuple &a) const {$/;"	f	struct:FiveTuple
+originals	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<string> originals;$/;"	m	class:Sigdata	file:
+packets	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<string> packets;$/;"	m	class:Benchmark	file:
+packets	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    vector<string> packets;$/;"	m	class:Benchmark	file:
+parseFile	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^static void parseFile(const char *filename, vector<string> &patterns,$/;"	f	file:
+parseFile	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void parseFile(const char *filename, vector<string> &patterns,$/;"	f	file:
+parseFlags	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^static unsigned parseFlags(const string &flagsStr) {$/;"	f	file:
+parseFlags	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static unsigned parseFlags(const string &flagsStr) {$/;"	f	file:
+patterns	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<string> patterns;$/;"	m	class:Sigdata	file:
+payloadOffset	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^bool payloadOffset(const unsigned char *pkt_data, unsigned int *offset,$/;"	f	file:
+payloadOffset	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static bool payloadOffset(const unsigned char *pkt_data, unsigned int *offset,$/;"	f	file:
+print_criterion	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^static void print_criterion(Criterion c, double val) {$/;"	f	file:
+protocol	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int protocol;$/;"	m	struct:FiveTuple	file:
+protocol	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int protocol;$/;"	m	struct:FiveTuple	file:
+readInputData	libs/hyperscan/share/doc/hyperscan/examples/simplegrep.c	/^static char *readInputData(const char *inputFN, unsigned int *length) {$/;"	f	file:
+readStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    bool readStreams(const char *pcapFile) {$/;"	f	class:Benchmark
+readStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    bool readStreams(const char *pcapFile) {$/;"	f	class:Benchmark
 requestHandler	main.go	/^func requestHandler(ctx *fasthttp.RequestCtx) {$/;"	f
+reserved1	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long reserved1;$/;"	m	struct:hs_platform_info
+reserved2	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long reserved2;$/;"	m	struct:hs_platform_info
+scanBlock	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void scanBlock() {$/;"	f	class:Benchmark
+scanBlock	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void scanBlock() {$/;"	f	class:Benchmark
+scanStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void scanStreams() {$/;"	f	class:Benchmark
+scanStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void scanStreams() {$/;"	f	class:Benchmark
+scratch	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_scratch_t *scratch = nullptr;$/;"	m	class:Benchmark	file:
+scratch	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    hs_scratch_t *scratch;$/;"	m	class:Benchmark	file:
+seconds	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    double seconds() const {$/;"	f	class:Clock
+seconds	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    double seconds() const {$/;"	f	class:Clock
+setDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void setDatabase(hs_database_t *hs_db) {$/;"	f	class:Benchmark
+size	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned size() const {$/;"	f	class:Sigdata
+srcAddr	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int srcAddr;$/;"	m	struct:FiveTuple	file:
+srcAddr	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int srcAddr;$/;"	m	struct:FiveTuple	file:
+srcPort	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int srcPort;$/;"	m	struct:FiveTuple	file:
+srcPort	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int srcPort;$/;"	m	struct:FiveTuple	file:
+start	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void start() {$/;"	f	class:Clock
+start	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void start() {$/;"	f	class:Clock
+stop	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void stop() {$/;"	f	class:Clock
+stop	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void stop() {$/;"	f	class:Clock
+stream_ids	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<size_t> stream_ids;$/;"	m	class:Benchmark	file:
+stream_ids	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    vector<size_t> stream_ids;$/;"	m	class:Benchmark	file:
+stream_map	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unordered_map<FiveTuple, size_t, FiveTupleHash> stream_map;$/;"	m	class:Benchmark	file:
+stream_map	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unordered_map<FiveTuple, size_t, FiveTupleHash> stream_map;$/;"	m	class:Benchmark	file:
+streams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<hs_stream_t *> streams;$/;"	m	class:Benchmark	file:
+streams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    vector<hs_stream_t *> streams;$/;"	m	class:Benchmark	file:
+time_end	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    std::chrono::time_point<std::chrono::system_clock> time_start, time_end;$/;"	m	class:Clock	file:
+time_end	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    std::chrono::time_point<std::chrono::system_clock> time_start, time_end;$/;"	m	class:Clock	file:
+time_start	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    std::chrono::time_point<std::chrono::system_clock> time_start, time_end;$/;"	m	class:Clock	file:
+time_start	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    std::chrono::time_point<std::chrono::system_clock> time_start, time_end;$/;"	m	class:Clock	file:
+tune	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned int tune;$/;"	m	struct:hs_platform_info
+unordered_matches	libs/hyperscan/include/hs/hs_compile.h	/^    char unordered_matches;$/;"	m	struct:hs_expr_info
+usage	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^void usage(const char *) {$/;"	f	file:
+usage	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void usage(const char *prog) {$/;"	f	file:
+~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark
+~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark

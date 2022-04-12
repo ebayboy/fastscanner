@@ -4,9 +4,11 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"runtime"
 	"syscall"
 
+	"github.com/flier/gohs/hyperscan"
 	"github.com/valyala/fasthttp"
 )
 
@@ -36,9 +38,8 @@ func main() {
 		h = fasthttp.CompressHandler(h)
 	}
 
-	//ListenAndServeUNIX
-	//fasthttp.ListenAndServe(*addr, h)
-	if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
+	if err := fasthttp.ListenAndServe(*addr, h); err != nil {
+		//if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
 		log.Fatalf("Error in ListenAndServeUNIX: %v", err)
 	}
 }
@@ -59,6 +60,9 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
+	//TODO: for test
+	gohs_test()
+
 	ctx.SetContentType("text/plain; charset=utf8")
 
 	// Set arbitrary headers
@@ -69,4 +73,40 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 	c.SetKey("cookie-name")
 	c.SetValue("cookie-value")
 	ctx.Response.Header.SetCookie(&c)
+}
+
+func on_match(id uint, from, to uint64, flags uint, context interface{}) error {
+	inputData := context.([]byte)
+
+	//pattern: 1234
+	//from:1 to:5 inputData:0123456
+
+	fmt.Printf("from:%d to:%d inputData:%s match_data:%s\n", from, to, string(inputData), inputData[from:to])
+	//fmt.Printf("%s%s%s\n", inputData[start:from], string(inputData[from:to]), inputData[to:end])
+	return nil
+}
+
+func gohs_test() {
+	pattern := hyperscan.NewPattern("1234", hyperscan.DotAll|hyperscan.SomLeftMost)
+	database, err := hyperscan.NewBlockDatabase(pattern)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "ERROR: Unable to compile pattern \"%s\": %s\n", pattern, err.Error())
+		os.Exit(-1)
+	}
+	defer database.Close()
+	scratch, err := hyperscan.NewScratch(database)
+	if err != nil {
+		fmt.Fprint(os.Stderr, "ERROR: Unable to allocate scratch space. Exiting.\n")
+		os.Exit(-1)
+	}
+	defer scratch.Free()
+
+	inputData := []byte("0123456")
+	fmt.Printf("Scanning %d bytes with Hyperscan\n", len(inputData))
+	if err := database.Scan(inputData, scratch, on_match, inputData); err != nil {
+		fmt.Fprint(os.Stderr, "ERROR: Unable to scan input buffer. Exiting.\n")
+		os.Exit(-1)
+	}
+
+	return
 }
