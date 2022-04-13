@@ -15,9 +15,11 @@ HSConfig	scanner/scanner.go	/^type HSConfig struct {$/;"	t
 HSContext	scanner/hsmatcher.go	/^type HSContext struct {$/;"	t
 HSMatcher	scanner/hsmatcher.go	/^type HSMatcher struct {$/;"	t
 Match	scanner/hsmatcher.go	/^func (self *HSMatcher) Match(ctx *HSContext) error {$/;"	f
+Match	scanner/scanner.go	/^func (self *Scanner) Match() {$/;"	f
 NewHSMatcher	scanner/hsmatcher.go	/^func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {$/;"	f
 NewScanner	scanner/scanner.go	/^func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, error) {$/;"	f
 Output	scanner/hsmatcher.go	/^func (self *HSMatcher) Output() {$/;"	f
+Output	scanner/scanner.go	/^func (self *Scanner) Output() {$/;"	f
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t

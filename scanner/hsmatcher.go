@@ -39,6 +39,7 @@ func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
 func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {
 	var err error
 	matcher := new(HSMatcher)
+	matcher.MZ = mz
 
 	for _, rule := range rules {
 		//TODO: rule hs_flag ...
@@ -57,24 +58,25 @@ func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *
 			log.WithField("err", err.Error()).Error("Error: hyperscan.NewBlockDatabase")
 			return nil, err
 		}
+		log.Info("New db:", matcher.HSDB)
 	}
 
 	if scratch == nil {
 		//alloc
-		log.Info("new matcher.HSScratch:", matcher.HSScratch)
 		matcher.HSScratch, err = hyperscan.NewScratch(matcher.HSDB)
 		if err != nil {
 			log.WithField("err", err.Error()).Error("Error: hyperscan.NewScratch")
 			return nil, err
 		}
+		log.Info("new matcher.HSScratch:", matcher.HSScratch)
 	} else {
 		//clone
-		log.Info("clone matcher:", scratch)
 		matcher.HSScratch, err = scratch.Clone()
 		if err != nil {
 			log.WithField("err", err.Error()).Error("Error: HSScratch.Clone")
 			return nil, err
 		}
+		log.Info("clone matcher:", matcher.HSScratch)
 	}
 
 	return matcher, nil

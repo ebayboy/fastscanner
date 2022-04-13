@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/flier/gohs/hyperscan"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -17,9 +16,7 @@ type Scanner struct {
 	Mctx     *context.Context
 	ConfFile string
 	Conf     *Conf
-	Db       hyperscan.BlockDatabase
-	Scratch  *hyperscan.Scratch
-	Matchers []*HSMatcher
+	Matchers map[string]*HSMatcher
 }
 
 type Rule struct {
@@ -85,6 +82,13 @@ func ConfParse(content []byte) (*Conf, error) {
 	return conf, nil
 }
 
+func (self *Scanner) Output() {
+	log.Info("Matcher count:", len(self.Matchers))
+	for k, v := range self.Matchers {
+		log.WithField("Matcher", v).Info("Matcher:", k)
+	}
+}
+
 func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, error) {
 	ins := new(Scanner)
 	ins.Mctx = mctx
@@ -107,22 +111,20 @@ func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, err
 }
 
 func (self *Scanner) init() {
-	//配置转换 Rules -> map[mz]rules
-
+	if self.Matchers == nil {
+		self.Matchers = make(map[string]*HSMatcher, 0)
+	}
 	for mz, rules := range self.Conf.RulesMap {
-		if matcher, err := NewHSMatcher(rules, mz, self.Db, self.Scratch); err != nil {
+		matcher, err := NewHSMatcher(rules, mz, nil, nil)
+		if err != nil {
 			log.WithField("MZ:", mz).Error("Error: NewHSMatcher")
 			continue
-		} else {
-			if self.Db == nil {
-				self.Db = matcher.HSDB
-			}
-			if self.Scratch == nil {
-				self.Scratch = matcher.HSScratch
-			}
-			log.WithField("MZ", mz).Info("init matcher ok!")
 		}
+		self.Matchers[mz] = matcher
+		log.WithField("count", len(self.Matchers)).Info("Add matcher:", matcher.MZ)
 	}
+
+	self.Output()
 }
 
 func (self *Scanner) Start() {
@@ -137,4 +139,8 @@ func (self *Scanner) Start() {
 func (self *Scanner) Stop() {
 	//遍历释放 matcher
 	log.Debug("Stop scanner done!")
+}
+
+func (self *Scanner) Match() {
+
 }

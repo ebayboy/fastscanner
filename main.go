@@ -73,6 +73,7 @@ func init() {
 	runtime.GOMAXPROCS(int(fastScanner.conf.CPUNum))
 }
 
+//run in fasthttp goroutine
 func requestHandler(ctx *fasthttp.RequestCtx) {
 
 	//TDOO: tunny goroutine pool
