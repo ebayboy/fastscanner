@@ -1,6 +1,7 @@
 {
     "debug":true,
     "version": "v1.0.0",
+    "cpunum": 2,
     "HSConfig": {
         "LogSwitch":"on",
         "Debug":"1",

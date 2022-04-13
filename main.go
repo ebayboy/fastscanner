@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/signal"
 	"runtime"
@@ -136,6 +138,17 @@ type HSMatcher struct {
 	HSScratch *hyperscan.Scratch
 }
 
+type Conf struct {
+	Debug   bool   `json:"debug"`
+	Version string `json:"version"`
+	CPUNum  int64  `json:"cpunum"`
+}
+
+type FastScanner struct {
+	confFile string
+	conf     Conf
+}
+
 func (self *HSMatcher) Init() (err error) {
 	pattern := hyperscan.NewPattern("1234", hyperscan.DotAll|hyperscan.SomLeftMost)
 	pattern.Id = 10001
@@ -210,6 +223,8 @@ func module_fini() error {
 	return nil
 }
 
+var fastScanner FastScanner
+
 func main() {
 	logrus.Info("Starting ...")
 
@@ -217,6 +232,17 @@ func main() {
 	mctx, cancel := context.WithCancel(context.Background())
 	sigCh := make(chan os.Signal)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+
+	//read Main Conf
+	confData, err := ioutil.ReadFile(confFile)
+	if err != nil {
+		logrus.Fatal("Read conf error!")
+	}
+
+	if err := json.Unmarshal(confData, &fastScanner.conf); err != nil {
+		logrus.Fatal("Parse main conf error!")
+	}
+	logrus.Info("version:", fastScanner.conf.Version)
 
 	//module inti && start
 	logrus.Info("Start module ...!")

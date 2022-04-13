@@ -4,6 +4,8 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Conf	main.go	/^type Conf struct {$/;"	t
+FastScanner	main.go	/^type FastScanner struct {$/;"	t
 Fini	main.go	/^func (self *HSMatcher) Fini() error {$/;"	f
 HSContext	main.go	/^type HSContext struct {$/;"	t
 HSMatcher	main.go	/^type HSMatcher struct {$/;"	t
@@ -12,6 +14,7 @@ Match	main.go	/^func (self *HSMatcher) Match(ctx *HSContext) error {$/;"	f
 addr	main.go	/^	addr      string$/;"	v
 compress	main.go	/^	compress  bool$/;"	v
 confFile	main.go	/^	confFile  string$/;"	v
+fastScanner	main.go	/^var fastScanner FastScanner$/;"	v
 hsMatcher	main.go	/^	hsMatcher HSMatcher$/;"	v
 init	main.go	/^func init() {$/;"	f
 isdev	main.go	/^	isdev     bool$/;"	v

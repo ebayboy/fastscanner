@@ -11,7 +11,7 @@ fasthttp + hyperscan
 + xml解析
 
 ## TODO
-+ json config 解析
++ json config 解析 及 模块化
     + 移植 statbot mutl goroutine model
     + MainConfig module
     + RulesConfig : Match zone && regex && flag && logic
