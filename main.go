@@ -16,17 +16,25 @@ import (
 )
 
 var (
-	isdev    = flag.Bool("dev", false, "run in dev mode")
-	version  = flag.Bool("version", false, "output version info")
-	logFile  = flag.String("log", "./logs/error.log", "error.log")
-	confFile = flag.String("conf", "./conf/config.json", "config file")
-	addr     = flag.String("addr", ":9999", "TCP address to listen to")
-	compress = flag.Bool("compress", false, "Whether to enable transparent response compression")
+	isdev     bool
+	version   bool
+	logFile   string
+	confFile  string
+	addr      string
+	compress  bool
+	hsMatcher HSMatcher
 )
 
-var hsMatcher HSMatcher
-
 func init() {
+	//parse flag
+	flag.BoolVar(&isdev, "d", false, "run in dev mode")
+	flag.BoolVar(&version, "version", false, "output version info")
+	flag.StringVar(&logFile, "log", "./logs/error.log", "error.log")
+	flag.StringVar(&confFile, "conf", "./conf/config.json", "config file")
+	flag.StringVar(&addr, "addr", ":9999", "TCP address to listen to")
+	flag.BoolVar(&compress, "compress", false, "Whether to enable transparent response compression")
+	flag.Parse()
+
 	//log init
 	logrus.SetFormatter(&logrus.TextFormatter{
 		DisableColors:   true,
@@ -40,8 +48,9 @@ func init() {
 		return
 	}
 
+	logPath := logFile
 	rtt_writer, _ := rotatelogs.New(
-		logFile+".%Y%m%d%H%M",
+		logPath+".%Y%m%d%H%M",
 		rotatelogs.WithLinkName(logFile),
 		rotatelogs.WithMaxAge(72*time.Hour),
 		rotatelogs.WithRotationTime(24*time.Hour),
@@ -67,19 +76,18 @@ func init() {
 	//set procs
 	runtime.GOMAXPROCS(4)
 
+	//hsmatcher init
 	hsMatcher.Init()
 }
 
 func main() {
 
-	flag.Parse()
-
 	h := requestHandler
-	if *compress {
+	if compress {
 		h = fasthttp.CompressHandler(h)
 	}
 
-	if err := fasthttp.ListenAndServe(*addr, h); err != nil {
+	if err := fasthttp.ListenAndServe(addr, h); err != nil {
 		//if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
 		logrus.Fatalf("Error in ListenAndServeUNIX: %v", err)
 	}
