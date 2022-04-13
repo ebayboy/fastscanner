@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/flier/gohs/hyperscan"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 type HSMatcher struct {
@@ -22,7 +22,7 @@ type HSContext struct {
 
 func (self *HSMatcher) Output() {
 	for _, v := range self.patterns {
-		logrus.Info("pattern:", v)
+		log.Info("pattern:", v)
 	}
 }
 
@@ -44,7 +44,7 @@ func NewHSMatcher(rules []Rule, db hyperscan.BlockDatabase, scratch *hyperscan.S
 		pattern := hyperscan.NewPattern(rule.RX, hyperscan.DotAll|hyperscan.SomLeftMost)
 		pattern.Id, err = strconv.Atoi(rule.ID)
 		if err != nil {
-			logrus.WithField("rule.Id", rule.ID).Error("Error: strconv.Atoi rule.Id")
+			log.WithField("rule.Id", rule.ID).Error("Error: strconv.Atoi rule.Id")
 			continue
 		}
 		matcher.patterns = append(matcher.patterns, pattern)
@@ -53,25 +53,25 @@ func NewHSMatcher(rules []Rule, db hyperscan.BlockDatabase, scratch *hyperscan.S
 	if db == nil {
 		matcher.HSDB, err = hyperscan.NewBlockDatabase(matcher.patterns...)
 		if err != nil {
-			logrus.WithField("err", err.Error()).Error("Error: hyperscan.NewBlockDatabase")
+			log.WithField("err", err.Error()).Error("Error: hyperscan.NewBlockDatabase")
 			return nil, err
 		}
 	}
 
 	if scratch == nil {
 		//alloc
-		logrus.Info("new matcher.HSScratch:", matcher.HSScratch)
+		log.Info("new matcher.HSScratch:", matcher.HSScratch)
 		matcher.HSScratch, err = hyperscan.NewScratch(matcher.HSDB)
 		if err != nil {
-			logrus.WithField("err", err.Error()).Error("Error: hyperscan.NewScratch")
+			log.WithField("err", err.Error()).Error("Error: hyperscan.NewScratch")
 			return nil, err
 		}
 	} else {
 		//clone
-		logrus.Info("clone matcher:", scratch)
+		log.Info("clone matcher:", scratch)
 		matcher.HSScratch, err = scratch.Clone()
 		if err != nil {
-			logrus.WithField("err", err.Error()).Error("Error: HSScratch.Clone")
+			log.WithField("err", err.Error()).Error("Error: HSScratch.Clone")
 			return nil, err
 		}
 	}
@@ -82,7 +82,7 @@ func NewHSMatcher(rules []Rule, db hyperscan.BlockDatabase, scratch *hyperscan.S
 // Test: curl http://localhost:9999/0123456
 func (self *HSMatcher) Match(ctx *HSContext) error {
 	if err := self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx); err != nil {
-		logrus.WithField("self.HSDB.Scan", err.Error()).Error("hs.scan")
+		log.WithField("self.HSDB.Scan", err.Error()).Error("hs.scan")
 		return err
 	}
 	//fmt.Printf("Scanning %d bytes %s with Hyperscan Id:%d from:%d to:%d hit:[%s]\n", len(hsctx.Data), hsctx.Data, hsctx.Id, hsctx.From, hsctx.To, hsctx.Data[hsctx.From:hsctx.To])

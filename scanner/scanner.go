@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/flier/gohs/hyperscan"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 /*TODO:
@@ -47,14 +47,14 @@ type Conf struct {
 }
 
 func (self *Scanner) ConfOutput() {
-	logrus.Info("ConfOutput")
-	logrus.Debug("Conf:", self.Conf)
+	log.Info("ConfOutput")
+	log.Debug("Conf:", self.Conf)
 }
 
 func ConfParse(content []byte) (*Conf, error) {
 	conf := new(Conf)
 	if err := json.Unmarshal(content, conf); err != nil {
-		logrus.WithFields(logrus.Fields{"err": err}).Error("Error: json.Unmarshal")
+		log.WithFields(log.Fields{"err": err}).Error("Error: json.Unmarshal")
 		return nil, err
 	}
 
@@ -69,7 +69,7 @@ func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, err
 	if cf == nil {
 		conf, err := ConfParse(confData)
 		if err != nil {
-			logrus.Error("Error: scanner.ConfParse error!")
+			log.Error("Error: scanner.ConfParse error!")
 			return nil, err
 		}
 		ins.Conf = conf
@@ -85,7 +85,7 @@ func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, err
 func (self *Scanner) init() {
 	for i := 0; i < self.Conf.HSConfig.ProcNum; i++ {
 		if matcher, err := NewHSMatcher(self.Conf.HSConfig.Rules, self.Db, self.Scratch); err != nil {
-			logrus.WithField("idx:", i).Error("Error: NewHSMatcher")
+			log.WithField("idx:", i).Error("Error: NewHSMatcher")
 			continue
 		} else {
 			if self.Db == nil {
@@ -94,7 +94,7 @@ func (self *Scanner) init() {
 			if self.Scratch == nil {
 				self.Scratch = matcher.HSScratch
 			}
-			logrus.WithField("idx", i).Info("init matcher ok!")
+			log.WithField("idx", i).Info("init matcher ok!")
 		}
 	}
 }
@@ -105,12 +105,12 @@ func (self *Scanner) Start() {
 
 	//do work
 	//tunny goroutine pool process body match
-	logrus.Info("Start Scanner done!")
+	log.Info("Start Scanner done!")
 
 	self.ConfOutput()
 }
 
 func (self *Scanner) Stop() {
 	//遍历释放 matcher
-	logrus.Debug("Stop scanner done!")
+	log.Debug("Stop scanner done!")
 }

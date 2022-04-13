@@ -14,7 +14,7 @@ import (
 
 	"github.com/fastscanner/scanner"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
 )
 
@@ -36,13 +36,13 @@ func init() {
 	flag.Parse()
 
 	//log init
-	logrus.SetFormatter(&logrus.TextFormatter{
+	log.SetFormatter(&log.TextFormatter{
 		DisableColors:   true,
 		TimestampFormat: "1970-00-00 00:00:00",
 	})
 	if isdev {
-		logrus.SetOutput(os.Stdout)
-		logrus.SetLevel(logrus.DebugLevel)
+		log.SetOutput(os.Stdout)
+		log.SetLevel(log.DebugLevel)
 	} else {
 		logPath := logFile
 		rtt_writer, _ := rotatelogs.New(
@@ -52,12 +52,12 @@ func init() {
 			rotatelogs.WithRotationTime(24*time.Hour),
 		)
 
-		logrus.SetFormatter(&logrus.TextFormatter{
+		log.SetFormatter(&log.TextFormatter{
 			DisableColors: true,
 			FullTimestamp: true,
 		})
-		logrus.SetOutput(rtt_writer)
-		logrus.SetLevel(logrus.InfoLevel)
+		log.SetOutput(rtt_writer)
+		log.SetLevel(log.InfoLevel)
 	}
 
 	//set rlimit
@@ -66,7 +66,7 @@ func init() {
 	rLimit.Max = 65535
 	err := syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit)
 	if err != nil {
-		logrus.Fatal("err:", err.Error())
+		log.Fatal("err:", err.Error())
 	}
 
 	//set procs
@@ -94,7 +94,7 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 	/*
 		hsctx := HSContext{Data: ctx.RequestURI()}
 		if err := hsMatcher.Match(&hsctx); err != nil {
-			logrus.Error("Error:", err.Error())
+			log.Error("Error:", err.Error())
 		}
 
 		if hsctx.Id > 0 {
@@ -133,17 +133,17 @@ func module_test(mctx *context.Context) error {
 		h := requestHandler
 		if err := fasthttp.ListenAndServe(addr, h); err != nil {
 			//if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
-			logrus.Fatalf("Error in ListenAndServeUNIX: %v", err)
+			log.Fatalf("Error in ListenAndServeUNIX: %v", err)
 		}
 	}()
 
-	logrus.Info("Start module done!")
+	log.Info("Start module done!")
 
 	//exit before main exit
 	for {
 		select {
 		case <-(*mctx).Done():
-			logrus.Debug("Recv mctx Done...")
+			log.Debug("Recv mctx Done...")
 			return nil
 		default:
 			time.Sleep(time.Second)
@@ -152,14 +152,14 @@ func module_test(mctx *context.Context) error {
 }
 
 func module_fini() error {
-	logrus.Info("module fini done!")
+	log.Info("module fini done!")
 	return nil
 }
 
 var fastScanner FastScanner
 
 func main() {
-	logrus.Info("Starting ...")
+	log.Info("Starting ...")
 
 	//init ctx && signal
 	mctx, cancel := context.WithCancel(context.Background())
@@ -169,18 +169,18 @@ func main() {
 	//read Main Conf
 	confData, err := ioutil.ReadFile(confFile)
 	if err != nil {
-		logrus.Fatal("Read conf error!")
+		log.Fatal("Read conf error!")
 	}
 
 	if err := json.Unmarshal(confData, &fastScanner.conf); err != nil {
-		logrus.Fatal("Parse main conf error!")
+		log.Fatal("Parse main conf error!")
 	}
-	logrus.Info("version:", fastScanner.conf.Version)
+	log.Info("version:", fastScanner.conf.Version)
 
 	//============= MODULE ===============
 	ins, err := scanner.NewScanner(confData, &mctx, nil)
 	if err != nil {
-		logrus.Fatal("init scanner.NewScanner error!")
+		log.Fatal("init scanner.NewScanner error!")
 	}
 	ins.Start()
 
@@ -194,5 +194,5 @@ func main() {
 
 	//main clean
 	cancel()
-	logrus.Warn("Stop done!")
+	log.Warn("Stop done!")
 }
