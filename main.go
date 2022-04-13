@@ -31,7 +31,7 @@ func init() {
 	//parse flag
 	flag.BoolVar(&isdev, "d", false, "run in dev mode")
 	flag.BoolVar(&version, "version", false, "output version info")
-	flag.StringVar(&logFile, "log", "./logs/error.log", "error.log")
+	flag.StringVar(&logFile, "log", "./logs/fastscanner.log", "error.log")
 	flag.StringVar(&confFile, "conf", "./conf/config.json", "config file")
 	flag.StringVar(&addr, "addr", ":9999", "TCP address to listen to")
 	flag.BoolVar(&compress, "compress", false, "Whether to enable transparent response compression")
@@ -42,29 +42,25 @@ func init() {
 		DisableColors:   true,
 		TimestampFormat: "1970-00-00 00:00:00",
 	})
-
 	if isdev {
-		logrus.SetReportCaller(true)
 		logrus.SetOutput(os.Stdout)
 		logrus.SetLevel(logrus.DebugLevel)
-		return
+	} else {
+		logPath := logFile
+		rtt_writer, _ := rotatelogs.New(
+			logPath+".%Y%m%d%H%M",
+			rotatelogs.WithLinkName(logFile),
+			rotatelogs.WithMaxAge(72*time.Hour),
+			rotatelogs.WithRotationTime(24*time.Hour),
+		)
+
+		logrus.SetFormatter(&logrus.TextFormatter{
+			DisableColors: true,
+			FullTimestamp: true,
+		})
+		logrus.SetOutput(rtt_writer)
+		logrus.SetLevel(logrus.InfoLevel)
 	}
-
-	logPath := logFile
-	rtt_writer, _ := rotatelogs.New(
-		logPath+".%Y%m%d%H%M",
-		rotatelogs.WithLinkName(logFile),
-		rotatelogs.WithMaxAge(72*time.Hour),
-		rotatelogs.WithRotationTime(24*time.Hour),
-	)
-
-	logrus.SetFormatter(&logrus.TextFormatter{
-		DisableColors: true,
-		FullTimestamp: true,
-	})
-
-	logrus.SetOutput(rtt_writer)
-	logrus.SetLevel(logrus.InfoLevel)
 
 	//set rlimit
 	var rLimit syscall.Rlimit
@@ -98,8 +94,11 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
 	hsctx := HSContext{Data: ctx.RequestURI()}
+	logrus.Info("Match ctx.RequestURI:", string(hsctx.Data))
+	if err := hsMatcher.Match(&hsctx); err != nil {
+		logrus.Error("Error:", err.Error())
+	}
 
-	hsMatcher.Match(&hsctx)
 	if hsctx.Id > 0 {
 		ctx.Response.Header.Set("waf-hit-id", strconv.Itoa(int(hsctx.Id)))
 		ctx.Response.SetStatusCode(403)
@@ -166,10 +165,10 @@ func (self *HSMatcher) Fini() error {
 }
 
 // Test: curl http://localhost:9999/0123456
-func (self *HSMatcher) Match(ctx *HSContext) (err error) {
-	err = self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx)
-	if err != nil {
-		fmt.Fprint(os.Stderr, "ERROR: Unable to scan input buffer. Exiting.\n")
+func (self *HSMatcher) Match(ctx *HSContext) error {
+	logrus.Info("Data:", ctx.Data, " size:", len(ctx.Data))
+	if err := self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx); err != nil {
+		logrus.WithField("self.HSDB.Scan", err.Error()).Error("hs.scan")
 		return err
 	}
 	//fmt.Printf("Scanning %d bytes %s with Hyperscan Id:%d from:%d to:%d hit:[%s]\n", len(hsctx.Data), hsctx.Data, hsctx.Id, hsctx.From, hsctx.To, hsctx.Data[hsctx.From:hsctx.To])
@@ -178,17 +177,6 @@ func (self *HSMatcher) Match(ctx *HSContext) (err error) {
 }
 
 func module_test(mctx *context.Context) error {
-
-	//exit before main exit
-	for {
-		select {
-		case <-(*mctx).Done():
-			logrus.Debug("Recv mctx Done...")
-			return nil
-		default:
-			time.Sleep(time.Second)
-		}
-	}
 
 	//start server
 	go func() {
@@ -203,8 +191,18 @@ func module_test(mctx *context.Context) error {
 		}
 	}()
 
-	logrus.Info("Start done!")
-	return nil
+	logrus.Info("Start module done!")
+
+	//exit before main exit
+	for {
+		select {
+		case <-(*mctx).Done():
+			logrus.Debug("Recv mctx Done...")
+			return nil
+		default:
+			time.Sleep(time.Second)
+		}
+	}
 }
 
 func module_fini() error {
@@ -223,7 +221,11 @@ func main() {
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
 	//module inti && start
-	module_test(&mctx)
+	logrus.Info("Start module ...!")
+	go func() {
+		module_test(&mctx)
+	}()
+	logrus.Info("Start done!")
 
 	//wait for exit signal
 	<-sigCh
@@ -233,6 +235,5 @@ func main() {
 
 	//main clean
 	cancel()
-	time.Sleep(time.Second * 1)
-	logrus.Warn("Stop spider_ip_rdns done!")
+	logrus.Warn("Stop done!")
 }

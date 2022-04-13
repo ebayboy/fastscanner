@@ -8,7 +8,7 @@ Fini	main.go	/^func (self *HSMatcher) Fini() error {$/;"	f
 HSContext	main.go	/^type HSContext struct {$/;"	t
 HSMatcher	main.go	/^type HSMatcher struct {$/;"	t
 Init	main.go	/^func (self *HSMatcher) Init() (err error) {$/;"	f
-Match	main.go	/^func (self *HSMatcher) Match(ctx *HSContext) (err error) {$/;"	f
+Match	main.go	/^func (self *HSMatcher) Match(ctx *HSContext) error {$/;"	f
 addr	main.go	/^	addr      string$/;"	v
 compress	main.go	/^	compress  bool$/;"	v
 confFile	main.go	/^	confFile  string$/;"	v
