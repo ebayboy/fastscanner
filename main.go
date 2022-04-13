@@ -94,7 +94,6 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
 	hsctx := HSContext{Data: ctx.RequestURI()}
-	logrus.Info("Match ctx.RequestURI:", string(hsctx.Data))
 	if err := hsMatcher.Match(&hsctx); err != nil {
 		logrus.Error("Error:", err.Error())
 	}
@@ -166,7 +165,6 @@ func (self *HSMatcher) Fini() error {
 
 // Test: curl http://localhost:9999/0123456
 func (self *HSMatcher) Match(ctx *HSContext) error {
-	logrus.Info("Data:", ctx.Data, " size:", len(ctx.Data))
 	if err := self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx); err != nil {
 		logrus.WithField("self.HSDB.Scan", err.Error()).Error("hs.scan")
 		return err
