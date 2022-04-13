@@ -20,6 +20,12 @@ type HSContext struct {
 	To   uint64
 }
 
+func (self *HSMatcher) Output() {
+	for _, v := range self.patterns {
+		logrus.Info("pattern:", v)
+	}
+}
+
 func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
 	hsctx := context.(*HSContext)
 	hsctx.Id = id
@@ -29,7 +35,7 @@ func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
 	return nil
 }
 
-func NewHSMatcher(rules []Rule, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) *HSMatcher {
+func NewHSMatcher(rules []Rule, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {
 	var err error
 	matcher := new(HSMatcher)
 
@@ -48,27 +54,29 @@ func NewHSMatcher(rules []Rule, db hyperscan.BlockDatabase, scratch *hyperscan.S
 		matcher.HSDB, err = hyperscan.NewBlockDatabase(matcher.patterns...)
 		if err != nil {
 			logrus.WithField("err", err.Error()).Error("Error: hyperscan.NewBlockDatabase")
-			return nil
+			return nil, err
 		}
 	}
 
 	if scratch == nil {
 		//alloc
+		logrus.Info("new matcher.HSScratch:", matcher.HSScratch)
 		matcher.HSScratch, err = hyperscan.NewScratch(matcher.HSDB)
 		if err != nil {
 			logrus.WithField("err", err.Error()).Error("Error: hyperscan.NewScratch")
-			return nil
+			return nil, err
 		}
 	} else {
 		//clone
-		matcher.HSScratch, err = matcher.HSScratch.Clone()
+		logrus.Info("clone matcher:", scratch)
+		matcher.HSScratch, err = scratch.Clone()
 		if err != nil {
 			logrus.WithField("err", err.Error()).Error("Error: HSScratch.Clone")
-			return nil
+			return nil, err
 		}
 	}
 
-	return matcher
+	return matcher, nil
 }
 
 // Test: curl http://localhost:9999/0123456

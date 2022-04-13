@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/flier/gohs/hyperscan"
 	"github.com/sirupsen/logrus"
 )
 
@@ -16,6 +17,9 @@ type Scanner struct {
 	Mctx     *context.Context
 	ConfFile string
 	Conf     *Conf
+	Db       hyperscan.BlockDatabase
+	Scratch  *hyperscan.Scratch
+	Matchers []*HSMatcher
 }
 
 type Rule struct {
@@ -33,6 +37,7 @@ type Policy struct {
 }
 
 type HSConfig struct {
+	ProcNum  int      `json:"procnum"`
 	Rules    []Rule   `json:"rules"`
 	Policies []Policy `json:"policies"`
 }
@@ -46,30 +51,58 @@ func (self *Scanner) ConfOutput() {
 	logrus.Debug("Conf:", self.Conf)
 }
 
-func (self *Scanner) ConfParse(content []byte) error {
+func ConfParse(content []byte) (*Conf, error) {
 	conf := new(Conf)
 	if err := json.Unmarshal(content, conf); err != nil {
 		logrus.WithFields(logrus.Fields{"err": err}).Error("Error: json.Unmarshal")
-		return err
+		return nil, err
 	}
-	self.Conf = conf
 
-	return nil
+	return conf, nil
 }
 
-func NewScanner(confData []byte, mctx *context.Context) *Scanner {
-	scanner := new(Scanner)
-	scanner.Mctx = mctx
+func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, error) {
+	ins := new(Scanner)
+	ins.Mctx = mctx
 
-	if err := scanner.ConfParse(confData); err != nil {
-		logrus.Error("Error: scanner.ConfParse error!")
-		return nil
+	//解析配置
+	if cf == nil {
+		conf, err := ConfParse(confData)
+		if err != nil {
+			logrus.Error("Error: scanner.ConfParse error!")
+			return nil, err
+		}
+		ins.Conf = conf
+	} else {
+		ins.Conf = cf
 	}
 
-	return scanner
+	//初始化matchers
+
+	return ins, nil
+}
+
+func (self *Scanner) init() {
+	for i := 0; i < self.Conf.HSConfig.ProcNum; i++ {
+		if matcher, err := NewHSMatcher(self.Conf.HSConfig.Rules, self.Db, self.Scratch); err != nil {
+			logrus.WithField("idx:", i).Error("Error: NewHSMatcher")
+			continue
+		} else {
+			if self.Db == nil {
+				self.Db = matcher.HSDB
+			}
+			if self.Scratch == nil {
+				self.Scratch = matcher.HSScratch
+			}
+			logrus.WithField("idx", i).Info("init matcher ok!")
+		}
+	}
 }
 
 func (self *Scanner) Start() {
+
+	self.init()
+
 	//do work
 	//tunny goroutine pool process body match
 	logrus.Info("Start Scanner done!")
@@ -78,5 +111,6 @@ func (self *Scanner) Start() {
 }
 
 func (self *Scanner) Stop() {
+	//遍历释放 matcher
 	logrus.Debug("Stop scanner done!")
 }

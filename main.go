@@ -178,24 +178,18 @@ func main() {
 	logrus.Info("version:", fastScanner.conf.Version)
 
 	//============= MODULE ===============
-	//module inti && start
-	ins := scanner.NewScanner(confData, &mctx)
-	if ins == nil {
+	ins, err := scanner.NewScanner(confData, &mctx, nil)
+	if err != nil {
 		logrus.Fatal("init scanner.NewScanner error!")
 	}
 	ins.Start()
-	logrus.Info("Start module ...!")
-	go func() {
-		module_test(&mctx)
-	}()
-	logrus.Info("Start done!")
+
 	//============= MODULE ===============
 
 	//wait for exit signal
 	<-sigCh
 
 	//module clean
-	module_fini()
 	ins.Stop()
 
 	//main clean

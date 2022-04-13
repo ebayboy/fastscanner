@@ -19,6 +19,7 @@ fasthttp + hyperscan
     + HSMatcher 模块化 
     + 实现规则引擎RuleEngine
     + 实现逻辑引擎LogicEngine(govaluate)
++ matcher 前面增加流式函数插件处理, 以及开关(spider_ip_rdns/router)
 
 ## DONE
 + logrus + file-rotatelogs
