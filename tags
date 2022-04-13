@@ -103,6 +103,7 @@ closeStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void 
 closeStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void closeStreams() {$/;"	f	class:Benchmark
 compileDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_database_t *compileDatabase(unsigned mode, double *compileTime) const {$/;"	f	class:Sigdata
 compress	main.go	/^	compress = flag.Bool("compress", false, "Whether to enable transparent response compression")$/;"	v
+confFile	main.go	/^	confFile = flag.String("conf", ".\/conf\/config.json", "config file")$/;"	v
 cpu_features	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long cpu_features;$/;"	m	struct:hs_platform_info
 databasesFromFile	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void databasesFromFile(const char *filename,$/;"	f	file:
 db	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_database_t *db = nullptr;$/;"	m	class:Benchmark	file:
@@ -141,6 +142,8 @@ hs_scratch_t	libs/hyperscan/include/hs/hs_runtime.h	/^typedef struct hs_scratch 
 hs_stream_t	libs/hyperscan/include/hs/hs_runtime.h	/^typedef struct hs_stream hs_stream_t;$/;"	t	typeref:struct:hs_stream
 ids	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<unsigned> ids;$/;"	m	class:Sigdata	file:
 init	main.go	/^func init() {$/;"	f
+isdev	main.go	/^	isdev    = flag.Bool("dev", false, "run in dev mode")$/;"	v
+logFile	main.go	/^	logFile  = flag.String("log", ".\/logs\/error.log", "error.log")$/;"	v
 main	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int main(int argc, char **argv) {$/;"	f
 main	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int main(int argc, char **argv) {$/;"	f
 main	libs/hyperscan/share/doc/hyperscan/examples/simplegrep.c	/^int main(int argc, char *argv[]) {$/;"	f
@@ -221,5 +224,6 @@ tune	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned int tune;$/;"	m	struc
 unordered_matches	libs/hyperscan/include/hs/hs_compile.h	/^    char unordered_matches;$/;"	m	struct:hs_expr_info
 usage	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^void usage(const char *) {$/;"	f	file:
 usage	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void usage(const char *prog) {$/;"	f	file:
+version	main.go	/^	version  = flag.Bool("version", false, "output version info")$/;"	v
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark

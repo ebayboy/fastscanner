@@ -3,17 +3,23 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"runtime"
 	"strconv"
 	"syscall"
+	"time"
 
 	"github.com/flier/gohs/hyperscan"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
 )
 
 var (
+	isdev    = flag.Bool("dev", false, "run in dev mode")
+	version  = flag.Bool("version", false, "output version info")
+	logFile  = flag.String("log", "./logs/error.log", "error.log")
+	confFile = flag.String("conf", "./conf/config.json", "config file")
 	addr     = flag.String("addr", ":9999", "TCP address to listen to")
 	compress = flag.Bool("compress", false, "Whether to enable transparent response compression")
 )
@@ -21,10 +27,33 @@ var (
 var hsMatcher HSMatcher
 
 func init() {
-	hsMatcher.Init()
-}
+	//log init
+	logrus.SetFormatter(&logrus.TextFormatter{
+		DisableColors:   true,
+		TimestampFormat: "1970-00-00 00:00:00",
+	})
 
-func main() {
+	if isdev {
+		logrus.SetReportCaller(true)
+		logrus.SetOutput(os.Stdout)
+		logrus.SetLevel(logrus.DebugLevel)
+		return
+	}
+
+	rtt_writer, _ := rotatelogs.New(
+		logFile+".%Y%m%d%H%M",
+		rotatelogs.WithLinkName(logFile),
+		rotatelogs.WithMaxAge(72*time.Hour),
+		rotatelogs.WithRotationTime(24*time.Hour),
+	)
+
+	logrus.SetFormatter(&logrus.TextFormatter{
+		DisableColors: true,
+		FullTimestamp: true,
+	})
+
+	logrus.SetOutput(rtt_writer)
+	logrus.SetLevel(logrus.InfoLevel)
 
 	//set rlimit
 	var rLimit syscall.Rlimit
@@ -32,11 +61,16 @@ func main() {
 	rLimit.Max = 65535
 	err := syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit)
 	if err != nil {
-		log.Fatal("err:", err.Error())
+		logrus.Fatal("err:", err.Error())
 	}
 
-	//set procx
+	//set procs
 	runtime.GOMAXPROCS(4)
+
+	hsMatcher.Init()
+}
+
+func main() {
 
 	flag.Parse()
 
@@ -47,7 +81,7 @@ func main() {
 
 	if err := fasthttp.ListenAndServe(*addr, h); err != nil {
 		//if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
-		log.Fatalf("Error in ListenAndServeUNIX: %v", err)
+		logrus.Fatalf("Error in ListenAndServeUNIX: %v", err)
 	}
 
 	hsMatcher.Fini()
