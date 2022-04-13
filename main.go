@@ -13,6 +13,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/fastscanner/scanner"
 	"github.com/flier/gohs/hyperscan"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/sirupsen/logrus"
@@ -74,7 +75,7 @@ func init() {
 	}
 
 	//set procs
-	runtime.GOMAXPROCS(4)
+	runtime.GOMAXPROCS(int(fastScanner.conf.CPUNum))
 
 	//hsmatcher init
 	hsMatcher.Init()
@@ -141,7 +142,7 @@ type HSMatcher struct {
 type Conf struct {
 	Debug   bool   `json:"debug"`
 	Version string `json:"version"`
-	CPUNum  int64  `json:"cpunum"`
+	CPUNum  int    `json:"cpunum"`
 }
 
 type FastScanner struct {
@@ -244,18 +245,23 @@ func main() {
 	}
 	logrus.Info("version:", fastScanner.conf.Version)
 
+	//============= MODULE ===============
 	//module inti && start
+	ins := scanner.NewScanner(confData, &mctx)
+	ins.Start()
 	logrus.Info("Start module ...!")
 	go func() {
 		module_test(&mctx)
 	}()
 	logrus.Info("Start done!")
+	//============= MODULE ===============
 
 	//wait for exit signal
 	<-sigCh
 
 	//module clean
 	module_fini()
+	ins.Stop()
 
 	//main clean
 	cancel()

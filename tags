@@ -5,12 +5,22 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 Conf	main.go	/^type Conf struct {$/;"	t
+Conf	scanner/scanner.go	/^type Conf struct {$/;"	t
+ConfOutput	scanner/scanner.go	/^func (self *Scanner) ConfOutput() {$/;"	f
+ConfParse	scanner/scanner.go	/^func (self *Scanner) ConfParse(content []byte) error {$/;"	f
 FastScanner	main.go	/^type FastScanner struct {$/;"	t
 Fini	main.go	/^func (self *HSMatcher) Fini() error {$/;"	f
+HSConfig	scanner/scanner.go	/^type HSConfig struct {$/;"	t
 HSContext	main.go	/^type HSContext struct {$/;"	t
 HSMatcher	main.go	/^type HSMatcher struct {$/;"	t
 Init	main.go	/^func (self *HSMatcher) Init() (err error) {$/;"	f
 Match	main.go	/^func (self *HSMatcher) Match(ctx *HSContext) error {$/;"	f
+NewScanner	scanner/scanner.go	/^func NewScanner(confData []byte, mctx *context.Context) *Scanner {$/;"	f
+Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
+Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
+Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
+Start	scanner/scanner.go	/^func (self *Scanner) Start() {$/;"	f
+Stop	scanner/scanner.go	/^func (self *Scanner) Stop() {$/;"	f
 addr	main.go	/^	addr      string$/;"	v
 compress	main.go	/^	compress  bool$/;"	v
 confFile	main.go	/^	confFile  string$/;"	v
@@ -25,4 +35,5 @@ module_fini	main.go	/^func module_fini() error {$/;"	f
 module_test	main.go	/^func module_test(mctx *context.Context) error {$/;"	f
 onMatch	main.go	/^func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
 requestHandler	main.go	/^func requestHandler(ctx *fasthttp.RequestCtx) {$/;"	f
+scanner	scanner/scanner.go	/^package scanner$/;"	p
 version	main.go	/^	version   bool$/;"	v
