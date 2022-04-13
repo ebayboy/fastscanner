@@ -1,4 +1,4 @@
-module github.com/fasthttp_hyperscan
+module github.com/fastscanner
 
 go 1.17
 
