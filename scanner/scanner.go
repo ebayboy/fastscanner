@@ -110,22 +110,20 @@ func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, err
 func (self *Scanner) init() {
 	//配置转换 Rules -> map[mz]rules
 
-	/*
-		for i := 0; i < self.Conf.HSConfig.ProcNum; i++ {
-			if matcher, err := NewHSMatcher(self.Conf.HSConfig.Rules, self.Db, self.Scratch); err != nil {
-				log.WithField("idx:", i).Error("Error: NewHSMatcher")
-				continue
-			} else {
-				if self.Db == nil {
-					self.Db = matcher.HSDB
-				}
-				if self.Scratch == nil {
-					self.Scratch = matcher.HSScratch
-				}
-				log.WithField("idx", i).Info("init matcher ok!")
+	for mz, rules := range self.Conf.RulesMap {
+		if matcher, err := NewHSMatcher(rules, mz, self.Db, self.Scratch); err != nil {
+			log.WithField("MZ:", mz).Error("Error: NewHSMatcher")
+			continue
+		} else {
+			if self.Db == nil {
+				self.Db = matcher.HSDB
 			}
+			if self.Scratch == nil {
+				self.Scratch = matcher.HSScratch
+			}
+			log.WithField("MZ", mz).Info("init matcher ok!")
 		}
-	*/
+	}
 }
 
 func (self *Scanner) Start() {
