@@ -248,6 +248,9 @@ func main() {
 	//============= MODULE ===============
 	//module inti && start
 	ins := scanner.NewScanner(confData, &mctx)
+	if ins == nil {
+		logrus.Fatal("init scanner.NewScanner error!")
+	}
 	ins.Start()
 	logrus.Info("Start module ...!")
 	go func() {
