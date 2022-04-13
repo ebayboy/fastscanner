@@ -10,7 +10,7 @@ import (
 type HSMatcher struct {
 	HSDB      hyperscan.BlockDatabase
 	HSScratch *hyperscan.Scratch
-	patterns  hyperscan.Patterns
+	Patterns  hyperscan.Patterns
 }
 
 type HSContext struct {
@@ -21,7 +21,7 @@ type HSContext struct {
 }
 
 func (self *HSMatcher) Output() {
-	for _, v := range self.patterns {
+	for _, v := range self.Patterns {
 		log.Info("pattern:", v)
 	}
 }
@@ -47,11 +47,11 @@ func NewHSMatcher(rules []Rule, db hyperscan.BlockDatabase, scratch *hyperscan.S
 			log.WithField("rule.Id", rule.ID).Error("Error: strconv.Atoi rule.Id")
 			continue
 		}
-		matcher.patterns = append(matcher.patterns, pattern)
+		matcher.Patterns = append(matcher.Patterns, pattern)
 	}
 
 	if db == nil {
-		matcher.HSDB, err = hyperscan.NewBlockDatabase(matcher.patterns...)
+		matcher.HSDB, err = hyperscan.NewBlockDatabase(matcher.Patterns...)
 		if err != nil {
 			log.WithField("err", err.Error()).Error("Error: hyperscan.NewBlockDatabase")
 			return nil, err
