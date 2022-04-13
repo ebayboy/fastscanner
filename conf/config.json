@@ -56,6 +56,12 @@
                 "rule_type": "1"
             },
             {
+                "rx": "666",
+                "id": "11016", 
+                "mz": "$request_uri",
+                "rule_type": "1"
+            },
+            {
                 "rx"  : "/etc/(passwd|shadow|rc|boot)",
                 "id": "20000", 
                 "mz": "$u_uri"

@@ -11,6 +11,7 @@ type HSMatcher struct {
 	HSDB      hyperscan.BlockDatabase
 	HSScratch *hyperscan.Scratch
 	Patterns  hyperscan.Patterns
+	MZ        string
 }
 
 type HSContext struct {
@@ -35,7 +36,7 @@ func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
 	return nil
 }
 
-func NewHSMatcher(rules []Rule, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {
+func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {
 	var err error
 	matcher := new(HSMatcher)
 

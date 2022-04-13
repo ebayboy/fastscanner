@@ -44,11 +44,32 @@ type HSConfig struct {
 
 type Conf struct {
 	HSConfig HSConfig `json:"hsconfig"`
+	RulesMap map[string][]Rule
 }
 
-func (self *Scanner) ConfOutput() {
-	log.Info("ConfOutput")
-	log.Debug("Conf:", self.Conf)
+func (self *Conf) ConfOutput() {
+	for k, v := range self.RulesMap {
+		log.WithFields(log.Fields{"MZ": k, "Rules": v}).Info()
+	}
+}
+
+func (self *Conf) BuildRules() {
+
+	//将相关匹配域的规则设置到map中
+	if self.RulesMap == nil {
+		self.RulesMap = make(map[string][]Rule, 0)
+	}
+
+	for _, rule := range self.HSConfig.Rules {
+		if _, exist := self.RulesMap[rule.MZ]; exist {
+			log.WithField("MZ", rule.MZ).Debug("Append rule:", rule)
+			self.RulesMap[rule.MZ] = append(self.RulesMap[rule.MZ], rule)
+		} else {
+			log.WithField("MZ", rule.MZ).Debug("New rule:", rule)
+			rules := []Rule{rule}
+			self.RulesMap[rule.MZ] = rules
+		}
+	}
 }
 
 func ConfParse(content []byte) (*Conf, error) {
@@ -57,6 +78,10 @@ func ConfParse(content []byte) (*Conf, error) {
 		log.WithFields(log.Fields{"err": err}).Error("Error: json.Unmarshal")
 		return nil, err
 	}
+
+	conf.BuildRules()
+
+	conf.ConfOutput()
 
 	return conf, nil
 }
@@ -83,20 +108,24 @@ func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, err
 }
 
 func (self *Scanner) init() {
-	for i := 0; i < self.Conf.HSConfig.ProcNum; i++ {
-		if matcher, err := NewHSMatcher(self.Conf.HSConfig.Rules, self.Db, self.Scratch); err != nil {
-			log.WithField("idx:", i).Error("Error: NewHSMatcher")
-			continue
-		} else {
-			if self.Db == nil {
-				self.Db = matcher.HSDB
+	//配置转换 Rules -> map[mz]rules
+
+	/*
+		for i := 0; i < self.Conf.HSConfig.ProcNum; i++ {
+			if matcher, err := NewHSMatcher(self.Conf.HSConfig.Rules, self.Db, self.Scratch); err != nil {
+				log.WithField("idx:", i).Error("Error: NewHSMatcher")
+				continue
+			} else {
+				if self.Db == nil {
+					self.Db = matcher.HSDB
+				}
+				if self.Scratch == nil {
+					self.Scratch = matcher.HSScratch
+				}
+				log.WithField("idx", i).Info("init matcher ok!")
 			}
-			if self.Scratch == nil {
-				self.Scratch = matcher.HSScratch
-			}
-			log.WithField("idx", i).Info("init matcher ok!")
 		}
-	}
+	*/
 }
 
 func (self *Scanner) Start() {
@@ -106,8 +135,6 @@ func (self *Scanner) Start() {
 	//do work
 	//tunny goroutine pool process body match
 	log.Info("Start Scanner done!")
-
-	self.ConfOutput()
 }
 
 func (self *Scanner) Stop() {
