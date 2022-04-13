@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"runtime"
 	"strconv"
 	"syscall"
@@ -79,22 +81,6 @@ func init() {
 	//hsmatcher init
 	hsMatcher.Init()
 }
-
-func main() {
-
-	h := requestHandler
-	if compress {
-		h = fasthttp.CompressHandler(h)
-	}
-
-	if err := fasthttp.ListenAndServe(addr, h); err != nil {
-		//if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
-		logrus.Fatalf("Error in ListenAndServeUNIX: %v", err)
-	}
-
-	hsMatcher.Fini()
-}
-
 func requestHandler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Hello, world!\n\n")
 
@@ -189,4 +175,64 @@ func (self *HSMatcher) Match(ctx *HSContext) (err error) {
 	//fmt.Printf("Scanning %d bytes %s with Hyperscan Id:%d from:%d to:%d hit:[%s]\n", len(hsctx.Data), hsctx.Data, hsctx.Id, hsctx.From, hsctx.To, hsctx.Data[hsctx.From:hsctx.To])
 
 	return nil
+}
+
+func module_test(mctx *context.Context) error {
+
+	//exit before main exit
+	for {
+		select {
+		case <-(*mctx).Done():
+			logrus.Debug("Recv mctx Done...")
+			return nil
+		default:
+			time.Sleep(time.Second)
+		}
+	}
+
+	//start server
+	go func() {
+		h := requestHandler
+		if compress {
+			h = fasthttp.CompressHandler(h)
+		}
+
+		if err := fasthttp.ListenAndServe(addr, h); err != nil {
+			//if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
+			logrus.Fatalf("Error in ListenAndServeUNIX: %v", err)
+		}
+	}()
+
+	logrus.Info("Start done!")
+	return nil
+}
+
+func module_fini() error {
+	hsMatcher.Fini()
+
+	logrus.Info("module fini done!")
+	return nil
+}
+
+func main() {
+	logrus.Info("Starting ...")
+
+	//init ctx && signal
+	mctx, cancel := context.WithCancel(context.Background())
+	sigCh := make(chan os.Signal)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+
+	//module inti && start
+	module_test(&mctx)
+
+	//wait for exit signal
+	<-sigCh
+
+	//module clean
+	module_fini()
+
+	//main clean
+	cancel()
+	time.Sleep(time.Second * 1)
+	logrus.Warn("Stop spider_ip_rdns done!")
 }

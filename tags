@@ -164,6 +164,8 @@ message	libs/hyperscan/include/hs/hs_compile.h	/^    char *message;$/;"	m	struct
 min_length	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long min_length;$/;"	m	struct:hs_expr_ext
 min_offset	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long min_offset;$/;"	m	struct:hs_expr_ext
 min_width	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned int min_width;$/;"	m	struct:hs_expr_info
+module_fini	main.go	/^func module_fini() error {$/;"	f
+module_test	main.go	/^func module_test(mctx *context.Context) error {$/;"	f
 onMatch	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
 onMatch	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
 onMatch	main.go	/^func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
