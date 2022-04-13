@@ -2,10 +2,11 @@
     "debug":true,
     "version": "v1.0.0",
     "cpunum": 2,
-    "HSConfig": {
+    "hsconfig": {
+        "ProcNum": 4,
         "LogSwitch":"on",
-        "Debug":"1",
-        "Rules": [
+        "debug":"1",
+        "rules": [
             {
                 "id": "12009",
                 "mz": "$u_d_request_headers,$u_d_request_body",
@@ -111,7 +112,7 @@
                 "rule_type": "1"
             }
         ],
-        "Policies": [
+        "policies": [
             {
                 "id": "20028",
                 "policy": "11011"
@@ -138,7 +139,7 @@
             }
         ]
     },
-    "SAConfig": {
+    "saconfig": {
         "switch": "off",
         "mz": "$u_args",
         "action":"log"

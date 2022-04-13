@@ -33,12 +33,12 @@ type Policy struct {
 }
 
 type HSConfig struct {
-	Rules    []Rule   `json:"Rules"`
-	Policies []Policy `json:"Policies"`
+	Rules    []Rule   `json:"rules"`
+	Policies []Policy `json:"policies"`
 }
 
 type Conf struct {
-	HSConfig HSConfig `json:"HSConfig"`
+	HSConfig HSConfig `json:"hsconfig"`
 }
 
 func (self *Scanner) ConfOutput() {
