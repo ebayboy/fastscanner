@@ -37,7 +37,6 @@ type Policy struct {
 }
 
 type HSConfig struct {
-	ProcNum  int      `json:"procnum"`
 	Rules    []Rule   `json:"rules"`
 	Policies []Policy `json:"policies"`
 }

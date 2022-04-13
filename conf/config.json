@@ -2,8 +2,8 @@
     "debug":true,
     "version": "v1.0.0",
     "cpunum": 2,
+    "procnum": 4,
     "hsconfig": {
-        "ProcNum": 4,
         "LogSwitch":"on",
         "debug":"1",
         "rules": [

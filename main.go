@@ -119,6 +119,7 @@ type Conf struct {
 	Debug   bool   `json:"debug"`
 	Version string `json:"version"`
 	CPUNum  int    `json:"cpunum"`
+	ProcNum int    `json:"procnum"`
 }
 
 type FastScanner struct {
@@ -126,34 +127,27 @@ type FastScanner struct {
 	conf     Conf
 }
 
-func module_test(mctx *context.Context) error {
+func ServeStart(mctx *context.Context) {
 
 	//start server
 	go func() {
 		h := requestHandler
 		if err := fasthttp.ListenAndServe(addr, h); err != nil {
-			//if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
-			log.Fatalf("Error in ListenAndServeUNIX: %v", err)
+			log.WithField("err", err.Error()).Fatal("Error: fasthttp.ListenAndServe")
 		}
 	}()
 
-	log.Info("Start module done!")
+	log.Info("Start server done!")
 
 	//exit before main exit
 	for {
 		select {
 		case <-(*mctx).Done():
 			log.Debug("Recv mctx Done...")
-			return nil
 		default:
 			time.Sleep(time.Second)
 		}
 	}
-}
-
-func module_fini() error {
-	log.Info("module fini done!")
-	return nil
 }
 
 var fastScanner FastScanner
@@ -183,6 +177,8 @@ func main() {
 		log.Fatal("init scanner.NewScanner error!")
 	}
 	ins.Start()
+
+	go ServeStart(&mctx)
 
 	//============= MODULE ===============
 

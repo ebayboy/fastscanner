@@ -21,6 +21,7 @@ Output	scanner/hsmatcher.go	/^func (self *HSMatcher) Output() {$/;"	f
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
+ServeStart	main.go	/^func ServeStart(mctx *context.Context) {$/;"	f
 Start	scanner/scanner.go	/^func (self *Scanner) Start() {$/;"	f
 Stop	scanner/scanner.go	/^func (self *Scanner) Stop() {$/;"	f
 addr	main.go	/^	addr     string$/;"	v
@@ -32,8 +33,6 @@ isdev	main.go	/^	isdev    bool$/;"	v
 logFile	main.go	/^	logFile  string$/;"	v
 main	main.go	/^func main() {$/;"	f
 main	main.go	/^package main$/;"	p
-module_fini	main.go	/^func module_fini() error {$/;"	f
-module_test	main.go	/^func module_test(mctx *context.Context) error {$/;"	f
 onMatch	scanner/hsmatcher.go	/^func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
 requestHandler	main.go	/^func requestHandler(ctx *fasthttp.RequestCtx) {$/;"	f
 scanner	scanner/hsmatcher.go	/^package scanner$/;"	p
