@@ -129,7 +129,11 @@ func (self *Scanner) init() {
 
 func (self *Scanner) Start() {
 
+	//TODO: 初始化通道
 	self.init()
+
+	//TODO: 轮询通道
+	//TODO: 找到对应Matcher，写入协程对应的写通道
 
 	//do work
 	//tunny goroutine pool process body match
@@ -141,6 +145,5 @@ func (self *Scanner) Stop() {
 	log.Debug("Stop scanner done!")
 }
 
-func (self *Scanner) Match() {
-
+func (self *Scanner) Work(hsctxs []*HSContext) {
 }

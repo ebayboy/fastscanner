@@ -5,6 +5,7 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
 BuildRules	scanner/scanner.go	/^func (self *Conf) BuildRules() {$/;"	f
+COMMIT_ID	scanner/waf.h	12;"	d
 Conf	main.go	/^type Conf struct {$/;"	t
 Conf	scanner/scanner.go	/^type Conf struct {$/;"	t
 ConfOutput	scanner/scanner.go	/^func (self *Conf) ConfOutput() {$/;"	f
@@ -14,29 +15,217 @@ Free	scanner/hsmatcher.go	/^func (self *HSMatcher) Free() error {$/;"	f
 HSConfig	scanner/scanner.go	/^type HSConfig struct {$/;"	t
 HSContext	scanner/hsmatcher.go	/^type HSContext struct {$/;"	t
 HSMatcher	scanner/hsmatcher.go	/^type HSMatcher struct {$/;"	t
-Match	scanner/hsmatcher.go	/^func (self *HSMatcher) Match(ctx *HSContext) error {$/;"	f
-Match	scanner/scanner.go	/^func (self *Scanner) Match() {$/;"	f
+HTTP_COPY	scanner/waf.h	326;"	d
+HTTP_DELETE	scanner/waf.h	324;"	d
+HTTP_GET	scanner/waf.h	320;"	d
+HTTP_HEAD	scanner/waf.h	321;"	d
+HTTP_LOCK	scanner/waf.h	331;"	d
+HTTP_MKCOL	scanner/waf.h	325;"	d
+HTTP_MOVE	scanner/waf.h	327;"	d
+HTTP_OPTIONS	scanner/waf.h	328;"	d
+HTTP_PATCH	scanner/waf.h	333;"	d
+HTTP_POST	scanner/waf.h	322;"	d
+HTTP_PROPFIND	scanner/waf.h	329;"	d
+HTTP_PROPPATCH	scanner/waf.h	330;"	d
+HTTP_PUT	scanner/waf.h	323;"	d
+HTTP_TRACE	scanner/waf.h	334;"	d
+HTTP_UNKNOWN	scanner/waf.h	319;"	d
+HTTP_UNLOCK	scanner/waf.h	332;"	d
+INIT_MATCH_DATA	scanner/waf.h	189;"	d
+INIT_MATCH_DATA_CPY	scanner/waf.h	192;"	d
+Init	scanner/hsmatcher.go	/^func (self *HSMatcher) Init() error {$/;"	f
+MD_HS_MATCHED	scanner/waf.h	159;"	d
+MD_HS_U_D_MATCHED	scanner/waf.h	167;"	d
+MD_HS_U_D_T_MATCHED	scanner/waf.h	168;"	d
+MD_HS_U_MATCHED	scanner/waf.h	164;"	d
+MD_MATCHED	scanner/waf.h	170;"	d
+MD_NOT_MATCHED	scanner/waf.h	157;"	d
+MD_SA_SQLI_MATCHED	scanner/waf.h	160;"	d
+MD_SA_U_SQLI_MATCHED	scanner/waf.h	165;"	d
+MD_SA_U_XSS_MATCHED	scanner/waf.h	166;"	d
+MD_SA_XSS_MATCHED	scanner/waf.h	161;"	d
+MD_U_MATCHED	scanner/waf.h	171;"	d
+MatchPool	scanner/hsmatcher.go	/^func (self *HSMatcher) MatchPool(data interface{}) interface{} {$/;"	f
 NewHSMatcher	scanner/hsmatcher.go	/^func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {$/;"	f
 NewScanner	scanner/scanner.go	/^func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, error) {$/;"	f
 Output	scanner/hsmatcher.go	/^func (self *HSMatcher) Output() {$/;"	f
 Output	scanner/scanner.go	/^func (self *Scanner) Output() {$/;"	f
+PARAM_HDR_TYPE	scanner/waf.h	336;"	d
+PARAM_MZ_TYPE	scanner/waf.h	338;"	d
+PARAM_VAR_TYPE	scanner/waf.h	337;"	d
+PAYLOAD_AFTER_LEN_DEFAULT	scanner/waf.h	25;"	d
+PAYLOAD_LEN	scanner/waf.h	24;"	d
+PAYLOAD_MAX_LEN_DEFAULT	scanner/waf.h	26;"	d
+POLICYS_RESULT_MAX	scanner/waf.h	29;"	d
+POLICY_RULES_MAX	scanner/waf.h	30;"	d
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
+RULE_RESULT_MAX	scanner/waf.h	28;"	d
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
 ServeStart	main.go	/^func ServeStart(mctx *context.Context) {$/;"	f
+Start	scanner/hsmatcher.go	/^func (self *HSMatcher) Start() error {$/;"	f
 Start	scanner/scanner.go	/^func (self *Scanner) Start() {$/;"	f
 Stop	scanner/scanner.go	/^func (self *Scanner) Stop() {$/;"	f
+WAFSDK_ACT_BLOCK	scanner/waf.h	/^    WAFSDK_ACT_BLOCK =2 $/;"	e	enum:__anon1
+WAFSDK_ACT_BLOCK_STR	scanner/waf.h	62;"	d
+WAFSDK_ACT_LOG	scanner/waf.h	/^    WAFSDK_ACT_LOG = 1,  $/;"	e	enum:__anon1
+WAFSDK_ACT_LOG_STR	scanner/waf.h	61;"	d
+WAFSDK_ACT_NONE	scanner/waf.h	/^    WAFSDK_ACT_NONE = 0, $/;"	e	enum:__anon1
+WAFSDK_ACT_NONE_STR	scanner/waf.h	60;"	d
+WAFSDK_MAGIC	scanner/waf.h	52;"	d
+WAF_BODY_TYPE_REQ	scanner/waf.h	49;"	d
+WAF_BODY_TYPE_RESP	scanner/waf.h	50;"	d
+WAF_HDR_KEY_REFERER	scanner/waf.h	198;"	d
+WAF_HDR_KEY_USER_AGENT	scanner/waf.h	197;"	d
+WAF_MATCHED	scanner/waf.h	41;"	d
+WAF_MATCHING	scanner/waf.h	43;"	d
+WAF_MATCH_DATA_ALLOC_KEY	scanner/waf.h	439;"	d
+WAF_MATCH_DATA_ALLOC_VALUE	scanner/waf.h	440;"	d
+WAF_MATCH_ERR	scanner/waf.h	37;"	d
+WAF_MATCH_OK	scanner/waf.h	36;"	d
+WAF_MZ_ARGS	scanner/waf.h	204;"	d
+WAF_MZ_ARGS_KEY	scanner/waf.h	238;"	d
+WAF_MZ_ARGS_VALUE	scanner/waf.h	239;"	d
+WAF_MZ_COOKIE_VALUE	scanner/waf.h	266;"	d
+WAF_MZ_FILE_CONTENT	scanner/waf.h	249;"	d
+WAF_MZ_FILE_NAME	scanner/waf.h	248;"	d
+WAF_MZ_GET_VALUE	scanner/waf.h	264;"	d
+WAF_MZ_HPP_PREFIX	scanner/waf.h	269;"	d
+WAF_MZ_HPP_TEST_PREFIX	scanner/waf.h	270;"	d
+WAF_MZ_HTTP_COOKIE	scanner/waf.h	212;"	d
+WAF_MZ_HTTP_REFERER	scanner/waf.h	208;"	d
+WAF_MZ_HTTP_URL	scanner/waf.h	205;"	d
+WAF_MZ_HTTP_USER_AGENT	scanner/waf.h	209;"	d
+WAF_MZ_MAX	scanner/waf.h	33;"	d
+WAF_MZ_POST_ARGS_VALUE	scanner/waf.h	246;"	d
+WAF_MZ_POST_VALUE	scanner/waf.h	265;"	d
+WAF_MZ_REQUEST_BODY	scanner/waf.h	207;"	d
+WAF_MZ_REQUEST_HEADERS	scanner/waf.h	213;"	d
+WAF_MZ_REQUEST_METHOD	scanner/waf.h	250;"	d
+WAF_MZ_REQUEST_URI	scanner/waf.h	206;"	d
+WAF_MZ_RESPONSE_BODY	scanner/waf.h	210;"	d
+WAF_MZ_RESPONSE_HEADERS	scanner/waf.h	214;"	d
+WAF_MZ_URI	scanner/waf.h	203;"	d
+WAF_MZ_U_ARGS	scanner/waf.h	219;"	d
+WAF_MZ_U_ARGS_KEY	scanner/waf.h	240;"	d
+WAF_MZ_U_ARGS_KV	scanner/waf.h	220;"	d
+WAF_MZ_U_ARGS_VALUE	scanner/waf.h	241;"	d
+WAF_MZ_U_COOKIE_KEY	scanner/waf.h	236;"	d
+WAF_MZ_U_COOKIE_VALUE	scanner/waf.h	237;"	d
+WAF_MZ_U_D_GET_VALUE	scanner/waf.h	252;"	d
+WAF_MZ_U_D_HTTP_URL	scanner/waf.h	254;"	d
+WAF_MZ_U_D_POST_VALUE	scanner/waf.h	253;"	d
+WAF_MZ_U_D_REQUEST_BODY	scanner/waf.h	256;"	d
+WAF_MZ_U_D_REQUEST_HEADERS	scanner/waf.h	255;"	d
+WAF_MZ_U_D_T_GET_VALUE	scanner/waf.h	259;"	d
+WAF_MZ_U_D_T_HTTP_URL	scanner/waf.h	261;"	d
+WAF_MZ_U_D_T_POST_VALUE	scanner/waf.h	260;"	d
+WAF_MZ_U_D_T_REQUEST_HEADERS	scanner/waf.h	262;"	d
+WAF_MZ_U_GET_KEY	scanner/waf.h	234;"	d
+WAF_MZ_U_GET_VALUE	scanner/waf.h	235;"	d
+WAF_MZ_U_HTTP_COOKIE	scanner/waf.h	226;"	d
+WAF_MZ_U_HTTP_REFERER	scanner/waf.h	223;"	d
+WAF_MZ_U_HTTP_URL	scanner/waf.h	225;"	d
+WAF_MZ_U_HTTP_USER_AGENT	scanner/waf.h	224;"	d
+WAF_MZ_U_POST_ARGS_VALUE	scanner/waf.h	245;"	d
+WAF_MZ_U_POST_KEY	scanner/waf.h	242;"	d
+WAF_MZ_U_POST_VALUE	scanner/waf.h	243;"	d
+WAF_MZ_U_PREFIX	scanner/waf.h	268;"	d
+WAF_MZ_U_REQUEST_BODY	scanner/waf.h	222;"	d
+WAF_MZ_U_REQUEST_HEADERS	scanner/waf.h	227;"	d
+WAF_MZ_U_REQUEST_HEADERS_VAL	scanner/waf.h	228;"	d
+WAF_MZ_U_REQUEST_METHOD	scanner/waf.h	230;"	d
+WAF_MZ_U_REQUEST_URI	scanner/waf.h	221;"	d
+WAF_MZ_U_REQUEST_URI_PATH	scanner/waf.h	231;"	d
+WAF_MZ_U_RESPONSE_BODY	scanner/waf.h	229;"	d
+WAF_MZ_U_RESPONSE_HEADERS	scanner/waf.h	215;"	d
+WAF_MZ_U_URI	scanner/waf.h	218;"	d
+WAF_NOT_FOUND	scanner/waf.h	44;"	d
+WAF_NOT_MATCH	scanner/waf.h	42;"	d
+WAF_PHASE_ANY	scanner/waf.h	47;"	d
+WAF_PHASE_REQ	scanner/waf.h	/^    WAF_PHASE_REQ = 1, \/\/1$/;"	e	enum:__anon2
+WAF_PHASE_REQ_BODY	scanner/waf.h	/^    WAF_PHASE_REQ_BODY, \/\/3$/;"	e	enum:__anon2
+WAF_PHASE_REQ_HEADER	scanner/waf.h	/^    WAF_PHASE_REQ_HEADER, \/\/2$/;"	e	enum:__anon2
+WAF_PHASE_RESP	scanner/waf.h	/^    WAF_PHASE_RESP,  \/\/4$/;"	e	enum:__anon2
+WAF_PHASE_RESP_BODY	scanner/waf.h	/^    WAF_PHASE_RESP_BODY \/\/6$/;"	e	enum:__anon2
+WAF_PHASE_RESP_HEADER	scanner/waf.h	/^    WAF_PHASE_RESP_HEADER, \/\/5$/;"	e	enum:__anon2
+WAF_RULE_MZ_LEN	scanner/waf.h	31;"	d
+WAF_SA_FP_LEN	scanner/waf.h	34;"	d
+WAF_SA_LEN	scanner/waf.h	32;"	d
+WAF_SYSLOG_TITLE	scanner/waf.h	39;"	d
+WAF_VAR_KEY_REQUEST_URI	scanner/waf.h	196;"	d
+WAF_VAR_KEY_URL	scanner/waf.h	195;"	d
+WAF_VAR_RESPONSE_BODY	scanner/waf.h	199;"	d
+Work	scanner/scanner.go	/^func (self *Scanner) Work(hsctxs []*HSContext) {$/;"	f
+__WAF_H	scanner/waf.h	19;"	d
+action	scanner/waf.h	/^    int action; $/;"	m	struct:__anon3
 addr	main.go	/^	addr     string$/;"	v
 confFile	main.go	/^	confFile string$/;"	v
+cursor	scanner/waf.h	/^    unsigned int cursor;$/;"	m	struct:__anon5
+data	scanner/waf.h	/^    char *data;$/;"	m	struct:__anon7
+data_mz_map	scanner/data_mz_map.go	/^var data_mz_map map[string]string = map[string]string{$/;"	v
+dlen	scanner/waf.h	/^    size_t dlen;$/;"	m	struct:__anon7
 fastScanner	main.go	/^var fastScanner FastScanner$/;"	v
+from	scanner/waf.h	/^    unsigned int  from;$/;"	m	struct:__anon4
+hash	scanner/waf.h	/^    unsigned int hash; $/;"	m	struct:__anon7
 init	main.go	/^func init() {$/;"	f
+init	scanner/hsmatcher.go	/^func (self *HSMatcher) init() error {$/;"	f
 init	scanner/scanner.go	/^func (self *Scanner) init() {$/;"	f
+init_result	scanner/waf.h	/^    int init_result;$/;"	m	struct:__anon7
+is_copy	scanner/waf.h	/^    int is_copy;$/;"	m	struct:__anon7
 isdev	main.go	/^	isdev    bool$/;"	v
+issqli	scanner/waf.h	/^    int issqli; $/;"	m	struct:__anon3
+isxss	scanner/waf.h	/^    int isxss;$/;"	m	struct:__anon3
 logFile	main.go	/^	logFile  string$/;"	v
 main	main.go	/^func main() {$/;"	f
 main	main.go	/^package main$/;"	p
+match_data_t	scanner/waf.h	/^} match_data_t;$/;"	t	typeref:struct:__anon7
+match_result_t	scanner/waf.h	/^} match_result_t;$/;"	t	typeref:struct:__anon6
+match_state	scanner/waf.h	/^    int match_state; \/* WAF_NOT_MATCH WAF_MATCHING WAF_MATCHED *\/$/;"	m	struct:__anon5
+match_status	scanner/waf.h	/^	size_t match_status;  \/* 00000000 00000000 ~ ffffffff ffffffff *\/$/;"	m	struct:__anon7
+matched	scanner/waf.h	/^	size_t matched;		  \/*是否已经匹配过, 1-匹配过; 0-未匹配 *\/$/;"	m	struct:__anon7
+mz	scanner/waf.h	/^    char mz[WAF_MZ_MAX];$/;"	m	struct:__anon4
+mz	scanner/waf.h	/^    char mz[WAF_RULE_MZ_LEN];$/;"	m	struct:__anon3
 onMatch	scanner/hsmatcher.go	/^func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
+payload	scanner/waf.h	/^    unsigned char *payload; \/* point to hit end *\/$/;"	m	struct:__anon4
+payload	scanner/waf.h	/^    unsigned char *payload;$/;"	m	struct:__anon3
+payload_after	scanner/waf.h	/^    unsigned char *payload_after;  \/* point to hit after post *\/$/;"	m	struct:__anon4
+payload_after	scanner/waf.h	/^    unsigned char *payload_after;$/;"	m	struct:__anon3
+payload_after_len	scanner/waf.h	/^    unsigned int payload_after_len;$/;"	m	struct:__anon3
+payload_after_len	scanner/waf.h	/^    unsigned int payload_after_len;$/;"	m	struct:__anon4
+payload_len	scanner/waf.h	/^    unsigned int payload_len;$/;"	m	struct:__anon3
+payload_len	scanner/waf.h	/^    unsigned int payload_len;$/;"	m	struct:__anon4
+phase	scanner/waf.h	/^    waf_phase_e phase;$/;"	m	struct:__anon3
+phase	scanner/waf.h	/^    waf_phase_e phase;$/;"	m	struct:__anon4
+phase	scanner/waf.h	/^    waf_phase_e phase;$/;"	m	struct:__anon5
+policy_action	scanner/waf.h	/^    int policy_action;$/;"	m	struct:__anon5
+policy_cursor	scanner/waf.h	/^    unsigned int policy_cursor;$/;"	m	struct:__anon6
+policy_hit_cursor	scanner/waf.h	/^    unsigned int policy_hit_cursor;$/;"	m	struct:__anon6
+policy_hit_results	scanner/waf.h	/^    policy_result_t **policy_hit_results;$/;"	m	struct:__anon6
+policy_id	scanner/waf.h	/^    int policy_id;$/;"	m	struct:__anon5
+policy_result_t	scanner/waf.h	/^} policy_result_t;$/;"	t	typeref:struct:__anon5
+policy_results	scanner/waf.h	/^    policy_result_t *policy_results;$/;"	m	struct:__anon6
 requestHandler	main.go	/^func requestHandler(ctx *fasthttp.RequestCtx) {$/;"	f
+result	scanner/waf.h	/^    match_result_t *result;$/;"	m	struct:__anon7
+results	scanner/waf.h	/^    rule_result_t *results[POLICY_RULES_MAX];  \/* point to rules[i] *\/$/;"	m	struct:__anon5
+rule_cursor	scanner/waf.h	/^    unsigned int rule_cursor;$/;"	m	struct:__anon6
+rule_id	scanner/waf.h	/^    int         rule_id;$/;"	m	struct:__anon4
+rule_result_t	scanner/waf.h	/^} rule_result_t;$/;"	t	typeref:struct:__anon4
+rule_results	scanner/waf.h	/^    rule_result_t *rule_results[RULE_RESULT_MAX];$/;"	m	struct:__anon6
+sa_action	scanner/waf.h	/^    char sa_action[64];  $/;"	m	struct:__anon3
+sa_cursor	scanner/waf.h	/^    unsigned int sa_cursor;$/;"	m	struct:__anon6
+sa_name	scanner/waf.h	/^    char sa_name[64];  $/;"	m	struct:__anon3
+sa_result_t	scanner/waf.h	/^} sa_result_t;$/;"	t	typeref:struct:__anon3
+sa_results	scanner/waf.h	/^    sa_result_t *sa_results[WAF_MZ_MAX];$/;"	m	struct:__anon6
+sa_type	scanner/waf.h	/^    char sa_type[64];  \/* white | black *\/$/;"	m	struct:__anon3
+sa_value	scanner/waf.h	/^    char sa_value[64];$/;"	m	struct:__anon3
+scanner	scanner/data_mz_map.go	/^package scanner$/;"	p
 scanner	scanner/hsmatcher.go	/^package scanner$/;"	p
 scanner	scanner/scanner.go	/^package scanner$/;"	p
+self_clone	scanner/waf.h	/^    int self_clone;$/;"	m	struct:__anon7
+start	scanner/waf.h	/^    char          *start;$/;"	m	struct:__anon4
+start_ori	scanner/waf.h	/^    char          *start_ori;$/;"	m	struct:__anon4
+to	scanner/waf.h	/^    unsigned int  to; $/;"	m	struct:__anon4
 version	main.go	/^	version  bool$/;"	v
+waf_phase_e	scanner/waf.h	/^} waf_phase_e;$/;"	t	typeref:enum:__anon2
+wafsdk_action_e	scanner/waf.h	/^} wafsdk_action_e;$/;"	t	typeref:enum:__anon1

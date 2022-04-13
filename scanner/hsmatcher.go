@@ -36,6 +36,24 @@ func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
 	return nil
 }
 
+func (self *HSMatcher) MatchPool(data interface{}) interface{} {
+	//此处使用的scrach应该是clone的
+	/*
+		ctx := data.(HSContext)
+
+		if err := database.Scan(ctx.Data, scratch, eventHandler, inputData); err != nil {
+			log.Error("Error:", err.Error())
+		}
+	*/
+
+	return nil
+}
+
+func (self *HSMatcher) Init() error {
+
+	return nil
+}
+
 func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {
 	var err error
 	matcher := new(HSMatcher)
@@ -82,13 +100,24 @@ func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *
 	return matcher, nil
 }
 
+func (self *HSMatcher) init() error {
+	//TODO: 初始化多个协程，以及通道
+
+	return nil
+}
+
 // Test: curl http://localhost:9999/0123456
-func (self *HSMatcher) Match(ctx *HSContext) error {
-	if err := self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx); err != nil {
-		log.WithField("self.HSDB.Scan", err.Error()).Error("hs.scan")
+func (self *HSMatcher) Start() error {
+
+	if err := self.init(); err != nil {
+		log.Error("Error", err.Error())
 		return err
 	}
-	//fmt.Printf("Scanning %d bytes %s with Hyperscan Id:%d from:%d to:%d hit:[%s]\n", len(hsctx.Data), hsctx.Data, hsctx.Id, hsctx.From, hsctx.To, hsctx.Data[hsctx.From:hsctx.To])
+
+	//TODO: 轮询监听通道
+	//读取请求ctx
+	//db.Scan()
+	//读取mctx, cancle
 
 	return nil
 }

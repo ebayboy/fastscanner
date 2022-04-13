@@ -3,6 +3,7 @@ module github.com/fastscanner
 go 1.17
 
 require (
+	github.com/Jeffail/tunny v0.1.4
 	github.com/flier/gohs v1.2.0
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/sirupsen/logrus v1.8.1
