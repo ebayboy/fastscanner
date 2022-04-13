@@ -9,31 +9,30 @@ Conf	scanner/scanner.go	/^type Conf struct {$/;"	t
 ConfOutput	scanner/scanner.go	/^func (self *Scanner) ConfOutput() {$/;"	f
 ConfParse	scanner/scanner.go	/^func (self *Scanner) ConfParse(content []byte) error {$/;"	f
 FastScanner	main.go	/^type FastScanner struct {$/;"	t
-Fini	main.go	/^func (self *HSMatcher) Fini() error {$/;"	f
+Free	scanner/hsmatcher.go	/^func (self *HSMatcher) Free() error {$/;"	f
 HSConfig	scanner/scanner.go	/^type HSConfig struct {$/;"	t
-HSContext	main.go	/^type HSContext struct {$/;"	t
-HSMatcher	main.go	/^type HSMatcher struct {$/;"	t
-Init	main.go	/^func (self *HSMatcher) Init() (err error) {$/;"	f
-Match	main.go	/^func (self *HSMatcher) Match(ctx *HSContext) error {$/;"	f
+HSContext	scanner/hsmatcher.go	/^type HSContext struct {$/;"	t
+HSMatcher	scanner/hsmatcher.go	/^type HSMatcher struct {$/;"	t
+Match	scanner/hsmatcher.go	/^func (self *HSMatcher) Match(ctx *HSContext) error {$/;"	f
+NewHSMatcher	scanner/hsmatcher.go	/^func NewHSMatcher(rules []Rule, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) *HSMatcher {$/;"	f
 NewScanner	scanner/scanner.go	/^func NewScanner(confData []byte, mctx *context.Context) *Scanner {$/;"	f
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
 Start	scanner/scanner.go	/^func (self *Scanner) Start() {$/;"	f
 Stop	scanner/scanner.go	/^func (self *Scanner) Stop() {$/;"	f
-addr	main.go	/^	addr      string$/;"	v
-compress	main.go	/^	compress  bool$/;"	v
-confFile	main.go	/^	confFile  string$/;"	v
+addr	main.go	/^	addr     string$/;"	v
+confFile	main.go	/^	confFile string$/;"	v
 fastScanner	main.go	/^var fastScanner FastScanner$/;"	v
-hsMatcher	main.go	/^	hsMatcher HSMatcher$/;"	v
 init	main.go	/^func init() {$/;"	f
-isdev	main.go	/^	isdev     bool$/;"	v
-logFile	main.go	/^	logFile   string$/;"	v
+isdev	main.go	/^	isdev    bool$/;"	v
+logFile	main.go	/^	logFile  string$/;"	v
 main	main.go	/^func main() {$/;"	f
 main	main.go	/^package main$/;"	p
 module_fini	main.go	/^func module_fini() error {$/;"	f
 module_test	main.go	/^func module_test(mctx *context.Context) error {$/;"	f
-onMatch	main.go	/^func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
+onMatch	scanner/hsmatcher.go	/^func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
 requestHandler	main.go	/^func requestHandler(ctx *fasthttp.RequestCtx) {$/;"	f
+scanner	scanner/hsmatcher.go	/^package scanner$/;"	p
 scanner	scanner/scanner.go	/^package scanner$/;"	p
-version	main.go	/^	version   bool$/;"	v
+version	main.go	/^	version  bool$/;"	v

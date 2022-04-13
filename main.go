@@ -9,25 +9,21 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
-	"strconv"
 	"syscall"
 	"time"
 
 	"github.com/fastscanner/scanner"
-	"github.com/flier/gohs/hyperscan"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
 )
 
 var (
-	isdev     bool
-	version   bool
-	logFile   string
-	confFile  string
-	addr      string
-	compress  bool
-	hsMatcher HSMatcher
+	isdev    bool
+	version  bool
+	logFile  string
+	confFile string
+	addr     string
 )
 
 func init() {
@@ -37,7 +33,6 @@ func init() {
 	flag.StringVar(&logFile, "log", "./logs/fastscanner.log", "error.log")
 	flag.StringVar(&confFile, "conf", "./conf/config.json", "config file")
 	flag.StringVar(&addr, "addr", ":9999", "TCP address to listen to")
-	flag.BoolVar(&compress, "compress", false, "Whether to enable transparent response compression")
 	flag.Parse()
 
 	//log init
@@ -76,11 +71,11 @@ func init() {
 
 	//set procs
 	runtime.GOMAXPROCS(int(fastScanner.conf.CPUNum))
-
-	//hsmatcher init
-	hsMatcher.Init()
 }
+
 func requestHandler(ctx *fasthttp.RequestCtx) {
+
+	//TDOO: tunny goroutine pool
 	fmt.Fprintf(ctx, "Hello, world!\n\n")
 
 	fmt.Fprintf(ctx, "Request method is %q\n", ctx.Method())
@@ -96,15 +91,17 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
-	hsctx := HSContext{Data: ctx.RequestURI()}
-	if err := hsMatcher.Match(&hsctx); err != nil {
-		logrus.Error("Error:", err.Error())
-	}
+	/*
+		hsctx := HSContext{Data: ctx.RequestURI()}
+		if err := hsMatcher.Match(&hsctx); err != nil {
+			logrus.Error("Error:", err.Error())
+		}
 
-	if hsctx.Id > 0 {
-		ctx.Response.Header.Set("waf-hit-id", strconv.Itoa(int(hsctx.Id)))
-		ctx.Response.SetStatusCode(403)
-	}
+		if hsctx.Id > 0 {
+			ctx.Response.Header.Set("waf-hit-id", strconv.Itoa(int(hsctx.Id)))
+			ctx.Response.SetStatusCode(403)
+		}
+	*/
 
 	ctx.SetContentType("text/plain; charset=utf8")
 
@@ -118,27 +115,6 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 	ctx.Response.Header.SetCookie(&c)
 }
 
-func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
-	hsctx := context.(*HSContext)
-	hsctx.Id = id
-	hsctx.From = from
-	hsctx.To = to
-
-	return nil
-}
-
-type HSContext struct {
-	Data []byte
-	Id   uint
-	From uint64
-	To   uint64
-}
-
-type HSMatcher struct {
-	HSDB      hyperscan.BlockDatabase
-	HSScratch *hyperscan.Scratch
-}
-
 type Conf struct {
 	Debug   bool   `json:"debug"`
 	Version string `json:"version"`
@@ -150,53 +126,11 @@ type FastScanner struct {
 	conf     Conf
 }
 
-func (self *HSMatcher) Init() (err error) {
-	pattern := hyperscan.NewPattern("1234", hyperscan.DotAll|hyperscan.SomLeftMost)
-	pattern.Id = 10001
-
-	self.HSDB, err = hyperscan.NewBlockDatabase(pattern)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "ERROR: Unable to compile pattern \"%s\": %s\n", pattern, err.Error())
-		return err
-	}
-
-	self.HSScratch, err = hyperscan.NewScratch(self.HSDB)
-	if err != nil {
-		fmt.Fprint(os.Stderr, "ERROR: Unable to allocate scratch space. Exiting.\n")
-		return err
-	}
-
-	return nil
-}
-
-func (self *HSMatcher) Fini() error {
-
-	self.HSDB.Close()
-	self.HSScratch.Free()
-
-	return nil
-}
-
-// Test: curl http://localhost:9999/0123456
-func (self *HSMatcher) Match(ctx *HSContext) error {
-	if err := self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx); err != nil {
-		logrus.WithField("self.HSDB.Scan", err.Error()).Error("hs.scan")
-		return err
-	}
-	//fmt.Printf("Scanning %d bytes %s with Hyperscan Id:%d from:%d to:%d hit:[%s]\n", len(hsctx.Data), hsctx.Data, hsctx.Id, hsctx.From, hsctx.To, hsctx.Data[hsctx.From:hsctx.To])
-
-	return nil
-}
-
 func module_test(mctx *context.Context) error {
 
 	//start server
 	go func() {
 		h := requestHandler
-		if compress {
-			h = fasthttp.CompressHandler(h)
-		}
-
 		if err := fasthttp.ListenAndServe(addr, h); err != nil {
 			//if err := fasthttp.ListenAndServeUNIX("/tmp/fasthttp_hyperscan.sock", 666, h); err != nil {
 			logrus.Fatalf("Error in ListenAndServeUNIX: %v", err)
@@ -218,8 +152,6 @@ func module_test(mctx *context.Context) error {
 }
 
 func module_fini() error {
-	hsMatcher.Fini()
-
 	logrus.Info("module fini done!")
 	return nil
 }

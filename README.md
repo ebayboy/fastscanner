@@ -4,11 +4,12 @@ fasthttp + hyperscan
 
 ## golang libs
 + tunny goroutine pool
-+ go-cache
-+ logrus + file-rotatelogs
 + govaluate : express compute
-+ 流式json解析： jsonparser gjson
-+ xml解析
++ BODY:
+    + 流式json解析： jsonparser gjson
+    + xml解析
++ fasthttp: contain fasthttp goroutine pool
++ go-cache
 
 ## TODO
 + json config 解析 及 模块化
@@ -20,6 +21,7 @@ fasthttp + hyperscan
     + 实现逻辑引擎LogicEngine(govaluate)
 
 ## DONE
++ logrus + file-rotatelogs
 + fasthttp + hyperscan 
 + hyperscan static lib 
 + nginx性能测试 并发 + 延迟
