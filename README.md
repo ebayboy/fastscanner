@@ -2,12 +2,22 @@
 
 fasthttp + hyperscan
 
+## golang libs
++ tunny goroutine pool
++ go-cache
++ logrus + file-rotatelogs
++ govaluate : express compute
++ 流式json解析： jsonparser gjson
++ xml解析
+
 ## TODO
-+ config
-    + multi goroutine 
-    + db && clone-scratch
-    + match zone && regex
-+ logic matcher
++ json config 解析
+    + 移植 statbot mutl goroutine model
+    + MainConfig module
+    + RulesConfig : Match zone && regex && flag && logic
+    + HSMatcher 模块化 
+    + 实现规则引擎RuleEngine
+    + 实现逻辑引擎LogicEngine(govaluate)
 
 ## DONE
 + fasthttp + hyperscan 
