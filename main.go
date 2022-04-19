@@ -153,6 +153,7 @@ func ServeStart(mctx *context.Context) {
 var fastScanner FastScanner
 
 func main() {
+
 	log.Info("Starting ...")
 
 	//init ctx && signal

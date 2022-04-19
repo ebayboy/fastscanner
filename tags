@@ -112,6 +112,8 @@ HTTP_UNLOCK	scanner/waf.h	332;"	d
 INIT_MATCH_DATA	scanner/waf.h	189;"	d
 INIT_MATCH_DATA_CPY	scanner/waf.h	192;"	d
 Init	scanner/hsmatcher.go	/^func (self *HSMatcher) Init() error {$/;"	f
+Interrupt	worker/worker.go	/^func (w *WorkerWrapper) Interrupt() {$/;"	f
+Join	worker/worker.go	/^func (w *WorkerWrapper) Join() {$/;"	f
 MD_HS_MATCHED	scanner/waf.h	159;"	d
 MD_HS_U_D_MATCHED	scanner/waf.h	167;"	d
 MD_HS_U_D_T_MATCHED	scanner/waf.h	168;"	d
@@ -126,6 +128,7 @@ MD_U_MATCHED	scanner/waf.h	171;"	d
 MatchPool	scanner/hsmatcher.go	/^func (self *HSMatcher) MatchPool(data interface{}) interface{} {$/;"	f
 NewHSMatcher	scanner/hsmatcher.go	/^func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {$/;"	f
 NewScanner	scanner/scanner.go	/^func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, error) {$/;"	f
+NewWorkerWrapper	worker/worker.go	/^func NewWorkerWrapper($/;"	f
 Output	scanner/hsmatcher.go	/^func (self *HSMatcher) Output() {$/;"	f
 Output	scanner/scanner.go	/^func (self *Scanner) Output() {$/;"	f
 PARAM_HDR_TYPE	scanner/waf.h	336;"	d
@@ -139,6 +142,7 @@ POLICY_RULES_MAX	scanner/waf.h	30;"	d
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
 RULE_RESULT_MAX	scanner/waf.h	28;"	d
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
+Run	worker/worker.go	/^func (w *WorkerWrapper) Run() {$/;"	f
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
 ServeStart	main.go	/^func ServeStart(mctx *context.Context) {$/;"	f
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata() {}$/;"	f	class:Sigdata
@@ -147,6 +151,7 @@ Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Sigdata 
 Start	scanner/hsmatcher.go	/^func (self *HSMatcher) Start() error {$/;"	f
 Start	scanner/scanner.go	/^func (self *Scanner) Start() {$/;"	f
 Stop	scanner/scanner.go	/^func (self *Scanner) Stop() {$/;"	f
+Stop	worker/worker.go	/^func (w *WorkerWrapper) Stop() {$/;"	f
 WAFSDK_ACT_BLOCK	scanner/waf.h	/^    WAFSDK_ACT_BLOCK =2 $/;"	e	enum:__anon1
 WAFSDK_ACT_BLOCK_STR	scanner/waf.h	62;"	d
 WAFSDK_ACT_LOG	scanner/waf.h	/^    WAFSDK_ACT_LOG = 1,  $/;"	e	enum:__anon1
@@ -238,7 +243,9 @@ WAF_VAR_KEY_REQUEST_URI	scanner/waf.h	196;"	d
 WAF_VAR_KEY_URL	scanner/waf.h	195;"	d
 WAF_VAR_RESPONSE_BODY	scanner/waf.h	199;"	d
 Work	scanner/scanner.go	/^func (self *Scanner) Work(hsctxs []*HSContext) {$/;"	f
+WorkRequest	worker/worker.go	/^type WorkRequest struct {$/;"	t
 Worker	worker/worker.go	/^type Worker interface {$/;"	t
+WorkerWrapper	worker/worker.go	/^type WorkerWrapper struct {$/;"	t
 __FAVOR_BSD	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	129;"	d	file:
 __FAVOR_BSD	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	64;"	d	file:
 __WAF_H	scanner/waf.h	19;"	d
@@ -301,12 +308,10 @@ init	main.go	/^func init() {$/;"	f
 init	scanner/hsmatcher.go	/^func (self *HSMatcher) init() error {$/;"	f
 init	scanner/scanner.go	/^func (self *Scanner) init() {$/;"	f
 init_result	scanner/waf.h	/^    int init_result;$/;"	m	struct:__anon7
-interrupt	worker/worker.go	/^func (w *workerWrapper) interrupt() {$/;"	f
 is_copy	scanner/waf.h	/^    int is_copy;$/;"	m	struct:__anon7
 isdev	main.go	/^	isdev    bool$/;"	v
 issqli	scanner/waf.h	/^    int issqli; $/;"	m	struct:__anon3
 isxss	scanner/waf.h	/^    int isxss;$/;"	m	struct:__anon3
-join	worker/worker.go	/^func (w *workerWrapper) join() {$/;"	f
 logFile	main.go	/^	logFile  string$/;"	v
 main	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int main(int argc, char **argv) {$/;"	f
 main	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int main(int argc, char **argv) {$/;"	f
@@ -335,7 +340,6 @@ min_offset	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long min_o
 min_width	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned int min_width;$/;"	m	struct:hs_expr_info
 mz	scanner/waf.h	/^    char mz[WAF_MZ_MAX];$/;"	m	struct:__anon4
 mz	scanner/waf.h	/^    char mz[WAF_RULE_MZ_LEN];$/;"	m	struct:__anon3
-newWorkerWrapper	worker/worker.go	/^func newWorkerWrapper($/;"	f
 onMatch	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
 onMatch	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
 onMatch	scanner/hsmatcher.go	/^func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
@@ -388,7 +392,6 @@ rule_cursor	scanner/waf.h	/^    unsigned int rule_cursor;$/;"	m	struct:__anon6
 rule_id	scanner/waf.h	/^    int         rule_id;$/;"	m	struct:__anon4
 rule_result_t	scanner/waf.h	/^} rule_result_t;$/;"	t	typeref:struct:__anon4
 rule_results	scanner/waf.h	/^    rule_result_t *rule_results[RULE_RESULT_MAX];$/;"	m	struct:__anon6
-run	worker/worker.go	/^func (w *workerWrapper) run() {$/;"	f
 sa_action	scanner/waf.h	/^    char sa_action[64];  $/;"	m	struct:__anon3
 sa_cursor	scanner/waf.h	/^    unsigned int sa_cursor;$/;"	m	struct:__anon6
 sa_name	scanner/waf.h	/^    char sa_name[64];  $/;"	m	struct:__anon3
@@ -420,7 +423,6 @@ start	scanner/waf.h	/^    char          *start;$/;"	m	struct:__anon4
 start_ori	scanner/waf.h	/^    char          *start_ori;$/;"	m	struct:__anon4
 stop	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void stop() {$/;"	f	class:Clock
 stop	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void stop() {$/;"	f	class:Clock
-stop	worker/worker.go	/^func (w *workerWrapper) stop() {$/;"	f
 stream_ids	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<size_t> stream_ids;$/;"	m	class:Benchmark	file:
 stream_ids	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    vector<size_t> stream_ids;$/;"	m	class:Benchmark	file:
 stream_map	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unordered_map<FiveTuple, size_t, FiveTupleHash> stream_map;$/;"	m	class:Benchmark	file:
@@ -439,8 +441,6 @@ usage	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void usag
 version	main.go	/^	version  bool$/;"	v
 waf_phase_e	scanner/waf.h	/^} waf_phase_e;$/;"	t	typeref:enum:__anon2
 wafsdk_action_e	scanner/waf.h	/^} wafsdk_action_e;$/;"	t	typeref:enum:__anon1
-workRequest	worker/worker.go	/^type workRequest struct {$/;"	t
 worker	worker/worker.go	/^package worker$/;"	p
-workerWrapper	worker/worker.go	/^type workerWrapper struct {$/;"	t
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark

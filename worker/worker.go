@@ -7,25 +7,25 @@ type Worker interface {
 	Terminate()
 }
 
-type workRequest struct {
+type WorkRequest struct {
 	jobChan       chan<- interface{}
 	retChan       <-chan interface{}
 	interruptFunc func()
 }
 
-type workerWrapper struct {
+type WorkerWrapper struct {
 	worker        Worker
 	interruptChan chan struct{}
-	reqChan       chan<- workRequest
+	reqChan       chan<- WorkRequest
 	closeChan     chan struct{}
 	closedChan    chan struct{}
 }
 
-func newWorkerWrapper(
-	reqChan chan<- workRequest,
+func NewWorkerWrapper(
+	reqChan chan<- WorkRequest,
 	worker Worker,
-) *workerWrapper {
-	w := workerWrapper{
+) *WorkerWrapper {
+	w := WorkerWrapper{
 		worker:        worker,
 		interruptChan: make(chan struct{}),
 		reqChan:       reqChan,
@@ -33,17 +33,17 @@ func newWorkerWrapper(
 		closedChan:    make(chan struct{}),
 	}
 
-	go w.run()
+	go w.Run()
 
 	return &w
 }
 
-func (w *workerWrapper) interrupt() {
+func (w *WorkerWrapper) Interrupt() {
 	close(w.interruptChan)
 	w.worker.Interrupt()
 }
 
-func (w *workerWrapper) run() {
+func (w *WorkerWrapper) Run() {
 	jobChan, retChan := make(chan interface{}), make(chan interface{})
 	defer func() {
 		w.worker.Terminate()
@@ -54,10 +54,10 @@ func (w *workerWrapper) run() {
 	for {
 		w.worker.BlockUntilReady()
 		select {
-		case w.reqChan <- workRequest{
+		case w.reqChan <- WorkRequest{
 			jobChan:       jobChan,
 			retChan:       retChan,
-			interruptFunc: w.interrupt,
+			interruptFunc: w.Interrupt,
 		}:
 			select {
 			case payload := <-jobChan:
@@ -76,10 +76,10 @@ func (w *workerWrapper) run() {
 	}
 }
 
-func (w *workerWrapper) stop() {
+func (w *WorkerWrapper) Stop() {
 	close(w.closeChan)
 }
 
-func (w *workerWrapper) join() {
+func (w *WorkerWrapper) Join() {
 	<-w.closedChan
 }
