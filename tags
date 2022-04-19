@@ -238,6 +238,7 @@ WAF_VAR_KEY_REQUEST_URI	scanner/waf.h	196;"	d
 WAF_VAR_KEY_URL	scanner/waf.h	195;"	d
 WAF_VAR_RESPONSE_BODY	scanner/waf.h	199;"	d
 Work	scanner/scanner.go	/^func (self *Scanner) Work(hsctxs []*HSContext) {$/;"	f
+Worker	worker/worker.go	/^type Worker interface {$/;"	t
 __FAVOR_BSD	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	129;"	d	file:
 __FAVOR_BSD	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	64;"	d	file:
 __WAF_H	scanner/waf.h	19;"	d
@@ -300,10 +301,12 @@ init	main.go	/^func init() {$/;"	f
 init	scanner/hsmatcher.go	/^func (self *HSMatcher) init() error {$/;"	f
 init	scanner/scanner.go	/^func (self *Scanner) init() {$/;"	f
 init_result	scanner/waf.h	/^    int init_result;$/;"	m	struct:__anon7
+interrupt	worker/worker.go	/^func (w *workerWrapper) interrupt() {$/;"	f
 is_copy	scanner/waf.h	/^    int is_copy;$/;"	m	struct:__anon7
 isdev	main.go	/^	isdev    bool$/;"	v
 issqli	scanner/waf.h	/^    int issqli; $/;"	m	struct:__anon3
 isxss	scanner/waf.h	/^    int isxss;$/;"	m	struct:__anon3
+join	worker/worker.go	/^func (w *workerWrapper) join() {$/;"	f
 logFile	main.go	/^	logFile  string$/;"	v
 main	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int main(int argc, char **argv) {$/;"	f
 main	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int main(int argc, char **argv) {$/;"	f
@@ -332,6 +335,7 @@ min_offset	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long min_o
 min_width	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned int min_width;$/;"	m	struct:hs_expr_info
 mz	scanner/waf.h	/^    char mz[WAF_MZ_MAX];$/;"	m	struct:__anon4
 mz	scanner/waf.h	/^    char mz[WAF_RULE_MZ_LEN];$/;"	m	struct:__anon3
+newWorkerWrapper	worker/worker.go	/^func newWorkerWrapper($/;"	f
 onMatch	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
 onMatch	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int onMatch(unsigned int id, unsigned long long from, unsigned long long to,$/;"	f	file:
 onMatch	scanner/hsmatcher.go	/^func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {$/;"	f
@@ -375,7 +379,7 @@ protocol	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned 
 readInputData	libs/hyperscan/share/doc/hyperscan/examples/simplegrep.c	/^static char *readInputData(const char *inputFN, unsigned int *length) {$/;"	f	file:
 readStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    bool readStreams(const char *pcapFile) {$/;"	f	class:Benchmark
 readStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    bool readStreams(const char *pcapFile) {$/;"	f	class:Benchmark
-requestHandler	main.go	/^func requestHandler(ctx *fasthttp.RequestCtx) {$/;"	f
+request_handler	main.go	/^func request_handler(ctx *fasthttp.RequestCtx) {$/;"	f
 reserved1	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long reserved1;$/;"	m	struct:hs_platform_info
 reserved2	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long reserved2;$/;"	m	struct:hs_platform_info
 result	scanner/waf.h	/^    match_result_t *result;$/;"	m	struct:__anon7
@@ -384,6 +388,7 @@ rule_cursor	scanner/waf.h	/^    unsigned int rule_cursor;$/;"	m	struct:__anon6
 rule_id	scanner/waf.h	/^    int         rule_id;$/;"	m	struct:__anon4
 rule_result_t	scanner/waf.h	/^} rule_result_t;$/;"	t	typeref:struct:__anon4
 rule_results	scanner/waf.h	/^    rule_result_t *rule_results[RULE_RESULT_MAX];$/;"	m	struct:__anon6
+run	worker/worker.go	/^func (w *workerWrapper) run() {$/;"	f
 sa_action	scanner/waf.h	/^    char sa_action[64];  $/;"	m	struct:__anon3
 sa_cursor	scanner/waf.h	/^    unsigned int sa_cursor;$/;"	m	struct:__anon6
 sa_name	scanner/waf.h	/^    char sa_name[64];  $/;"	m	struct:__anon3
@@ -415,6 +420,7 @@ start	scanner/waf.h	/^    char          *start;$/;"	m	struct:__anon4
 start_ori	scanner/waf.h	/^    char          *start_ori;$/;"	m	struct:__anon4
 stop	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void stop() {$/;"	f	class:Clock
 stop	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void stop() {$/;"	f	class:Clock
+stop	worker/worker.go	/^func (w *workerWrapper) stop() {$/;"	f
 stream_ids	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<size_t> stream_ids;$/;"	m	class:Benchmark	file:
 stream_ids	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    vector<size_t> stream_ids;$/;"	m	class:Benchmark	file:
 stream_map	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unordered_map<FiveTuple, size_t, FiveTupleHash> stream_map;$/;"	m	class:Benchmark	file:
@@ -433,5 +439,8 @@ usage	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void usag
 version	main.go	/^	version  bool$/;"	v
 waf_phase_e	scanner/waf.h	/^} waf_phase_e;$/;"	t	typeref:enum:__anon2
 wafsdk_action_e	scanner/waf.h	/^} wafsdk_action_e;$/;"	t	typeref:enum:__anon1
+workRequest	worker/worker.go	/^type workRequest struct {$/;"	t
+worker	worker/worker.go	/^package worker$/;"	p
+workerWrapper	worker/worker.go	/^type workerWrapper struct {$/;"	t
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark

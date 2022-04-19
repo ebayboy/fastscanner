@@ -74,11 +74,9 @@ func init() {
 }
 
 //run in fasthttp goroutine
-func requestHandler(ctx *fasthttp.RequestCtx) {
+func request_handler(ctx *fasthttp.RequestCtx) {
 
-	//TDOO: tunny goroutine pool
 	fmt.Fprintf(ctx, "Hello, world!\n\n")
-
 	fmt.Fprintf(ctx, "Request method is %q\n", ctx.Method())
 	fmt.Fprintf(ctx, "RequestURI is %q\n", ctx.RequestURI())
 	fmt.Fprintf(ctx, "Requested path is %q\n", ctx.Path())
@@ -89,8 +87,9 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Request has been started at %s\n", ctx.Time())
 	fmt.Fprintf(ctx, "Serial request number for the current connection is %d\n", ctx.ConnRequestNum())
 	fmt.Fprintf(ctx, "Your ip is %q\n\n", ctx.RemoteIP())
-
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
+
+	//通过通道传递数据到
 
 	/*
 		hsctx := HSContext{Data: ctx.RequestURI()}
@@ -132,7 +131,7 @@ func ServeStart(mctx *context.Context) {
 
 	//start server
 	go func() {
-		h := requestHandler
+		h := request_handler
 		if err := fasthttp.ListenAndServe(addr, h); err != nil {
 			log.WithField("err", err.Error()).Fatal("Error: fasthttp.ListenAndServe")
 		}

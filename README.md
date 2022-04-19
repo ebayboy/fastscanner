@@ -3,7 +3,6 @@
 fasthttp + hyperscan
 
 ## golang libs
-+ tunny goroutine pool
 + govaluate : express compute
 + BODY:
     + 流式json解析： jsonparser gjson
@@ -12,14 +11,18 @@ fasthttp + hyperscan
 + go-cache
 
 ## TODO
-+ tunny协程池无法实现 每个协程对应独立的scratch
++ 并发处理： 函数调用方式（同步） &&  通道方式(异步)
++ 使用tunny读取body
++ 匹配域matcher实现： 每个匹配域对应一个pool，可以配置worker数量(也不行， matcher需要单例的scratch）
++ 通道方式： 每个协程 +  一个通道 +  一个scratch
 + json config 解析 及 模块化
     + 移植 statbot mutl goroutine model
     + MainConfig module
     + RulesConfig : Match zone && regex && flag && logic
     + HSMatcher 模块化 
-    + 实现规则引擎RuleEngine
-    + 实现逻辑引擎LogicEngine(govaluate)
++ 实现规则引擎RuleEngine
++ 实现逻辑引擎LogicEngine(govaluate)
++ 多match对输入数据包（URI、BODY、HEADER等）集中快速查找匹配问题
 + matcher 前面增加流式函数插件处理, 以及开关(spider_ip_rdns/router)
 + 原文匹配
 + 解码匹配
@@ -34,6 +37,9 @@ fasthttp + hyperscan
 + nginx性能测试 并发 + 延迟
 + fasthttp性能测试 并发 + 延迟
 + nginx + (http socket | unix socket)  + fasthttp 延迟测试
+
+## OTHER
++ tunny goroutine pool(无法实现对每个matcher传递对应的独立scratch)
 
 ## hyperscan编译
 + hyperscan下载:https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/hyperscan/5.4.0-2/hyperscan_5.4.0.orig.tar.gz
