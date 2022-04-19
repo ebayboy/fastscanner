@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/fastscanner/scanner"
+	"github.com/fastscanner/worker"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	log "github.com/sirupsen/logrus"
 	"github.com/valyala/fasthttp"
@@ -152,7 +153,67 @@ func ServeStart(mctx *context.Context) {
 
 var fastScanner FastScanner
 
+// -----------------------  implement of worker
+func doWork(payload interface{}) interface{} {
+	log.Println("doWork: payload:", payload)
+	return -1
+}
+
+type closureWorker struct {
+	processor func(interface{}) interface{}
+}
+
+func (w *closureWorker) Process(payload interface{}) interface{} {
+	log.Println("Process: ", payload)
+	return w.processor(payload)
+}
+
+func (w *closureWorker) BlockUntilReady() {
+	log.Println("BlockUntilReady done! reqChan:", wWraper.ReqChan)
+}
+func (w *closureWorker) Interrupt() {
+	log.Println("Interrupt")
+}
+func (w *closureWorker) Terminate() {
+	log.Println("Terminate")
+}
+
+//-------------------------
+
+var reqChan chan<- worker.WorkRequest
+var wWraper *worker.WorkerWrapper
+var wReq worker.WorkRequest
+
+func Testworker() {
+	reqChan = make(chan<- worker.WorkRequest)
+
+	log.Info("Testworker : reqChan:", reqChan)
+	wk := &closureWorker{
+		processor: doWork,
+	}
+	log.Println("Testworker wk:", wk)
+
+	wWraper = worker.NewWorkerWrapper(reqChan, wk)
+	log.Println("worker.NewWorkerWrapper done!", wWraper)
+
+	wWraper.ReqChan <- wReq
+
+}
+
 func main() {
+
+	//TODO: test worker
+	go Testworker()
+
+	for i := 0; ; i++ {
+		time.Sleep(time.Duration(1 * time.Second))
+
+		log.Println("write 1 to wReq.JobChan start ...")
+		wReq.JobChan <- 1
+		log.Println("write 1 to wReq.JobChan done!")
+		log.Println("time.Sleep:", i)
+		log.Println("time.Sleep:", i, "done")
+	}
 
 	log.Info("Starting ...")
 

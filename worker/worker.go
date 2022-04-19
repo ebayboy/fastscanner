@@ -1,5 +1,7 @@
 package worker
 
+import "log"
+
 type Worker interface {
 	Process(interface{}) interface{}
 	BlockUntilReady()
@@ -8,29 +10,26 @@ type Worker interface {
 }
 
 type WorkRequest struct {
-	jobChan       chan<- interface{}
-	retChan       <-chan interface{}
-	interruptFunc func()
+	JobChan       chan<- interface{}
+	RetChan       <-chan interface{}
+	InterruptFunc func()
 }
 
 type WorkerWrapper struct {
-	worker        Worker
-	interruptChan chan struct{}
-	reqChan       chan<- WorkRequest
-	closeChan     chan struct{}
-	closedChan    chan struct{}
+	Worker        Worker
+	InterruptChan chan struct{}
+	ReqChan       chan<- WorkRequest
+	CloseChan     chan struct{}
+	ClosedChan    chan struct{}
 }
 
-func NewWorkerWrapper(
-	reqChan chan<- WorkRequest,
-	worker Worker,
-) *WorkerWrapper {
+func NewWorkerWrapper(reqChan chan<- WorkRequest, worker Worker) *WorkerWrapper {
 	w := WorkerWrapper{
-		worker:        worker,
-		interruptChan: make(chan struct{}),
-		reqChan:       reqChan,
-		closeChan:     make(chan struct{}),
-		closedChan:    make(chan struct{}),
+		Worker:        worker,
+		InterruptChan: make(chan struct{}),
+		ReqChan:       reqChan,
+		CloseChan:     make(chan struct{}),
+		ClosedChan:    make(chan struct{}),
 	}
 
 	go w.Run()
@@ -39,47 +38,59 @@ func NewWorkerWrapper(
 }
 
 func (w *WorkerWrapper) Interrupt() {
-	close(w.interruptChan)
-	w.worker.Interrupt()
+	close(w.InterruptChan)
+	w.Worker.Interrupt()
 }
 
 func (w *WorkerWrapper) Run() {
 	jobChan, retChan := make(chan interface{}), make(chan interface{})
+
+	//Run退出后，关闭通道
 	defer func() {
-		w.worker.Terminate()
+		w.Worker.Terminate()
 		close(retChan)
-		close(w.closedChan)
+		close(w.ClosedChan)
 	}()
 
 	for {
-		w.worker.BlockUntilReady()
+		//BlockUntilReady执行完成后开始处理任务
+		w.Worker.BlockUntilReady()
+
 		select {
-		case w.reqChan <- WorkRequest{
-			jobChan:       jobChan,
-			retChan:       retChan,
-			interruptFunc: w.Interrupt,
+		//TODO :  case + 初始化
+		case w.ReqChan <- WorkRequest{
+			JobChan:       jobChan,
+			RetChan:       retChan,
+			InterruptFunc: w.Interrupt,
 		}:
+			log.Println("w.ReqChan <- WorkRequest: JobChan")
 			select {
+			//从jobChan读取到payload
 			case payload := <-jobChan:
-				result := w.worker.Process(payload)
+				log.Println("-jobChan read payload:", payload)
+				//调用Process
+				result := w.Worker.Process(payload)
 				select {
+				//将result写入到retChan
 				case retChan <- result:
-				case <-w.interruptChan:
-					w.interruptChan = make(chan struct{})
+					//case + 初始化
+				case <-w.InterruptChan:
+					w.InterruptChan = make(chan struct{})
 				}
-			case <-w.interruptChan:
-				w.interruptChan = make(chan struct{})
+			case <-w.InterruptChan:
+				w.InterruptChan = make(chan struct{})
 			}
-		case <-w.closeChan:
+			//从CloseChan读取到消息, 退出Run
+		case <-w.CloseChan:
 			return
 		}
 	}
 }
 
 func (w *WorkerWrapper) Stop() {
-	close(w.closeChan)
+	close(w.CloseChan)
 }
 
 func (w *WorkerWrapper) Join() {
-	<-w.closedChan
+	<-w.ClosedChan
 }
