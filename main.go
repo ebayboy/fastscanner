@@ -159,18 +159,45 @@ func workerCallback(payload interface{}) interface{} {
 	return -1
 }
 
+//-------------------------
+//var reqChan chan<- worker.WorkRequest
+var wWraper *worker.WorkerWrapper
+var reqChan chan worker.WorkRequest
+var request worker.WorkRequest
+
 //woker模块， 实现worker.Worker接口
 type closureWorker struct {
 	processor func(interface{}) interface{}
 }
 
 func (w *closureWorker) Process(payload interface{}) interface{} {
-	log.Println("Process: ", payload)
-	return w.processor(payload)
+	log.Info("====closureWorker Process:payload:", payload.(string))
+	return payload
+}
+
+func SendPayload(payload interface{}) interface{} {
+
+	log.Info("====SendPayload ...")
+	//1. read request
+	request, open := <-reqChan
+	if !open {
+		log.Panic("ErrNotRunning")
+	}
+
+	//2.1 write payload to jobChan
+	request.JobChan <- payload
+
+	//2.2 read payload from retChan
+	payload, open = <-request.RetChan
+	if !open {
+		log.Panic("ErrWorkerClosed")
+	}
+
+	return payload
 }
 
 func (w *closureWorker) BlockUntilReady() {
-	log.Println("closureWorker BlockUntilReady")
+	log.Println("closureWorker BlockUntilReady, WorkerWrappe reqChan:", wWraper.ReqChan)
 }
 func (w *closureWorker) Interrupt() {
 	log.Println("closureWorker Interrupt")
@@ -179,21 +206,16 @@ func (w *closureWorker) Terminate() {
 	log.Println("closureWorker Terminate")
 }
 
-//-------------------------
-var reqChan chan<- worker.WorkRequest
-var wWraper *worker.WorkerWrapper
-var wReq worker.WorkRequest
-
 func Testworker() {
 
 	//reqChan <- WorkRequest
-	reqChan = make(chan<- worker.WorkRequest)
+	reqChan = make(chan worker.WorkRequest)
+
 	cWorker := &closureWorker{
 		processor: workerCallback,
 	}
 	log.Println("Testworker cWorker:", cWorker)
 
-	//1.worker.NewWorkerWrapper
 	wWraper = worker.NewWorkerWrapper(reqChan, cWorker)
 
 	log.Println("worker.NewWorkerWrapper:", wWraper)
@@ -202,17 +224,26 @@ func Testworker() {
 
 	log.Println("here should ready done")
 
-	log.Info("wWraper.Stop...")
-	wWraper.Stop()
-	log.Info("wWraper.Stop done!")
+	//TODO: 向jobChan写入数据
 
-	//TODO: block herer
+	go func() {
+		log.Info("====Write to w.ReqChan:", wWraper.ReqChan)
+		SendPayload("hello world")
+		log.Info("====Write to w.ReqChan done:", wWraper.ReqChan)
+	}()
 
+	//TODO: 读取retChan结果
 	/*
 		log.Println("write wWraper.ReqChan <- wReq start ...")
 		wWraper.ReqChan <- wReq
 		log.Println("write wWraper.ReqChan <- wReq done!")
 	*/
+
+	time.Sleep(time.Duration(5) * time.Second)
+
+	log.Info("wWraper.Stop...")
+	wWraper.Stop()
+	log.Info("wWraper.Stop done!")
 }
 
 func main() {

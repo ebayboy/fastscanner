@@ -1,6 +1,10 @@
 package worker
 
-import log "github.com/sirupsen/logrus"
+import (
+	"time"
+
+	log "github.com/sirupsen/logrus"
+)
 
 //接口: 继承此接口的模块需要实现接口函数
 type Worker interface {
@@ -41,12 +45,12 @@ func NewWorkerWrapper(reqChan chan<- WorkRequest, worker Worker) *WorkerWrapper 
 	w := WorkerWrapper{
 		Worker:        worker,
 		ReqChan:       reqChan,
-		InterruptChan: make(chan struct{}), /* 自初始化 */
-		CloseChan:     make(chan struct{}), /* 自初始化 */
-		ClosedChan:    make(chan struct{}), /* 自初始化 */
+		InterruptChan: make(chan struct{}), /* 自初始化, 无缓冲通道 */
+		CloseChan:     make(chan struct{}), /* 自初始化, 无缓冲通道 */
+		ClosedChan:    make(chan struct{}), /* 自初始化, 无缓冲通道 */
 	}
 
-	log.Println("NewWorkerWrapper  before w.Run , ClosedChan:", w.ClosedChan)
+	log.Println("NewWorkerWrapper  before w.Run , ClosedChan:", w.ClosedChan, " reqChan:", w.ReqChan)
 	go w.run()
 
 	return &w
@@ -76,7 +80,7 @@ func (w *WorkerWrapper) run() {
 	for {
 		//BlockUntilReady执行完成后开始处理任务
 		w.Worker.BlockUntilReady()
-		log.Println("w.Worker.BlockUntilRead done! Next will block with select...")
+		log.Println("w.Worker.BlockUntilRead done! Next will block with select... w.ReqChan:", w.ReqChan)
 
 		select {
 		case w.ReqChan <- WorkRequest{
@@ -84,7 +88,7 @@ func (w *WorkerWrapper) run() {
 			RetChan:       retChan,
 			InterruptFunc: w.Interrupt,
 		}:
-			log.Println("Run Read success: w.ReqChan <- WorkRequest: JobChan")
+			log.Println("==== Run Read success: w.ReqChan <- WorkRequest: JobChan")
 			select {
 			//从jobChan读取到payload
 			case payload := <-jobChan:
@@ -108,6 +112,9 @@ func (w *WorkerWrapper) run() {
 		case <-w.CloseChan:
 			log.Info("recv <- w.CloseChan: ", w.ClosedChan)
 			return
+		default:
+			log.Info("-----default-----")
+			time.Sleep(time.Duration(1) * time.Second)
 		}
 	}
 }

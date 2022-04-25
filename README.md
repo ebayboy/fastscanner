@@ -14,6 +14,9 @@ fasthttp + hyperscan
 
 ## TODO
 + worker dev && test
+    + worker.Stop test. [done]
+    + worker job 
+    + worker job result
 + 并发处理： 函数调用方式（同步） &&  通道方式(异步)
 + 使用tunny读取body
 + 匹配域matcher实现： 每个匹配域对应一个pool，可以配置worker数量(也不行， matcher需要单例的scratch）

@@ -146,6 +146,7 @@ Process	main.go	/^func (w *closureWorker) Process(payload interface{}) interface
 RULE_RESULT_MAX	scanner/waf.h	28;"	d
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
+SendPayload	main.go	/^func SendPayload(payload interface{}) interface{} {$/;"	f
 ServeStart	main.go	/^func ServeStart(mctx *context.Context) {$/;"	f
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata() {}$/;"	f	class:Sigdata
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata(const char *filename) {$/;"	f	class:Sigdata
@@ -388,7 +389,8 @@ protocol	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned 
 readInputData	libs/hyperscan/share/doc/hyperscan/examples/simplegrep.c	/^static char *readInputData(const char *inputFN, unsigned int *length) {$/;"	f	file:
 readStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    bool readStreams(const char *pcapFile) {$/;"	f	class:Benchmark
 readStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    bool readStreams(const char *pcapFile) {$/;"	f	class:Benchmark
-reqChan	main.go	/^var reqChan chan<- worker.WorkRequest$/;"	v
+reqChan	main.go	/^var reqChan chan worker.WorkRequest$/;"	v
+request	main.go	/^var request worker.WorkRequest$/;"	v
 request_handler	main.go	/^func request_handler(ctx *fasthttp.RequestCtx) {$/;"	f
 reserved1	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long reserved1;$/;"	m	struct:hs_platform_info
 reserved2	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long reserved2;$/;"	m	struct:hs_platform_info
@@ -446,7 +448,6 @@ unordered_matches	libs/hyperscan/include/hs/hs_compile.h	/^    char unordered_ma
 usage	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^void usage(const char *) {$/;"	f	file:
 usage	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void usage(const char *prog) {$/;"	f	file:
 version	main.go	/^	version  bool$/;"	v
-wReq	main.go	/^var wReq worker.WorkRequest$/;"	v
 wWraper	main.go	/^var wWraper *worker.WorkerWrapper$/;"	v
 waf_phase_e	scanner/waf.h	/^} waf_phase_e;$/;"	t	typeref:enum:__anon2
 wafsdk_action_e	scanner/waf.h	/^} wafsdk_action_e;$/;"	t	typeref:enum:__anon1
