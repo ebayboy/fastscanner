@@ -194,9 +194,12 @@ func Testworker() {
 	log.Println("Testworker wk:", wk)
 
 	wWraper = worker.NewWorkerWrapper(reqChan, wk)
-	log.Println("worker.NewWorkerWrapper done!", wWraper)
 
+	time.Sleep(time.Duration(1) * time.Second)
+	log.Println("here should ready done")
+	log.Println("write wWraper.ReqChan <- wReq start ...")
 	wWraper.ReqChan <- wReq
+	log.Println("write wWraper.ReqChan <- wReq done!")
 
 }
 
@@ -205,10 +208,29 @@ func main() {
 	//TODO: test worker
 	go Testworker()
 
-	for i := 0; ; i++ {
-		time.Sleep(time.Duration(1 * time.Second))
+	var request worker.WorkRequest
+	var open bool
 
+	for i := 0; ; i++ {
+		time.Sleep(time.Duration(3 * time.Second))
 		log.Println("write 1 to wReq.JobChan start ...")
+
+		select {
+		case request, open = <-wWraper.ReqChan:
+			if !open {
+				log.Println("NotRunning")
+			}
+		}
+
+		/*
+			select {
+			case request.jobChan <- payload:
+			case <-tout.C:
+				request.interruptFunc()
+				return nil, ErrJobTimedOut
+			}
+		*/
+
 		wReq.JobChan <- 1
 		log.Println("write 1 to wReq.JobChan done!")
 		log.Println("time.Sleep:", i)

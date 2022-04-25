@@ -32,6 +32,7 @@ func NewWorkerWrapper(reqChan chan<- WorkRequest, worker Worker) *WorkerWrapper 
 		ClosedChan:    make(chan struct{}),
 	}
 
+	log.Println("NewWorkerWrapper  before w.Run")
 	go w.Run()
 
 	return &w
@@ -43,6 +44,8 @@ func (w *WorkerWrapper) Interrupt() {
 }
 
 func (w *WorkerWrapper) Run() {
+
+	//TODO: jobChan, retChan是内部创建的， 如何写入
 	jobChan, retChan := make(chan interface{}), make(chan interface{})
 
 	//Run退出后，关闭通道
@@ -63,19 +66,21 @@ func (w *WorkerWrapper) Run() {
 			RetChan:       retChan,
 			InterruptFunc: w.Interrupt,
 		}:
-			log.Println("w.ReqChan <- WorkRequest: JobChan")
+			log.Println("Run Read success: w.ReqChan <- WorkRequest: JobChan")
 			select {
 			//从jobChan读取到payload
 			case payload := <-jobChan:
-				log.Println("-jobChan read payload:", payload)
+				log.Println("Run jobChan read payload:", payload)
 				//调用Process
 				result := w.Worker.Process(payload)
 				select {
 				//将result写入到retChan
 				case retChan <- result:
+					log.Println("Run retChan <- result")
 					//case + 初始化
 				case <-w.InterruptChan:
 					w.InterruptChan = make(chan struct{})
+					log.Println("Run -w.InterruptChan")
 				}
 			case <-w.InterruptChan:
 				w.InterruptChan = make(chan struct{})

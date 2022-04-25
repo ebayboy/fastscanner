@@ -3,7 +3,9 @@
 fasthttp + hyperscan
 
 ## golang libs
-+ govaluate : express compute
++ 逻辑表达式计算:
+    + govaluate : express compute
+    + hyperscan 5.0 内置逻辑表达式
 + BODY:
     + 流式json解析： jsonparser gjson
     + xml解析
@@ -11,6 +13,7 @@ fasthttp + hyperscan
 + go-cache
 
 ## TODO
++ worker dev && test
 + 并发处理： 函数调用方式（同步） &&  通道方式(异步)
 + 使用tunny读取body
 + 匹配域matcher实现： 每个匹配域对应一个pool，可以配置worker数量(也不行， matcher需要单例的scratch）
@@ -29,6 +32,9 @@ fasthttp + hyperscan
 + 自适应匹配
 + 协程池tunny实现对同一个matcher的匹配
 + 异步：通过通道传递数据到matcher的多个协程
++ 高效性能设计： 请求头+ URI + BODY 高效匹配设计
+    + 请求头并发匹配(避免嵌套循环，计算消耗会指数下降)
+    + 请求BODY多协程匹配
 
 ## DONE
 + logrus + file-rotatelogs
