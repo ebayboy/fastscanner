@@ -145,7 +145,6 @@ Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
 Process	main.go	/^func (w *closureWorker) Process(payload interface{}) interface{} {$/;"	f
 RULE_RESULT_MAX	scanner/waf.h	28;"	d
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
-Run	worker/worker.go	/^func (w *WorkerWrapper) Run() {$/;"	f
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
 ServeStart	main.go	/^func ServeStart(mctx *context.Context) {$/;"	f
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata() {}$/;"	f	class:Sigdata
@@ -277,7 +276,6 @@ db_block	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    const hs_
 db_streaming	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    const hs_database_t *db_streaming;$/;"	m	class:Benchmark	file:
 displayStats	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void displayStats() {$/;"	f	class:Benchmark
 dlen	scanner/waf.h	/^    size_t dlen;$/;"	m	struct:__anon7
-doWork	main.go	/^func doWork(payload interface{}) interface{} {$/;"	f
 dstAddr	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int dstAddr;$/;"	m	struct:FiveTuple	file:
 dstAddr	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int dstAddr;$/;"	m	struct:FiveTuple	file:
 dstPort	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int dstPort;$/;"	m	struct:FiveTuple	file:
@@ -400,6 +398,7 @@ rule_cursor	scanner/waf.h	/^    unsigned int rule_cursor;$/;"	m	struct:__anon6
 rule_id	scanner/waf.h	/^    int         rule_id;$/;"	m	struct:__anon4
 rule_result_t	scanner/waf.h	/^} rule_result_t;$/;"	t	typeref:struct:__anon4
 rule_results	scanner/waf.h	/^    rule_result_t *rule_results[RULE_RESULT_MAX];$/;"	m	struct:__anon6
+run	worker/worker.go	/^func (w *WorkerWrapper) run() {$/;"	f
 sa_action	scanner/waf.h	/^    char sa_action[64];  $/;"	m	struct:__anon3
 sa_cursor	scanner/waf.h	/^    unsigned int sa_cursor;$/;"	m	struct:__anon6
 sa_name	scanner/waf.h	/^    char sa_name[64];  $/;"	m	struct:__anon3
@@ -452,5 +451,6 @@ wWraper	main.go	/^var wWraper *worker.WorkerWrapper$/;"	v
 waf_phase_e	scanner/waf.h	/^} waf_phase_e;$/;"	t	typeref:enum:__anon2
 wafsdk_action_e	scanner/waf.h	/^} wafsdk_action_e;$/;"	t	typeref:enum:__anon1
 worker	worker/worker.go	/^package worker$/;"	p
+workerCallback	main.go	/^func workerCallback(payload interface{}) interface{} {$/;"	f
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark

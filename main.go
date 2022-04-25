@@ -154,11 +154,12 @@ func ServeStart(mctx *context.Context) {
 var fastScanner FastScanner
 
 // -----------------------  implement of worker
-func doWork(payload interface{}) interface{} {
+func workerCallback(payload interface{}) interface{} {
 	log.Println("doWork: payload:", payload)
 	return -1
 }
 
+//woker模块， 实现worker.Worker接口
 type closureWorker struct {
 	processor func(interface{}) interface{}
 }
@@ -169,73 +170,59 @@ func (w *closureWorker) Process(payload interface{}) interface{} {
 }
 
 func (w *closureWorker) BlockUntilReady() {
-	log.Println("BlockUntilReady done! reqChan:", wWraper.ReqChan)
+	log.Println("closureWorker BlockUntilReady")
 }
 func (w *closureWorker) Interrupt() {
-	log.Println("Interrupt")
+	log.Println("closureWorker Interrupt")
 }
 func (w *closureWorker) Terminate() {
-	log.Println("Terminate")
+	log.Println("closureWorker Terminate")
 }
 
 //-------------------------
-
 var reqChan chan<- worker.WorkRequest
 var wWraper *worker.WorkerWrapper
 var wReq worker.WorkRequest
 
 func Testworker() {
+
+	//reqChan <- WorkRequest
 	reqChan = make(chan<- worker.WorkRequest)
-
-	log.Info("Testworker : reqChan:", reqChan)
-	wk := &closureWorker{
-		processor: doWork,
+	cWorker := &closureWorker{
+		processor: workerCallback,
 	}
-	log.Println("Testworker wk:", wk)
+	log.Println("Testworker cWorker:", cWorker)
 
-	wWraper = worker.NewWorkerWrapper(reqChan, wk)
+	//1.worker.NewWorkerWrapper
+	wWraper = worker.NewWorkerWrapper(reqChan, cWorker)
+
+	log.Println("worker.NewWorkerWrapper:", wWraper)
 
 	time.Sleep(time.Duration(1) * time.Second)
-	log.Println("here should ready done")
-	log.Println("write wWraper.ReqChan <- wReq start ...")
-	wWraper.ReqChan <- wReq
-	log.Println("write wWraper.ReqChan <- wReq done!")
 
+	log.Println("here should ready done")
+
+	log.Info("wWraper.Stop...")
+	wWraper.Stop()
+	log.Info("wWraper.Stop done!")
+
+	//TODO: block herer
+
+	/*
+		log.Println("write wWraper.ReqChan <- wReq start ...")
+		wWraper.ReqChan <- wReq
+		log.Println("write wWraper.ReqChan <- wReq done!")
+	*/
 }
 
 func main() {
 
 	//TODO: test worker
-	go Testworker()
+	Testworker()
 
-	var request worker.WorkRequest
-	var open bool
+	time.Sleep(3 * time.Second)
 
-	for i := 0; ; i++ {
-		time.Sleep(time.Duration(3 * time.Second))
-		log.Println("write 1 to wReq.JobChan start ...")
-
-		select {
-		case request, open = <-wWraper.ReqChan:
-			if !open {
-				log.Println("NotRunning")
-			}
-		}
-
-		/*
-			select {
-			case request.jobChan <- payload:
-			case <-tout.C:
-				request.interruptFunc()
-				return nil, ErrJobTimedOut
-			}
-		*/
-
-		wReq.JobChan <- 1
-		log.Println("write 1 to wReq.JobChan done!")
-		log.Println("time.Sleep:", i)
-		log.Println("time.Sleep:", i, "done")
-	}
+	os.Exit(1)
 
 	log.Info("Starting ...")
 
