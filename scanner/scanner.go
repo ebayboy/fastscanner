@@ -3,14 +3,23 @@ package scanner
 import (
 	"context"
 	"encoding/json"
+	"errors"
 
 	log "github.com/sirupsen/logrus"
 )
+
+//每个scanner包含一组Matchers
 
 /*TODO:
 + 配置解析
 + scanner 包含hs匹配db, scrach/每协程
 */
+
+type ScannerContext struct {
+	/* Data : such as uri/request_body/request_uri, type is []byte */
+	HSCtx HSContext
+	MZ    string
+}
 
 type Scanner struct {
 	Mctx     *context.Context
@@ -106,6 +115,7 @@ func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, err
 	}
 
 	//初始化matchers
+	ins.init()
 
 	return ins, nil
 }
@@ -127,23 +137,30 @@ func (self *Scanner) init() {
 	self.Output()
 }
 
-func (self *Scanner) Start() {
-
-	//TODO: 初始化通道
-	self.init()
-
-	//TODO: 轮询通道
-	//TODO: 找到对应Matcher，写入协程对应的写通道
-
-	//do work
-	//tunny goroutine pool process body match
-	log.Info("Start Scanner done!")
-}
-
 func (self *Scanner) Stop() {
 	//遍历释放 matcher
+	for k, _ := range self.Matchers {
+		self.Matchers[k].Stop()
+	}
 	log.Debug("Stop scanner done!")
 }
 
-func (self *Scanner) Work(hsctxs []*HSContext) {
+func (self *Scanner) Scan(scannerCtx interface{}) (err error) {
+
+	//选择匹配域对应的matcher， 执行匹配
+	ctx := scannerCtx.(ScannerContext)
+	matcher, exist := self.Matchers[ctx.MZ]
+	if !exist {
+		errStr := "Error: scanner.Scan mz not exist:" + ctx.MZ
+		log.Error(errStr)
+		return errors.New(errStr)
+	}
+
+	if err = matcher.Scan(&ctx.HSCtx); err != nil {
+		log.Error("Error: matcher.Scan! err:", err.Error())
+		return err
+	}
+
+	log.WithFields(log.Fields{"ctx": ctx}).Info("Scanner.Scan done!")
+	return nil
 }

@@ -15,10 +15,11 @@ type HSMatcher struct {
 }
 
 type HSContext struct {
-	Data []byte
-	Id   uint
-	From uint64
-	To   uint64
+	Data []byte //input
+	MZ   string //input
+	Id   uint   //output
+	From uint64 //output
+	To   uint64 //output
 }
 
 func (self *HSMatcher) Output() {
@@ -82,33 +83,21 @@ func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *
 	return matcher, nil
 }
 
-func (self *HSMatcher) init() error {
-	//TODO: 初始化多个协程，以及通道
+func (self *HSMatcher) Scan(HSCtx interface{}) (err error) {
+	ctx := HSCtx.(*HSContext)
 
-	return nil
-}
-
-// Test: curl http://localhost:9999/0123456
-func (self *HSMatcher) Start() error {
-
-	if err := self.init(); err != nil {
-		log.Error("Error", err.Error())
+	if err = self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx); err != nil {
+		log.WithField("err", err.Error()).Error("ERROR: Unable to scan input buffer. Exiting.")
 		return err
 	}
 
-	//TODO: 轮询监听通道
-	//读取请求ctx
-	//db.Scan()
-	//读取mctx, cancle
-
-	return nil
+	return err
 }
 
 func (self *HSMatcher) Stop() error {
 
-	//TODO: 监听通道退出?
-	self.HSDB.Close()
 	self.HSScratch.Free()
+	self.HSDB.Close()
 
 	return nil
 }

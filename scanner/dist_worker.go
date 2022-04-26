@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"context"
 	"math/rand"
 
 	"github.com/Jeffail/tunny"
@@ -8,7 +9,7 @@ import (
 )
 
 type DistWorkerContext struct {
-	Payload    interface{}
+	Data       interface{}
 	distWorker *DistWorker
 }
 
@@ -23,23 +24,30 @@ func selectScanWorker(distWorkerContext interface{}) (res interface{}) {
 
 	ctx := distWorkerContext.(DistWorkerContext)
 	idx := rand.Intn(ctx.distWorker.NumScanWorker)
-	res = ctx.distWorker.ScanWorkers[idx].ScanPayload(ctx.Payload)
+
+	res = ctx.distWorker.ScanWorkers[idx].Scan(&ctx)
 
 	log.WithFields(log.Fields{"idx:": idx, "ctx": ctx, "res": res}).Info("selectScanWorker")
 	return res
 }
 
-func NewDistWorker(numScanWorker int) *DistWorker {
-	dist := &DistWorker{NumScanWorker: numScanWorker}
+func NewDistWorker(numScanWorker int, confData []byte, mctx *context.Context, cf *Conf) (*DistWorker, error) {
 
-	//TODO: scanner -> hsmatcher
-	scan_worker := NewScanWorker()
-	dist.ScanWorkers = append(dist.ScanWorkers, scan_worker)
+	dist := &DistWorker{NumScanWorker: numScanWorker}
 	dist.Pool = tunny.NewFunc(numScanWorker, selectScanWorker)
 
-	return dist
+	for i := 0; i < numScanWorker; i++ {
+		scan_worker, err := NewScanWorker(confData, mctx, cf)
+		if err != nil {
+			return nil, err
+		}
+		dist.ScanWorkers = append(dist.ScanWorkers, scan_worker)
+	}
+
+	return dist, nil
 }
 
+//TODO: 此处应该改成通道传递数据进来
 func (w *DistWorker) Process(payload interface{}) (res interface{}) {
 	res = w.Pool.Process(payload)
 	return res
@@ -50,6 +58,7 @@ func (w *DistWorker) Stop() {
 	if w.Pool != nil {
 		w.Pool.Close()
 	}
+
 	for k, _ := range w.ScanWorkers {
 		w.ScanWorkers[k].Stop()
 	}

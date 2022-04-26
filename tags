@@ -22,6 +22,7 @@ Conf	scanner/scanner.go	/^type Conf struct {$/;"	t
 ConfOutput	scanner/scanner.go	/^func (self *Conf) ConfOutput() {$/;"	f
 ConfParse	scanner/scanner.go	/^func ConfParse(content []byte) (*Conf, error) {$/;"	f
 Criterion	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^enum Criterion {$/;"	g	file:
+DataZoneMap	scanner/data_mz_map.go	/^var DataZoneMap map[string]interface{} = map[string]interface{}{$/;"	v
 DistWorker	scanner/dist_worker.go	/^type DistWorker struct {$/;"	t
 DistWorkerContext	scanner/dist_worker.go	/^type DistWorkerContext struct {$/;"	t
 FastScanner	main.go	/^type FastScanner struct {$/;"	t
@@ -127,9 +128,9 @@ MD_SA_U_SQLI_MATCHED	scanner/waf.h	165;"	d
 MD_SA_U_XSS_MATCHED	scanner/waf.h	166;"	d
 MD_SA_XSS_MATCHED	scanner/waf.h	161;"	d
 MD_U_MATCHED	scanner/waf.h	171;"	d
-NewDistWorker	scanner/dist_worker.go	/^func NewDistWorker(numScanWorker int) *DistWorker {$/;"	f
+NewDistWorker	scanner/dist_worker.go	/^func NewDistWorker(numScanWorker int, confData []byte, mctx *context.Context, cf *Conf) (*DistWorker, error) {$/;"	f
 NewHSMatcher	scanner/hsmatcher.go	/^func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {$/;"	f
-NewScanWorker	scanner/scan_worker.go	/^func NewScanWorker() *ScanWorker {$/;"	f
+NewScanWorker	scanner/scan_worker.go	/^func NewScanWorker(confData []byte, mctx *context.Context, cf *Conf) (*ScanWorker, error) {$/;"	f
 NewScanner	scanner/scanner.go	/^func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, error) {$/;"	f
 NewWorkerWrapper	worker/worker.go	/^func NewWorkerWrapper(reqChan chan<- WorkRequest, worker Worker) *WorkerWrapper {$/;"	f
 Output	scanner/hsmatcher.go	/^func (self *HSMatcher) Output() {$/;"	f
@@ -144,18 +145,20 @@ POLICYS_RESULT_MAX	scanner/waf.h	29;"	d
 POLICY_RULES_MAX	scanner/waf.h	30;"	d
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
 Process	scanner/dist_worker.go	/^func (w *DistWorker) Process(payload interface{}) (res interface{}) {$/;"	f
-Process	scanner/scan_worker.go	/^func (w *ScanWorker) Process(payload interface{}) interface{} {$/;"	f
+Process	scanner/scan_worker.go	/^func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {$/;"	f
 RULE_RESULT_MAX	scanner/waf.h	28;"	d
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
-ScanPayload	scanner/scan_worker.go	/^func (w *ScanWorker) ScanPayload(payload interface{}) (res interface{}) {$/;"	f
+Scan	scanner/hsmatcher.go	/^func (self *HSMatcher) Scan(HSCtx interface{}) (err error) {$/;"	f
+Scan	scanner/scan_worker.go	/^func (w *ScanWorker) Scan(scanWorkerCtx interface{}) (res interface{}) {$/;"	f
+Scan	scanner/scanner.go	/^func (self *Scanner) Scan(scannerCtx interface{}) (err error) {$/;"	f
 ScanWorker	scanner/scan_worker.go	/^type ScanWorker struct {$/;"	t
+ScanWorkerContext	scanner/scan_worker.go	/^type ScanWorkerContext struct {$/;"	t
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
+ScannerContext	scanner/scanner.go	/^type ScannerContext struct {$/;"	t
 ServeStart	main.go	/^func ServeStart(mctx *context.Context) {$/;"	f
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata() {}$/;"	f	class:Sigdata
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata(const char *filename) {$/;"	f	class:Sigdata
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Sigdata {$/;"	c	file:
-Start	scanner/hsmatcher.go	/^func (self *HSMatcher) Start() error {$/;"	f
-Start	scanner/scanner.go	/^func (self *Scanner) Start() {$/;"	f
 Stop	scanner/dist_worker.go	/^func (w *DistWorker) Stop() {$/;"	f
 Stop	scanner/hsmatcher.go	/^func (self *HSMatcher) Stop() error {$/;"	f
 Stop	scanner/scan_worker.go	/^func (w *ScanWorker) Stop() {$/;"	f
@@ -252,7 +255,6 @@ WAF_SYSLOG_TITLE	scanner/waf.h	39;"	d
 WAF_VAR_KEY_REQUEST_URI	scanner/waf.h	196;"	d
 WAF_VAR_KEY_URL	scanner/waf.h	195;"	d
 WAF_VAR_RESPONSE_BODY	scanner/waf.h	199;"	d
-Work	scanner/scanner.go	/^func (self *Scanner) Work(hsctxs []*HSContext) {$/;"	f
 WorkRequest	worker/worker.go	/^type WorkRequest struct {$/;"	t
 Worker	worker/worker.go	/^type Worker interface {$/;"	t
 WorkerWrapper	worker/worker.go	/^type WorkerWrapper struct {$/;"	t
@@ -274,12 +276,12 @@ confFile	main.go	/^	confFile string$/;"	v
 cpu_features	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long cpu_features;$/;"	m	struct:hs_platform_info
 cursor	scanner/waf.h	/^    unsigned int cursor;$/;"	m	struct:__anon5
 data	scanner/waf.h	/^    char *data;$/;"	m	struct:__anon7
-data_mz_map	scanner/data_mz_map.go	/^var data_mz_map map[string]string = map[string]string{$/;"	v
 databasesFromFile	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void databasesFromFile(const char *filename,$/;"	f	file:
 db	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_database_t *db = nullptr;$/;"	m	class:Benchmark	file:
 db_block	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    const hs_database_t *db_block;$/;"	m	class:Benchmark	file:
 db_streaming	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    const hs_database_t *db_streaming;$/;"	m	class:Benchmark	file:
 displayStats	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void displayStats() {$/;"	f	class:Benchmark
+distWorker	main.go	/^var distWorker *scanner.DistWorker$/;"	v
 dlen	scanner/waf.h	/^    size_t dlen;$/;"	m	struct:__anon7
 dstAddr	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int dstAddr;$/;"	m	struct:FiveTuple	file:
 dstAddr	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int dstAddr;$/;"	m	struct:FiveTuple	file:
@@ -315,7 +317,6 @@ hs_scratch_t	libs/hyperscan/include/hs/hs_runtime.h	/^typedef struct hs_scratch 
 hs_stream_t	libs/hyperscan/include/hs/hs_runtime.h	/^typedef struct hs_stream hs_stream_t;$/;"	t	typeref:struct:hs_stream
 ids	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<unsigned> ids;$/;"	m	class:Sigdata	file:
 init	main.go	/^func init() {$/;"	f
-init	scanner/hsmatcher.go	/^func (self *HSMatcher) init() error {$/;"	f
 init	scanner/scanner.go	/^func (self *Scanner) init() {$/;"	f
 init_result	scanner/waf.h	/^    int init_result;$/;"	m	struct:__anon7
 is_copy	scanner/waf.h	/^    int is_copy;$/;"	m	struct:__anon7

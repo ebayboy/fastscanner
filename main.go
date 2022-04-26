@@ -12,6 +12,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Jeffail/tunny"
 	"github.com/fastscanner/scanner"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	log "github.com/sirupsen/logrus"
@@ -89,7 +90,23 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Your ip is %q\n\n", ctx.RemoteIP())
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
-	//通过通道传递数据到
+	swCtx := scanner.ScanWorkerContext{}
+	swCtx.Data = map[string]interface{}{
+		"request_method":  ctx.Method(),
+		"request_uri":     ctx.RequestURI(),
+		"http_referer":    ctx.Referer(),
+		"http_user_agent": ctx.UserAgent(),
+		"request_body":    ctx.PostBody(),
+		"args":            ctx.QueryArgs(),
+		"request":         &ctx.Request,
+	}
+
+	res, err := distWorker.Pool.ProcessTimed(&swCtx, time.Millisecond*100)
+	if err == tunny.ErrJobTimedOut {
+		log.WithFields(log.Fields{"hsCtx": swCtx, "rerr": err.Error()}).Error("Error: Request timed out!")
+		return
+	}
+	log.WithFields(log.Fields{"swCtx": swCtx, "res": res}).Info()
 
 	/*
 		hsctx := HSContext{Data: ctx.RequestURI()}
@@ -151,12 +168,9 @@ func ServeStart(mctx *context.Context) {
 }
 
 var fastScanner FastScanner
+var distWorker *scanner.DistWorker
 
 func main() {
-
-	scanWorkerStart()
-	time.Sleep(1 * time.Second)
-	os.Exit(1)
 
 	log.Info("Starting ...")
 
@@ -176,12 +190,10 @@ func main() {
 	}
 	log.Info("version:", fastScanner.conf.Version)
 
-	//============= MODULE ===============
-	ins, err := scanner.NewScanner(confData, &mctx, nil)
+	distWorker, err = scanner.NewDistWorker(1, confData, &mctx, nil)
 	if err != nil {
-		log.Fatal("init scanner.NewScanner error!")
+		log.Fatalln("Error: scanner.NewDistWorker! err:", err.Error())
 	}
-	ins.Start()
 
 	go ServeStart(&mctx)
 
@@ -191,7 +203,6 @@ func main() {
 	<-sigCh
 
 	//module clean
-	ins.Stop()
 
 	//main clean
 	cancel()
