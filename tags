@@ -144,7 +144,7 @@ PAYLOAD_MAX_LEN_DEFAULT	scanner/waf.h	26;"	d
 POLICYS_RESULT_MAX	scanner/waf.h	29;"	d
 POLICY_RULES_MAX	scanner/waf.h	30;"	d
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
-Process	scanner/dist_worker.go	/^func (w *DistWorker) Process(payload interface{}) (res interface{}) {$/;"	f
+Process	scanner/dist_worker.go	/^func (w *DistWorker) Process(distWorkerCtx interface{}) (res interface{}) {$/;"	f
 Process	scanner/scan_worker.go	/^func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {$/;"	f
 RULE_RESULT_MAX	scanner/waf.h	28;"	d
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t

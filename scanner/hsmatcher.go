@@ -90,6 +90,7 @@ func (self *HSMatcher) Scan(HSCtx interface{}) (err error) {
 		log.WithField("err", err.Error()).Error("ERROR: Unable to scan input buffer. Exiting.")
 		return err
 	}
+	log.WithFields(log.Fields{"ctx.Data": ctx.Data}).Info("HSMatcher.Scran ok!")
 
 	return err
 }

@@ -24,7 +24,7 @@ type ScanWorker struct {
 }
 
 type ScanWorkerContext struct {
-	Data map[string]interface{} //map[data_key]data
+	Data interface{} //map[data_key]data
 	Res  []HSContext
 }
 
@@ -36,7 +36,8 @@ func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {
 	log.Info("ScanWorker.Process ctx:", ctx)
 
 	//forr k, v map , 此处的v是引用吗
-	for data_key, _ := range ctx.Data {
+	ctxData := ctx.Data.(map[string][]byte)
+	for data_key, _ := range ctxData {
 		zones, exist := DataZoneMap[data_key]
 		if !exist {
 			log.WithFields(log.Fields{"data_key": data_key, "DataZoneMap": DataZoneMap}).Error("Error: MZ not exit!")
@@ -45,7 +46,7 @@ func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {
 
 		for _, zone := range zones.([]string) {
 			//TODO: 此处用的data是引用还是复制 ?
-			hsctx := HSContext{MZ: zone, Data: ctx.Data[data_key].([]byte)}
+			hsctx := HSContext{MZ: zone, Data: ctxData[data_key]}
 			if err := w.scanner.Scan(&hsctx); err != nil {
 				log.Error("err:", err.Error())
 				return err

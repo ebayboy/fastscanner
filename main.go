@@ -90,8 +90,8 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Your ip is %q\n\n", ctx.RemoteIP())
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
-	swCtx := scanner.ScanWorkerContext{}
-	swCtx.Data = map[string]interface{}{
+	distCtx := scanner.DistWorkerContext{}
+	distCtx.Data = map[string]interface{}{
 		"request_method":  ctx.Method(),
 		"request_uri":     ctx.RequestURI(),
 		"http_referer":    ctx.Referer(),
@@ -100,13 +100,12 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 		"args":            ctx.QueryArgs(),
 		"request":         &ctx.Request,
 	}
-
-	res, err := distWorker.Pool.ProcessTimed(&swCtx, time.Millisecond*100)
+	res, err := distWorker.Pool.ProcessTimed(&distCtx, time.Millisecond*100)
 	if err == tunny.ErrJobTimedOut {
-		log.WithFields(log.Fields{"hsCtx": swCtx, "rerr": err.Error()}).Error("Error: Request timed out!")
+		log.WithFields(log.Fields{"hsCtx": distCtx, "rerr": err.Error()}).Error("Error: Request timed out!")
 		return
 	}
-	log.WithFields(log.Fields{"swCtx": swCtx, "res": res}).Info()
+	log.WithFields(log.Fields{"swCtx": distCtx, "res": res}).Info()
 
 	/*
 		hsctx := HSContext{Data: ctx.RequestURI()}
@@ -154,7 +153,7 @@ func ServeStart(mctx *context.Context) {
 		}
 	}()
 
-	log.Info("Start server done!")
+	log.Info("Start server done! Listen on:", addr)
 
 	//exit before main exit
 	for {
