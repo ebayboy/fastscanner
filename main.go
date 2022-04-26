@@ -154,10 +154,12 @@ var fastScanner FastScanner
 
 func main() {
 
-	Testworker()
-	time.Sleep(1 * time.Second)
-	os.Exit(1)
+	/*
+		Testworker()
+		time.Sleep(1 * time.Second)
+		os.Exit(1)
 
+	*/
 	log.Info("Starting ...")
 
 	//init ctx && signal
