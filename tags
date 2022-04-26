@@ -409,7 +409,7 @@ scanBlock	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void sca
 scanBlock	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void scanBlock() {$/;"	f	class:Benchmark
 scanStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void scanStreams() {$/;"	f	class:Benchmark
 scanStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void scanStreams() {$/;"	f	class:Benchmark
-scanWorker	scan_worker.go	/^type scanWorker struct {$/;"	t
+scanWorker	scan_worker.go	/^type scanWorker struct{}$/;"	t
 scanWorkerStart	scan_worker.go	/^func scanWorkerStart() {$/;"	f
 scanner	scanner/data_mz_map.go	/^package scanner$/;"	p
 scanner	scanner/hsmatcher.go	/^package scanner$/;"	p
