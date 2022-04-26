@@ -1,80 +1,57 @@
 package scanner
 
 import (
-	"github.com/fastscanner/worker"
+	"math/rand"
+
+	"github.com/Jeffail/tunny"
 	log "github.com/sirupsen/logrus"
 )
 
-//TODO: 使用tunny.tool.ProcessTimeout分发数据到scanWorker
-//TODO: scanWorkers
+type DistWorkerContext struct {
+	Payload    interface{}
+	distWorker *DistWorker
+}
 
-//woker模块， 实现worker.Worker接口
 type DistWorker struct {
-	ScanWorkers ScanWorker
+	NumScanWorker int
+	ScanWorkers   []*ScanWorker
+	Pool          *tunny.Pool
 }
 
-/* Process Flow: payload -> jobChan -> Process -> res -> retChan */
-//not call directly, this func is workerWrapper's callback func
-func (w *DistWorker) Process(payload interface{}) interface{} {
-	// hyperscan match , return result
-	res := payload.(string) + ", Process"
-	log.Info("====DistWorker reutrn res:", res)
+//tunny.pool 多协程同时调用此函数, 要保证线程安全
+func selectScanWorker(distWorkerContext interface{}) (res interface{}) {
+
+	ctx := distWorkerContext.(DistWorkerContext)
+	idx := rand.Intn(ctx.distWorker.NumScanWorker)
+	res = ctx.distWorker.ScanWorkers[idx].ScanPayload(ctx.Payload)
+
+	log.WithFields(log.Fields{"idx:": idx, "ctx": ctx, "res": res}).Info("selectScanWorker")
 	return res
 }
 
-//发送数据到jobChan通道, 读取retChan结果
-// http -> jobChan -> hyperscan -> retChan
-func (w *DistWorker) ScanPayload(payload interface{}) (res interface{}) {
+func NewDistWorker(numScanWorker int) *DistWorker {
+	dist := &DistWorker{NumScanWorker: numScanWorker}
 
-	log.Info("====write to jobChan ...")
-	//1. read request
-	request, open := <-w.reqChan
-	if !open {
-		log.Panic("ErrNotRunning")
-	}
+	//TODO: scanner -> hsmatcher
+	scan_worker := NewScanWorker()
+	dist.ScanWorkers = append(dist.ScanWorkers, scan_worker)
+	dist.Pool = tunny.NewFunc(numScanWorker, selectScanWorker)
 
-	//2.1 write payload to request.jobChan
-	request.JobChan <- payload
+	return dist
+}
 
-	//2.2 read payload from request.retChan
-	res, open = <-request.RetChan
-	if !open {
-		log.Panic("ErrWorkerClosed")
-	}
-	log.Info("====read from retChan")
-
+func (w *DistWorker) Process(payload interface{}) (res interface{}) {
+	res = w.Pool.Process(payload)
 	return res
-}
-
-func (w *DistWorker) BlockUntilReady() {
-	log.Println("DistWorker BlockUntilReady, WorkerWrappe reqChan:", w.wWraper.ReqChan)
-}
-func (w *DistWorker) Interrupt() {
-	log.Println("DistWorker Interrupt")
-}
-func (w *DistWorker) Terminate() {
-	log.Println("DistWorker Terminate")
-}
-
-func NewDistWorker() *DistWorker {
-	reqChan := make(chan worker.WorkRequest)
-	sWorker := &DistWorker{}
-	sWorker.wWraper = worker.NewWorkerWrapper(reqChan, sWorker)
-
-	return sWorker
 }
 
 func (w *DistWorker) Stop() {
-	log.Info("DistWorkerStop...")
-	w.wWraper.Stop()
+	log.Info("DistWorker Stop...")
+	if w.Pool != nil {
+		w.Pool.Close()
+	}
+	for k, _ := range w.ScanWorkers {
+		w.ScanWorkers[k].Stop()
+	}
 	log.Info("DistWorker Stoped!")
 }
-
-/*
-	//TODO: 向jobChan写入数据, 读取retChan结果输出
-	go func() {
-		log.Info("====Write to w.ReqChan: hello", wWraper.ReqChan)
-		res := ScanPayload("hello")
-		log.Info("====read from w.ReqChan done!res : res")
-	}()
-*/

@@ -7,7 +7,6 @@
 Benchmark	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Benchmark {$/;"	c	file:
 Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    Benchmark(const hs_database_t *streaming, const hs_database_t *block)$/;"	f	class:Benchmark
 Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^class Benchmark {$/;"	c	file:
-BlockUntilReady	scanner/dist_worker.go	/^func (w *DistWorker) BlockUntilReady() {$/;"	f
 BlockUntilReady	scanner/scan_worker.go	/^func (w *ScanWorker) BlockUntilReady() {$/;"	f
 BuildRules	scanner/scanner.go	/^func (self *Conf) BuildRules() {$/;"	f
 COMMIT_ID	scanner/waf.h	12;"	d
@@ -24,6 +23,7 @@ ConfOutput	scanner/scanner.go	/^func (self *Conf) ConfOutput() {$/;"	f
 ConfParse	scanner/scanner.go	/^func ConfParse(content []byte) (*Conf, error) {$/;"	f
 Criterion	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^enum Criterion {$/;"	g	file:
 DistWorker	scanner/dist_worker.go	/^type DistWorker struct {$/;"	t
+DistWorkerContext	scanner/dist_worker.go	/^type DistWorkerContext struct {$/;"	t
 FastScanner	main.go	/^type FastScanner struct {$/;"	t
 FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    FiveTuple(const struct ip *iphdr) {$/;"	f	struct:FiveTuple
 FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^struct FiveTuple {$/;"	s	file:
@@ -113,7 +113,6 @@ HTTP_UNKNOWN	scanner/waf.h	319;"	d
 HTTP_UNLOCK	scanner/waf.h	332;"	d
 INIT_MATCH_DATA	scanner/waf.h	189;"	d
 INIT_MATCH_DATA_CPY	scanner/waf.h	192;"	d
-Interrupt	scanner/dist_worker.go	/^func (w *DistWorker) Interrupt() {$/;"	f
 Interrupt	scanner/scan_worker.go	/^func (w *ScanWorker) Interrupt() {$/;"	f
 Interrupt	worker/worker.go	/^func (w *WorkerWrapper) Interrupt() {$/;"	f
 Join	worker/worker.go	/^func (w *WorkerWrapper) Join() {$/;"	f
@@ -128,7 +127,7 @@ MD_SA_U_SQLI_MATCHED	scanner/waf.h	165;"	d
 MD_SA_U_XSS_MATCHED	scanner/waf.h	166;"	d
 MD_SA_XSS_MATCHED	scanner/waf.h	161;"	d
 MD_U_MATCHED	scanner/waf.h	171;"	d
-NewDistWorker	scanner/dist_worker.go	/^func NewDistWorker() *DistWorker {$/;"	f
+NewDistWorker	scanner/dist_worker.go	/^func NewDistWorker(numScanWorker int) *DistWorker {$/;"	f
 NewHSMatcher	scanner/hsmatcher.go	/^func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {$/;"	f
 NewScanWorker	scanner/scan_worker.go	/^func NewScanWorker() *ScanWorker {$/;"	f
 NewScanner	scanner/scanner.go	/^func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, error) {$/;"	f
@@ -144,11 +143,10 @@ PAYLOAD_MAX_LEN_DEFAULT	scanner/waf.h	26;"	d
 POLICYS_RESULT_MAX	scanner/waf.h	29;"	d
 POLICY_RULES_MAX	scanner/waf.h	30;"	d
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
-Process	scanner/dist_worker.go	/^func (w *DistWorker) Process(payload interface{}) interface{} {$/;"	f
+Process	scanner/dist_worker.go	/^func (w *DistWorker) Process(payload interface{}) (res interface{}) {$/;"	f
 Process	scanner/scan_worker.go	/^func (w *ScanWorker) Process(payload interface{}) interface{} {$/;"	f
 RULE_RESULT_MAX	scanner/waf.h	28;"	d
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
-ScanPayload	scanner/dist_worker.go	/^func (w *DistWorker) ScanPayload(payload interface{}) (res interface{}) {$/;"	f
 ScanPayload	scanner/scan_worker.go	/^func (w *ScanWorker) ScanPayload(payload interface{}) (res interface{}) {$/;"	f
 ScanWorker	scanner/scan_worker.go	/^type ScanWorker struct {$/;"	t
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
@@ -163,7 +161,6 @@ Stop	scanner/hsmatcher.go	/^func (self *HSMatcher) Stop() error {$/;"	f
 Stop	scanner/scan_worker.go	/^func (w *ScanWorker) Stop() {$/;"	f
 Stop	scanner/scanner.go	/^func (self *Scanner) Stop() {$/;"	f
 Stop	worker/worker.go	/^func (w *WorkerWrapper) Stop() {$/;"	f
-Terminate	scanner/dist_worker.go	/^func (w *DistWorker) Terminate() {$/;"	f
 Terminate	scanner/scan_worker.go	/^func (w *ScanWorker) Terminate() {$/;"	f
 WAFSDK_ACT_BLOCK	scanner/waf.h	/^    WAFSDK_ACT_BLOCK =2 $/;"	e	enum:__anon1
 WAFSDK_ACT_BLOCK_STR	scanner/waf.h	62;"	d
@@ -426,6 +423,7 @@ scratch	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_scratch
 scratch	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    hs_scratch_t *scratch;$/;"	m	class:Benchmark	file:
 seconds	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    double seconds() const {$/;"	f	class:Clock
 seconds	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    double seconds() const {$/;"	f	class:Clock
+selectScanWorker	scanner/dist_worker.go	/^func selectScanWorker(distWorkerContext interface{}) (res interface{}) {$/;"	f
 self_clone	scanner/waf.h	/^    int self_clone;$/;"	m	struct:__anon7
 setDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void setDatabase(hs_database_t *hs_db) {$/;"	f	class:Benchmark
 size	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned size() const {$/;"	f	class:Sigdata

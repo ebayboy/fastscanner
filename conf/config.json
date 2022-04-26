@@ -3,6 +3,7 @@
     "version": "v1.0.0",
     "cpunum": 1,
     "procnum": 1,
+    "scannernum": 1,
     "hsconfig": {
         "debug":"1",
         "rules": [

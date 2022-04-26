@@ -7,7 +7,7 @@ import (
 
 /*
 TODO:
-+ 每个woker对应一个matcher
++ 每个woker对应一个matcher， 对应关系
 */
 
 //woker模块， 实现worker.Worker接口
@@ -64,6 +64,8 @@ func NewScanWorker() *ScanWorker {
 	reqChan := make(chan worker.WorkRequest)
 	sWorker := &ScanWorker{}
 	sWorker.wWraper = worker.NewWorkerWrapper(reqChan, sWorker)
+
+	//TODO: worker -> matcher
 
 	return sWorker
 }
