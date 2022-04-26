@@ -1,30 +1,34 @@
-package main
+package scanner
 
 import (
 	"github.com/fastscanner/worker"
 	log "github.com/sirupsen/logrus"
 )
 
-//TODO: 使用tunny.tool.ProcessTimeout分发数据到scanWorker
-//TODO: scanWorkers
+/*
+TODO:
++ 每个woker对应一个matcher
+*/
 
 //woker模块， 实现worker.Worker接口
-type DistWorker struct {
-	ScanWorkers ScanWorker
+type ScanWorker struct {
+	wWraper *worker.WorkerWrapper
+	reqChan chan worker.WorkRequest
+	request worker.WorkRequest
 }
 
 /* Process Flow: payload -> jobChan -> Process -> res -> retChan */
 //not call directly, this func is workerWrapper's callback func
-func (w *DistWorker) Process(payload interface{}) interface{} {
+func (w *ScanWorker) Process(payload interface{}) interface{} {
 	// hyperscan match , return result
 	res := payload.(string) + ", Process"
-	log.Info("====DistWorker reutrn res:", res)
+	log.Info("====ScanWorker reutrn res:", res)
 	return res
 }
 
 //发送数据到jobChan通道, 读取retChan结果
 // http -> jobChan -> hyperscan -> retChan
-func (w *DistWorker) ScanPayload(payload interface{}) (res interface{}) {
+func (w *ScanWorker) ScanPayload(payload interface{}) (res interface{}) {
 
 	log.Info("====write to jobChan ...")
 	//1. read request
@@ -46,28 +50,28 @@ func (w *DistWorker) ScanPayload(payload interface{}) (res interface{}) {
 	return res
 }
 
-func (w *DistWorker) BlockUntilReady() {
-	log.Println("DistWorker BlockUntilReady, WorkerWrappe reqChan:", w.wWraper.ReqChan)
+func (w *ScanWorker) BlockUntilReady() {
+	log.Println("ScanWorker BlockUntilReady, WorkerWrappe reqChan:", w.wWraper.ReqChan)
 }
-func (w *DistWorker) Interrupt() {
-	log.Println("DistWorker Interrupt")
+func (w *ScanWorker) Interrupt() {
+	log.Println("ScanWorker Interrupt")
 }
-func (w *DistWorker) Terminate() {
-	log.Println("DistWorker Terminate")
+func (w *ScanWorker) Terminate() {
+	log.Println("ScanWorker Terminate")
 }
 
-func NewDistWorker() *DistWorker {
+func NewScanWorker() *ScanWorker {
 	reqChan := make(chan worker.WorkRequest)
-	sWorker := &DistWorker{}
+	sWorker := &ScanWorker{}
 	sWorker.wWraper = worker.NewWorkerWrapper(reqChan, sWorker)
 
 	return sWorker
 }
 
-func (w *DistWorker) Stop() {
-	log.Info("DistWorkerStop...")
+func (w *ScanWorker) Stop() {
+	log.Info("ScanWorkerStop...")
 	w.wWraper.Stop()
-	log.Info("DistWorker Stoped!")
+	log.Info("ScanWorker Stoped!")
 }
 
 /*
