@@ -7,6 +7,7 @@
 Benchmark	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Benchmark {$/;"	c	file:
 Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    Benchmark(const hs_database_t *streaming, const hs_database_t *block)$/;"	f	class:Benchmark
 Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^class Benchmark {$/;"	c	file:
+BlockUntilReady	scan_worker.go	/^func (w *closureWorker) BlockUntilReady() {$/;"	f
 BlockUntilReady	test_worker.go	/^func (w *closureWorker) BlockUntilReady() {$/;"	f
 BuildRules	scanner/scanner.go	/^func (self *Conf) BuildRules() {$/;"	f
 COMMIT_ID	scanner/waf.h	12;"	d
@@ -29,7 +30,6 @@ FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    FiveTupl
 FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTuple {$/;"	s	file:
 FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^struct FiveTupleHash {$/;"	s	file:
 FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTupleHash {$/;"	s	file:
-Free	scanner/hsmatcher.go	/^func (self *HSMatcher) Free() error {$/;"	f
 HSConfig	scanner/scanner.go	/^type HSConfig struct {$/;"	t
 HSContext	scanner/hsmatcher.go	/^type HSContext struct {$/;"	t
 HSMatcher	scanner/hsmatcher.go	/^type HSMatcher struct {$/;"	t
@@ -112,7 +112,7 @@ HTTP_UNKNOWN	scanner/waf.h	319;"	d
 HTTP_UNLOCK	scanner/waf.h	332;"	d
 INIT_MATCH_DATA	scanner/waf.h	189;"	d
 INIT_MATCH_DATA_CPY	scanner/waf.h	192;"	d
-Init	scanner/hsmatcher.go	/^func (self *HSMatcher) Init() error {$/;"	f
+Interrupt	scan_worker.go	/^func (w *closureWorker) Interrupt() {$/;"	f
 Interrupt	test_worker.go	/^func (w *closureWorker) Interrupt() {$/;"	f
 Interrupt	worker/worker.go	/^func (w *WorkerWrapper) Interrupt() {$/;"	f
 Join	worker/worker.go	/^func (w *WorkerWrapper) Join() {$/;"	f
@@ -127,7 +127,6 @@ MD_SA_U_SQLI_MATCHED	scanner/waf.h	165;"	d
 MD_SA_U_XSS_MATCHED	scanner/waf.h	166;"	d
 MD_SA_XSS_MATCHED	scanner/waf.h	161;"	d
 MD_U_MATCHED	scanner/waf.h	171;"	d
-MatchPool	scanner/hsmatcher.go	/^func (self *HSMatcher) MatchPool(data interface{}) interface{} {$/;"	f
 NewHSMatcher	scanner/hsmatcher.go	/^func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {$/;"	f
 NewScanner	scanner/scanner.go	/^func NewScanner(confData []byte, mctx *context.Context, cf *Conf) (*Scanner, error) {$/;"	f
 NewWorkerWrapper	worker/worker.go	/^func NewWorkerWrapper(reqChan chan<- WorkRequest, worker Worker) *WorkerWrapper {$/;"	f
@@ -142,10 +141,12 @@ PAYLOAD_MAX_LEN_DEFAULT	scanner/waf.h	26;"	d
 POLICYS_RESULT_MAX	scanner/waf.h	29;"	d
 POLICY_RULES_MAX	scanner/waf.h	30;"	d
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
+Process	scan_worker.go	/^func (w *closureWorker) Process(payload interface{}) interface{} {$/;"	f
 Process	test_worker.go	/^func (w *closureWorker) Process(payload interface{}) interface{} {$/;"	f
 RULE_RESULT_MAX	scanner/waf.h	28;"	d
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
 Scanner	scanner/scanner.go	/^type Scanner struct {$/;"	t
+SendPayload	scan_worker.go	/^func SendPayload(payload interface{}) interface{} {$/;"	f
 SendPayload	test_worker.go	/^func SendPayload(payload interface{}) interface{} {$/;"	f
 ServeStart	main.go	/^func ServeStart(mctx *context.Context) {$/;"	f
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata() {}$/;"	f	class:Sigdata
@@ -153,9 +154,12 @@ Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata(co
 Sigdata	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^class Sigdata {$/;"	c	file:
 Start	scanner/hsmatcher.go	/^func (self *HSMatcher) Start() error {$/;"	f
 Start	scanner/scanner.go	/^func (self *Scanner) Start() {$/;"	f
+Stop	scanner/hsmatcher.go	/^func (self *HSMatcher) Stop() error {$/;"	f
 Stop	scanner/scanner.go	/^func (self *Scanner) Stop() {$/;"	f
 Stop	worker/worker.go	/^func (w *WorkerWrapper) Stop() {$/;"	f
+Terminate	scan_worker.go	/^func (w *closureWorker) Terminate() {$/;"	f
 Terminate	test_worker.go	/^func (w *closureWorker) Terminate() {$/;"	f
+Testworker	scan_worker.go	/^func Testworker() {$/;"	f
 Testworker	test_worker.go	/^func Testworker() {$/;"	f
 WAFSDK_ACT_BLOCK	scanner/waf.h	/^    WAFSDK_ACT_BLOCK =2 $/;"	e	enum:__anon1
 WAFSDK_ACT_BLOCK_STR	scanner/waf.h	62;"	d
@@ -264,6 +268,7 @@ clearMatches	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void 
 cloneExclude	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata cloneExclude(const set<unsigned> &excludeIndexSet) const {$/;"	f	class:Sigdata
 closeStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void closeStreams() {$/;"	f	class:Benchmark
 closeStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void closeStreams() {$/;"	f	class:Benchmark
+closureWorker	scan_worker.go	/^type closureWorker struct {$/;"	t
 closureWorker	test_worker.go	/^type closureWorker struct {$/;"	t
 compileDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_database_t *compileDatabase(unsigned mode, double *compileTime) const {$/;"	f	class:Sigdata
 confFile	main.go	/^	confFile string$/;"	v
@@ -324,6 +329,7 @@ main	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^int main(int argc
 main	libs/hyperscan/share/doc/hyperscan/examples/simplegrep.c	/^int main(int argc, char *argv[]) {$/;"	f
 main	main.go	/^func main() {$/;"	f
 main	main.go	/^package main$/;"	p
+main	scan_worker.go	/^package main$/;"	p
 main	test_worker.go	/^package main$/;"	p
 matchCount	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    size_t matchCount = 0;$/;"	m	class:Benchmark	file:
 matchCount	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    size_t matchCount;$/;"	m	class:Benchmark	file:
@@ -390,7 +396,9 @@ protocol	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned 
 readInputData	libs/hyperscan/share/doc/hyperscan/examples/simplegrep.c	/^static char *readInputData(const char *inputFN, unsigned int *length) {$/;"	f	file:
 readStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    bool readStreams(const char *pcapFile) {$/;"	f	class:Benchmark
 readStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    bool readStreams(const char *pcapFile) {$/;"	f	class:Benchmark
+reqChan	scan_worker.go	/^var reqChan chan worker.WorkRequest$/;"	v
 reqChan	test_worker.go	/^var reqChan chan worker.WorkRequest$/;"	v
+request	scan_worker.go	/^var request worker.WorkRequest$/;"	v
 request	test_worker.go	/^var request worker.WorkRequest$/;"	v
 request_handler	main.go	/^func request_handler(ctx *fasthttp.RequestCtx) {$/;"	f
 reserved1	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long reserved1;$/;"	m	struct:hs_platform_info
@@ -449,10 +457,12 @@ unordered_matches	libs/hyperscan/include/hs/hs_compile.h	/^    char unordered_ma
 usage	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^void usage(const char *) {$/;"	f	file:
 usage	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void usage(const char *prog) {$/;"	f	file:
 version	main.go	/^	version  bool$/;"	v
+wWraper	scan_worker.go	/^var wWraper *worker.WorkerWrapper$/;"	v
 wWraper	test_worker.go	/^var wWraper *worker.WorkerWrapper$/;"	v
 waf_phase_e	scanner/waf.h	/^} waf_phase_e;$/;"	t	typeref:enum:__anon2
 wafsdk_action_e	scanner/waf.h	/^} wafsdk_action_e;$/;"	t	typeref:enum:__anon1
 worker	worker/worker.go	/^package worker$/;"	p
 workerCallback	test_worker.go	/^func workerCallback(payload interface{}) interface{} {$/;"	f
+worker_callback	scan_worker.go	/^func worker_callback(payload interface{}) interface{} {$/;"	f
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark
 ~Benchmark	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    ~Benchmark() {$/;"	f	class:Benchmark

@@ -36,24 +36,6 @@ func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
 	return nil
 }
 
-func (self *HSMatcher) MatchPool(data interface{}) interface{} {
-	//此处使用的scrach应该是clone的
-	/*
-		ctx := data.(HSContext)
-
-		if err := database.Scan(ctx.Data, scratch, eventHandler, inputData); err != nil {
-			log.Error("Error:", err.Error())
-		}
-	*/
-
-	return nil
-}
-
-func (self *HSMatcher) Init() error {
-
-	return nil
-}
-
 func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {
 	var err error
 	matcher := new(HSMatcher)
@@ -122,7 +104,9 @@ func (self *HSMatcher) Start() error {
 	return nil
 }
 
-func (self *HSMatcher) Free() error {
+func (self *HSMatcher) Stop() error {
+
+	//TODO: 监听通道退出?
 	self.HSDB.Close()
 	self.HSScratch.Free()
 

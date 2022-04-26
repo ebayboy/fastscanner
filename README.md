@@ -13,7 +13,6 @@ fasthttp + hyperscan
 + go-cache
 
 ## TODO
-+ 设计图
 + 并发处理： 函数调用方式（同步） &&  通道方式(异步)
 + 通道方式： 每个协程 +  一个通道 +  一个scratch
 + 支持变量： nginx原版变量
