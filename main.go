@@ -90,7 +90,7 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Your ip is %q\n\n", ctx.RemoteIP())
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
-	distCtx := scanner.DistWorkerContext{}
+	distCtx := scanner.DistWorkerContext{DistWorker: distWorker}
 	distCtx.Data = map[string]interface{}{
 		"request_method":  ctx.Method(),
 		"request_uri":     ctx.RequestURI(),
@@ -100,7 +100,7 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 		"args":            ctx.QueryArgs(),
 		"request":         &ctx.Request,
 	}
-	res, err := distWorker.Pool.ProcessTimed(&distCtx, time.Millisecond*100)
+	res, err := distWorker.Pool.ProcessTimed(&distCtx, time.Second*5)
 	if err == tunny.ErrJobTimedOut {
 		log.WithFields(log.Fields{"hsCtx": distCtx, "rerr": err.Error()}).Error("Error: Request timed out!")
 		return

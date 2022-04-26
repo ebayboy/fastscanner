@@ -10,7 +10,7 @@ import (
 
 type DistWorkerContext struct {
 	Data       interface{} //map[data_key]data
-	distWorker *DistWorker
+	DistWorker *DistWorker
 }
 
 type DistWorker struct {
@@ -23,10 +23,10 @@ type DistWorker struct {
 func selectScanWorker(distWorkerContext interface{}) (res interface{}) {
 
 	ctx := distWorkerContext.(*DistWorkerContext)
-	idx := rand.Intn(ctx.distWorker.NumScanWorker)
+	idx := rand.Intn(ctx.DistWorker.NumScanWorker)
 
 	scanCtx := ScanWorkerContext{Data: ctx.Data}
-	res = ctx.distWorker.ScanWorkers[idx].Scan(&scanCtx)
+	res = ctx.DistWorker.ScanWorkers[idx].Scan(&scanCtx)
 
 	log.WithFields(log.Fields{"idx:": idx, "ctx": ctx, "res": res}).Info("selectScanWorker")
 	return res

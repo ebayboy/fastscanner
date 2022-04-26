@@ -2,6 +2,7 @@ package scanner
 
 import (
 	"context"
+	"errors"
 
 	"github.com/fastscanner/worker"
 	log "github.com/sirupsen/logrus"
@@ -68,27 +69,31 @@ func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {
 func (w *ScanWorker) Scan(scanWorkerCtx interface{}) (res interface{}) {
 
 	ctx := scanWorkerCtx.(*ScanWorkerContext)
-	log.Info("====write to jobChan ... ScanWorkerCtx:", ctx)
+	log.Info("====write to jobChan ... ScanWorkerCtx:", ctx, " w.reqChan:", w.reqChan)
 
 	//将ctx.Data 找到对应的MZ, 输出数据到给scanner, scanner做hyperscan匹配
-
 	//1. wait && read request
 	request, open := <-w.reqChan
 	if !open {
 		log.Error("ErrNotRunning")
+		return errors.New("ErrNotRunning")
 	}
 
+	log.Info("ScanWorker.Scan get request:", request)
 	//2.1 write payload to request.jobChan
 	request.JobChan <- ctx
+
+	log.Info("ScanWorker.Scan write to request.JobChan:", request.JobChan)
 
 	//2.2 wait && read payload from request.retChan
 	res, open = <-request.RetChan
 	if !open {
 		log.Panic("ErrWorkerClosed")
+		return errors.New("ErrWorkerClosed")
 	}
 	log.Info("====read from retChan")
 
-	return res
+	return nil
 }
 
 func (w *ScanWorker) BlockUntilReady() {
@@ -103,13 +108,15 @@ func (w *ScanWorker) Terminate() {
 
 func NewScanWorker(confData []byte, mctx *context.Context, cf *Conf) (*ScanWorker, error) {
 	var err error
-	reqChan := make(chan worker.WorkRequest)
+
 	w := &ScanWorker{}
-	w.wWraper = worker.NewWorkerWrapper(reqChan, w)
+	w.reqChan = make(chan worker.WorkRequest)
+	w.wWraper = worker.NewWorkerWrapper(w.reqChan, w)
 	w.scanner, err = NewScanner(confData, mctx, cf)
 	if err != nil {
 		return nil, err
 	}
+	log.Info("worker.WorkRequest: ", w, " w.wWraper.ReqChan:", w.wWraper.ReqChan)
 
 	return w, nil
 }
