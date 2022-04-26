@@ -13,14 +13,12 @@ fasthttp + hyperscan
 + go-cache
 
 ## TODO
-+ worker dev && test
-    + worker.Stop test. [done]
-    + worker job 
-    + worker job result
++ 设计图
 + 并发处理： 函数调用方式（同步） &&  通道方式(异步)
-+ 使用tunny读取body
-+ 匹配域matcher实现： 每个匹配域对应一个pool，可以配置worker数量(也不行， matcher需要单例的scratch）
 + 通道方式： 每个协程 +  一个通道 +  一个scratch
++ 支持变量： nginx原版变量
+
++ 匹配域matcher实现： 每个匹配域对应一个pool，可以配置worker数量(也不行， matcher需要单例的scratch）
 + json config 解析 及 模块化
     + 移植 statbot mutl goroutine model
     + MainConfig module
@@ -38,8 +36,15 @@ fasthttp + hyperscan
 + 高效性能设计： 请求头+ URI + BODY 高效匹配设计
     + 请求头并发匹配(避免嵌套循环，计算消耗会指数下降)
     + 请求BODY多协程匹配
++ body的读取tunny pool
+
+## TODO2:
++ apisix + fastscaner
++ 黑名单功能
++ 白名单功能
 
 ## DONE
++ worker dev && test  [done]
 + logrus + file-rotatelogs
 + fasthttp + hyperscan 
 + hyperscan static lib 
