@@ -1,8 +1,6 @@
 package worker
 
 import (
-	"time"
-
 	log "github.com/sirupsen/logrus"
 )
 
@@ -112,9 +110,6 @@ func (w *WorkerWrapper) run() {
 		case <-w.CloseChan:
 			log.Info("recv <- w.CloseChan: ", w.ClosedChan)
 			return
-		default:
-			log.Info("-----default-----")
-			time.Sleep(time.Duration(1) * time.Second)
 		}
 	}
 }
