@@ -2,7 +2,7 @@
 
 ## 支持的nginx原生变量
 ### curl -H"Cookie: username=fanpf;passwd=123456" -H"Referer: www.baidu.com" 'http://10.0.2.15:8888/abc/.././././test?name=fanpf&id=11' -F "FILE=@./test.json"
-+ "request:": POST /test?name=fanpf&id=11 HTTP/1.1
++ "request": POST /test?name=fanpf&id=11 HTTP/1.1
 + "request_body:": --------------------------b0c24a55384dfcad\x0D\x0AContent-Disposition: form-data; name=\x22FILE\x22; filename=\x22test.json\x22\x0D\x0AContent-Type: application/octet-stream\x0D\x0A\x0D\x0A{\x0A    \x22name\x22:\x22fanpf\x22,\x0A    \x22age\x22: 30\x0A}\x0A\x0D\x0A--------------------------b0c24a55384dfcad--\x0D\x0A
 + "request_method:": POST
 + "request_uri:": /test?name=fanpf&id=11
