@@ -43,6 +43,8 @@ func init() {
 		DisableColors:   true,
 		TimestampFormat: "1970-00-00 00:00:00",
 	})
+
+	// Start flag: -d
 	if isdev {
 		log.SetOutput(os.Stdout)
 		log.SetLevel(log.DebugLevel)
@@ -161,10 +163,11 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 }
 
 type Conf struct {
-	Debug   bool   `json:"debug"`
-	Version string `json:"version"`
-	CPUNum  int    `json:"cpunum"`
-	ProcNum int    `json:"procnum"`
+	Debug    bool   `json:"debug"`
+	Version  string `json:"version"`
+	LogLevel string `json:"loglevel"`
+	CPUNum   int    `json:"cpunum"`
+	ProcNum  int    `json:"procnum"`
 }
 
 type FastScanner struct {
