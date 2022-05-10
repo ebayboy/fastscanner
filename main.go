@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"os/signal"
+	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
@@ -15,6 +17,7 @@ import (
 	"time"
 
 	"github.com/Jeffail/tunny"
+	"github.com/fastscanner/common"
 	"github.com/fastscanner/scanner"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	log "github.com/sirupsen/logrus"
@@ -27,9 +30,11 @@ var (
 	logFile  string
 	confFile string
 	addr     string
+	pidFile  string = "fastscanner.pid"
 )
 
 func init() {
+
 	//parse flag
 	flag.BoolVar(&isdev, "d", false, "run in dev mode")
 	flag.BoolVar(&version, "version", false, "output version info")
@@ -203,7 +208,46 @@ var distWorker *scanner.DistWorker
 
 func main() {
 
-	log.Info("Starting ...")
+	//启动dev模式
+	if !isdev {
+		fmt.Println("Start with daemon...")
+		//Start daemon
+		//判 断当其是否是子进程，当父进程return之后，子进程会被 系统1 号进程接管
+		if os.Getppid() != 1 {
+			// 将命令行参数中执行文件路径转换成可用路径
+			filePath, _ := filepath.Abs(os.Args[0])
+			cmd := exec.Command(filePath, os.Args[1:]...)
+			// 将其他命令传入生成出的进程
+			cmd.Stdin = os.Stdin // 给新进程设置文件描述符，可以重定向到文件中
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			cmd.Start() // 开始执行新进程，不等待新进程退出
+			return
+		}
+	}
+
+	//check pid exist
+	exDir, err := os.Executable()
+	if err != nil {
+		log.Fatal("Error:", err.Error())
+	}
+	pathDir := filepath.Dir(exDir)
+	once_pid, started := common.PidfileExit(pathDir + "/" + pidFile)
+	if started {
+		if once_pid > 0 {
+			log.Error("exec already exist:%d\n", once_pid)
+			return
+		}
+	} else {
+		if once_pid > 0 {
+			log.Info("start new proc:%d", once_pid)
+			//HandleSingle()  //信号处理
+			defer os.Remove(pidFile) //程序退出后删除pid文件
+		}
+	}
+
+	//Start process
+	log.Info("Starting ... pid:", once_pid)
 
 	//init ctx && signal
 	mctx, cancel := context.WithCancel(context.Background())
@@ -222,7 +266,7 @@ func main() {
 
 	if fastScanner.conf.LogLevel > 0 {
 		log.SetLevel(log.Level(fastScanner.conf.LogLevel))
-		fmt.Println("Reset loglevel to:", fastScanner.conf.LogLevel)
+		log.Info("Reset loglevel to:", fastScanner.conf.LogLevel)
 	}
 
 	log.WithFields(log.Fields{"version": fastScanner.conf.Version, "LogLevel": fastScanner.conf.LogLevel}).Info()

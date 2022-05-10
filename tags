@@ -32,6 +32,7 @@ FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    FiveTupl
 FiveTuple	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTuple {$/;"	s	file:
 FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^struct FiveTupleHash {$/;"	s	file:
 FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTupleHash {$/;"	s	file:
+GetProcDir	common/common.go	/^func GetProcDir() (string, error) {$/;"	f
 HSConfig	scanner/scanner.go	/^type HSConfig struct {$/;"	t
 HSContext	scanner/hsmatcher.go	/^type HSContext struct {$/;"	t
 HSContextsShow	scanner/hsmatcher.go	/^func HSContextsShow(ctxs []HSContext) {$/;"	f
@@ -113,6 +114,7 @@ HTTP_PUT	scanner/waf.h	323;"	d
 HTTP_TRACE	scanner/waf.h	334;"	d
 HTTP_UNKNOWN	scanner/waf.h	319;"	d
 HTTP_UNLOCK	scanner/waf.h	332;"	d
+HandleSingle	common/common.go	/^func HandleSingle() {$/;"	f
 INIT_MATCH_DATA	scanner/waf.h	189;"	d
 INIT_MATCH_DATA_CPY	scanner/waf.h	192;"	d
 Interrupt	scanner/scan_worker.go	/^func (w *ScanWorker) Interrupt() {$/;"	f
@@ -145,6 +147,7 @@ PAYLOAD_LEN	scanner/waf.h	24;"	d
 PAYLOAD_MAX_LEN_DEFAULT	scanner/waf.h	26;"	d
 POLICYS_RESULT_MAX	scanner/waf.h	29;"	d
 POLICY_RULES_MAX	scanner/waf.h	30;"	d
+PidfileExit	common/common.go	/^func PidfileExit(pidfile string) (once_pid int, started bool) {$/;"	f
 Policy	scanner/scanner.go	/^type Policy struct {$/;"	t
 Process	scanner/dist_worker.go	/^func (w *DistWorker) Process(distWorkerCtx interface{}) (res interface{}) {$/;"	f
 Process	scanner/scan_worker.go	/^func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {$/;"	f
@@ -272,6 +275,7 @@ clearMatches	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void 
 cloneExclude	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    Sigdata cloneExclude(const set<unsigned> &excludeIndexSet) const {$/;"	f	class:Sigdata
 closeStreams	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void closeStreams() {$/;"	f	class:Benchmark
 closeStreams	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void closeStreams() {$/;"	f	class:Benchmark
+common	common/common.go	/^package common$/;"	p
 compileDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_database_t *compileDatabase(unsigned mode, double *compileTime) const {$/;"	f	class:Sigdata
 confFile	main.go	/^	confFile string$/;"	v
 cpu_features	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned long long cpu_features;$/;"	m	struct:hs_platform_info
@@ -383,6 +387,7 @@ payload_len	scanner/waf.h	/^    unsigned int payload_len;$/;"	m	struct:__anon4
 phase	scanner/waf.h	/^    waf_phase_e phase;$/;"	m	struct:__anon3
 phase	scanner/waf.h	/^    waf_phase_e phase;$/;"	m	struct:__anon4
 phase	scanner/waf.h	/^    waf_phase_e phase;$/;"	m	struct:__anon5
+pidFile	main.go	/^	pidFile  string = "fastscanner.pid"$/;"	v
 policy_action	scanner/waf.h	/^    int policy_action;$/;"	m	struct:__anon5
 policy_cursor	scanner/waf.h	/^    unsigned int policy_cursor;$/;"	m	struct:__anon6
 policy_hit_cursor	scanner/waf.h	/^    unsigned int policy_hit_cursor;$/;"	m	struct:__anon6
