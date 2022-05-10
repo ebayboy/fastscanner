@@ -165,7 +165,7 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 type Conf struct {
 	Debug    bool   `json:"debug"`
 	Version  string `json:"version"`
-	LogLevel string `json:"loglevel"`
+	LogLevel int    `json:"loglevel"`
 	CPUNum   int    `json:"cpunum"`
 	ProcNum  int    `json:"procnum"`
 }
@@ -219,7 +219,13 @@ func main() {
 	if err := json.Unmarshal(confData, &fastScanner.conf); err != nil {
 		log.Fatal("Parse main conf error!")
 	}
-	log.Info("version:", fastScanner.conf.Version)
+
+	if fastScanner.conf.LogLevel > 0 {
+		log.SetLevel(log.Level(fastScanner.conf.LogLevel))
+		fmt.Println("Reset loglevel to:", fastScanner.conf.LogLevel)
+	}
+
+	log.WithFields(log.Fields{"version": fastScanner.conf.Version, "LogLevel": fastScanner.conf.LogLevel}).Info()
 
 	distWorker, err = scanner.NewDistWorker(1, confData, &mctx, nil)
 	if err != nil {
