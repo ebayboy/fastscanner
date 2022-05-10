@@ -80,4 +80,5 @@ fasthttp + hyperscan
 + gohs使用
     + 需要指定hyerscan 安装的libhs.pc路径， libhs.pc文件包含库和头文件的路径, 默认安装到/usr/local/hyperscan
     + export PKG_CONFIG_PATH=/usrl/local/hyperscan
+    + 多个协程使用一个scratch会报错： ERROR: Unable to scan input buffer. Exiting. err: The scratch region was already in use.
 

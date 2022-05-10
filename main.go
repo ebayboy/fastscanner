@@ -111,15 +111,17 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 		distCtx.Data["request_body"] = ctx.PostBody()
 	}
 
+	//性能优化：
+	// + 不走匹配流程： Requests/sec: 73028.06
+	// + 走匹配流量: Requests/sec:  23948.57
+	// + 走匹配不打日志: Requests/sec:  32835.78
 	res, err := distWorker.Pool.ProcessTimed(&distCtx, time.Second*5)
 	if err == tunny.ErrJobTimedOut {
 		log.WithFields(log.Fields{"hsCtx": distCtx, "rerr": err.Error()}).Error("Error: Request timed out!")
 		return
 	}
 
-	log.Debug("======= Request Res Start =======")
 	scanner.HSContextsShow(res.([]scanner.HSContext))
-	log.Debug("======= Request Res End =======")
 
 	var hit_ids []string
 	var hit_payloads []string
@@ -137,10 +139,10 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 	}
 
 	request_id := strconv.FormatUint(ctx.ID(), 10)
-	log.WithFields(log.Fields{"hit_ids": hit_ids, "hit_payloads": hit_payloads, "request_id": request_id}).Info("Res")
+	log.WithFields(log.Fields{"hit_ids": hit_ids, "hit_payloads": hit_payloads, "request_id": request_id}).Info("Res") //影响1.7w QPS
 
 	if len(hit_ids) > 0 {
-		ctx.Response.Header.Set("request-id", request_id)
+		ctx.Response.Header.Set("waf-request-id", request_id)
 		ctx.Response.Header.Set("waf-hit-ids", strings.Join(hit_ids, ","))
 		ctx.Response.Header.Set("waf-hit-payloads", strings.Join(hit_payloads, ","))
 		ctx.Response.SetStatusCode(403)
