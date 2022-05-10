@@ -1,4 +1,4 @@
 
 
 ## 性能测试
-+ 2022.5.10 Requests/sec:  24765.14
++ 2022.5.10 直接通过lighthttp端口测试性能  Requests/sec:  24765.14: (sha 8ab585ec20d24d5c2bb623f2fd65aac949643382)
