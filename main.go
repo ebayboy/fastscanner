@@ -6,12 +6,13 @@ import (
 	"log"
 	"os"
 	"runtime"
-	"strconv"
 	"syscall"
 
 	"github.com/flier/gohs/hyperscan"
 	"github.com/valyala/fasthttp"
 )
+
+//TODO: 目前lighthttpd是多协程使用 一个scratch， 会导致scrach in use 错误
 
 var (
 	addr     = flag.String("addr", ":9999", "TCP address to listen to")
@@ -50,6 +51,8 @@ func main() {
 		log.Fatalf("Error in ListenAndServeUNIX: %v", err)
 	}
 
+	log.Println("ListenAndServe:", addr)
+
 	hsMatcher.Fini()
 }
 
@@ -69,13 +72,15 @@ func requestHandler(ctx *fasthttp.RequestCtx) {
 
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
-	hsctx := HSContext{Data: ctx.RequestURI()}
-
-	hsMatcher.Match(&hsctx)
-	if hsctx.Id > 0 {
-		ctx.Response.Header.Set("waf-hit-id", strconv.Itoa(int(hsctx.Id)))
-		ctx.Response.SetStatusCode(403)
-	}
+	//Dont use hyperscan match : wrk测试性能： Requests/sec:  77309.85
+	/*
+		hsctx := HSContext{Data: ctx.RequestURI()}
+		hsMatcher.Match(&hsctx)
+		if hsctx.Id > 0 {
+			ctx.Response.Header.Set("waf-hit-id", strconv.Itoa(int(hsctx.Id)))
+			ctx.Response.SetStatusCode(403)
+		}
+	*/
 
 	ctx.SetContentType("text/plain; charset=utf8")
 
@@ -111,7 +116,7 @@ type HSMatcher struct {
 }
 
 func (self *HSMatcher) Init() (err error) {
-	pattern := hyperscan.NewPattern("1234", hyperscan.DotAll|hyperscan.SomLeftMost)
+	pattern := hyperscan.NewPattern("request_uri", hyperscan.DotAll|hyperscan.SomLeftMost)
 	pattern.Id = 10001
 
 	self.HSDB, err = hyperscan.NewBlockDatabase(pattern)
@@ -141,7 +146,8 @@ func (self *HSMatcher) Fini() error {
 func (self *HSMatcher) Match(ctx *HSContext) (err error) {
 	err = self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx)
 	if err != nil {
-		fmt.Fprint(os.Stderr, "ERROR: Unable to scan input buffer. Exiting.\n")
+		fmt.Println("ERROR: Unable to scan input buffer. Exiting. err:", err.Error())
+		fmt.Println("Data::", string(ctx.Data))
 		return err
 	}
 	//fmt.Printf("Scanning %d bytes %s with Hyperscan Id:%d from:%d to:%d hit:[%s]\n", len(hsctx.Data), hsctx.Data, hsctx.Id, hsctx.From, hsctx.To, hsctx.Data[hsctx.From:hsctx.To])
