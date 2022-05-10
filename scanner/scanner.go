@@ -50,7 +50,7 @@ type HSConfig struct {
 
 type Conf struct {
 	HSConfig HSConfig          `json:"hsconfig"`
-	RulesMap map[string][]Rule //all rules
+	RulesMap map[string][]Rule //rules set -> map[mz]rules
 }
 
 func (self *Conf) ConfOutput() {
@@ -134,19 +134,13 @@ func (self *Scanner) init() {
 		self.Matchers = make(map[string]*HSMatcher, 0)
 	}
 
-	//Add rules to matcher
 	for mz, rules := range self.Conf.RulesMap {
-
-		matcher, exist := self.Matchers[mz]
-		if !exist {
-			matcher, err := NewHSMatcher(rules, mz, nil, nil)
-			if err != nil {
-				log.WithField("MZ:", mz).Error("Error: NewHSMatcher")
-				continue
-			}
-			self.Matchers[mz] = matcher
+		matcher, err := NewHSMatcher(rules, mz, nil, nil)
+		if err != nil {
+			log.WithField("MZ:", mz).Error("Error: NewHSMatcher")
+			continue
 		}
-
+		self.Matchers[mz] = matcher
 		log.WithField("count", len(self.Matchers)).Info("Add matcher:", matcher.MZ)
 	}
 
