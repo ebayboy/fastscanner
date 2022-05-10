@@ -20,26 +20,30 @@ type DistWorker struct {
 }
 
 //tunny.pool 多协程同时调用此函数, 要保证线程安全
-func selectScanWorker(distWorkerContext interface{}) (res interface{}) {
+//main -> dist_worker -> scanner_worker -> scanner -> matcher
+func distWorkerCallback(distWorkerContext interface{}) (err interface{}) {
 
-	log.Info("selectScanWorker...")
+	log.Info("distWorkerCallback...")
 
 	ctx := distWorkerContext.(*DistWorkerContext)
 	scanCtx := ScanWorkerContext{Data: ctx.Data}
 
 	//随机分发到scanner_worker
 	idx := rand.Intn(ctx.DistWorker.NumScanWorker)
-	res = ctx.DistWorker.ScanWorkers[idx].Scan(&scanCtx)
+	err = ctx.DistWorker.ScanWorkers[idx].Scan(&scanCtx)
+	if err != nil {
+		log.Error("Error! err:", err.(error).Error())
+		return nil
+	}
 
-	log.WithFields(log.Fields{"idx:": idx, "ctx": ctx, "res": res}).Info("selectScanWorker")
-
-	return res
+	HSContextsShow(scanCtx.Res)
+	return scanCtx.Res
 }
 
 func NewDistWorker(numScanWorker int, confData []byte, mctx *context.Context, cf *Conf) (*DistWorker, error) {
 
 	dist := &DistWorker{NumScanWorker: numScanWorker}
-	dist.Pool = tunny.NewFunc(numScanWorker, selectScanWorker)
+	dist.Pool = tunny.NewFunc(numScanWorker, distWorkerCallback)
 
 	for i := 0; i < numScanWorker; i++ {
 		scan_worker, err := NewScanWorker(confData, mctx, cf)

@@ -14,13 +14,13 @@
             },
             {
                 "id": "10002",
-                "mz": "$request_body",
-                "rx": "request_body"
+                "mz": "$http_referer",
+                "rx": "referer"
             },
             {
                 "id": "12011",
                 "mz": "$request_body,$request_uri,$http_user_agent,$http_referer,$request_method",
-                "rx": "request|request_body|request_uri|http_user_agent|http_referer|http_cookie|uri|arg_name"
+                "rx": "request|request_body|request_uri|user_agent|referer|cookie|uri|arg_name"
             }
         ],
         "policies": [

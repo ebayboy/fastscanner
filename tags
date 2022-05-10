@@ -34,6 +34,7 @@ FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^struct F
 FiveTupleHash	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^struct FiveTupleHash {$/;"	s	file:
 HSConfig	scanner/scanner.go	/^type HSConfig struct {$/;"	t
 HSContext	scanner/hsmatcher.go	/^type HSContext struct {$/;"	t
+HSContextsShow	scanner/hsmatcher.go	/^func HSContextsShow(ctxs []HSContext) {$/;"	f
 HSMatcher	scanner/hsmatcher.go	/^type HSMatcher struct {$/;"	t
 HS_ARCH_ERROR	libs/hyperscan/include/hs/hs_common.h	566;"	d
 HS_BAD_ALIGN	libs/hyperscan/include/hs/hs_common.h	529;"	d
@@ -282,6 +283,7 @@ db_block	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    const hs_
 db_streaming	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    const hs_database_t *db_streaming;$/;"	m	class:Benchmark	file:
 displayStats	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void displayStats() {$/;"	f	class:Benchmark
 distWorker	main.go	/^var distWorker *scanner.DistWorker$/;"	v
+distWorkerCallback	scanner/dist_worker.go	/^func distWorkerCallback(distWorkerContext interface{}) (err interface{}) {$/;"	f
 dlen	scanner/waf.h	/^    size_t dlen;$/;"	m	struct:__anon7
 dstAddr	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int dstAddr;$/;"	m	struct:FiveTuple	file:
 dstAddr	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int dstAddr;$/;"	m	struct:FiveTuple	file:
@@ -424,7 +426,6 @@ scratch	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    hs_scratch
 scratch	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    hs_scratch_t *scratch;$/;"	m	class:Benchmark	file:
 seconds	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    double seconds() const {$/;"	f	class:Clock
 seconds	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    double seconds() const {$/;"	f	class:Clock
-selectScanWorker	scanner/dist_worker.go	/^func selectScanWorker(distWorkerContext interface{}) (res interface{}) {$/;"	f
 self_clone	scanner/waf.h	/^    int self_clone;$/;"	m	struct:__anon7
 setDatabase	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void setDatabase(hs_database_t *hs_db) {$/;"	f	class:Benchmark
 size	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned size() const {$/;"	f	class:Sigdata

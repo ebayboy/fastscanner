@@ -22,6 +22,14 @@ type HSContext struct {
 	To   uint64 //output
 }
 
+func HSContextsShow(ctxs []HSContext) {
+	log.Debug("+++++++++++ HSContextsShow Start+++++++++++++")
+	for _, ctx := range ctxs {
+		log.WithFields(log.Fields{"MZ": ctx.MZ, "Data": string(ctx.Data), "Id": ctx.Id, "From": ctx.From, "To": ctx.To}).Debug("")
+	}
+	log.Debug("+++++++++++ HSContextsShow End+++++++++++++")
+}
+
 func (self *HSMatcher) Output() {
 	for _, v := range self.Patterns {
 		log.Info("pattern:", v)
