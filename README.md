@@ -2,6 +2,9 @@
 
 fasthttp + hyperscan
 
+## 架构
++ Data flow: dist_worker -> scan_worker -> scanners -> matchers
+
 ## golang libs
 + 逻辑表达式计算:
     + govaluate : express compute

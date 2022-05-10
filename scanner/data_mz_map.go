@@ -8,6 +8,4 @@ var DataZoneMap map[string]interface{} = map[string]interface{}{
 	"http_user_agent": []string{"$http_user_agent"},
 	"request_body":    []string{"$request_body"},
 	"request_method":  []string{"$request_method"},
-	"request":         []string{"$request"},
-	"args":            []string{"$args"},
 }

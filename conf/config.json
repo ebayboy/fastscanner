@@ -19,7 +19,7 @@
             },
             {
                 "id": "12011",
-                "mz": "$request,$request_body,$request_uri,$http_user_agent,$http_referer,$http_cookie,$uri,$arg_name",
+                "mz": "$request_body,$request_uri,$http_user_agent,$http_referer,$request_method",
                 "rx": "request|request_body|request_uri|http_user_agent|http_referer|http_cookie|uri|arg_name"
             }
         ],

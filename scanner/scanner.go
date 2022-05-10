@@ -145,18 +145,23 @@ func (self *Scanner) Stop() {
 	log.Debug("Stop scanner done!")
 }
 
+//ScanWorker -> Scanner
 func (self *Scanner) Scan(scannerCtx interface{}) (err error) {
 
 	//选择匹配域对应的matcher， 执行匹配
-	ctx := scannerCtx.(ScannerContext)
+	//panic: interface conversion: interface {} is *scanner.HSContext, not scanner.ScannerContext
+	ctx := scannerCtx.(*ScannerContext)
 	matcher, exist := self.Matchers[ctx.MZ]
 	if !exist {
-		errStr := "Error: scanner.Scan mz not exist:" + ctx.MZ
-		log.Error(errStr)
+		errStr := "Error: matcher not exist:" + ctx.MZ
+		log.Error(errStr, " Matchers:", self.Matchers)
+		for k, v := range self.Matchers {
+			log.Error(k, ":", v)
+		}
 		return errors.New(errStr)
 	}
 
-	if err = matcher.Scan(&ctx.HSCtx); err != nil {
+	if err = matcher.Match(&ctx.HSCtx); err != nil {
 		log.Error("Error: matcher.Scan! err:", err.Error())
 		return err
 	}

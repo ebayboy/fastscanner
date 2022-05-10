@@ -128,6 +128,7 @@ MD_SA_U_SQLI_MATCHED	scanner/waf.h	165;"	d
 MD_SA_U_XSS_MATCHED	scanner/waf.h	166;"	d
 MD_SA_XSS_MATCHED	scanner/waf.h	161;"	d
 MD_U_MATCHED	scanner/waf.h	171;"	d
+Match	scanner/hsmatcher.go	/^func (self *HSMatcher) Match(HSCtx interface{}) (err error) {$/;"	f
 NewDistWorker	scanner/dist_worker.go	/^func NewDistWorker(numScanWorker int, confData []byte, mctx *context.Context, cf *Conf) (*DistWorker, error) {$/;"	f
 NewHSMatcher	scanner/hsmatcher.go	/^func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *hyperscan.Scratch) (*HSMatcher, error) {$/;"	f
 NewScanWorker	scanner/scan_worker.go	/^func NewScanWorker(confData []byte, mctx *context.Context, cf *Conf) (*ScanWorker, error) {$/;"	f
@@ -148,7 +149,6 @@ Process	scanner/dist_worker.go	/^func (w *DistWorker) Process(distWorkerCtx inte
 Process	scanner/scan_worker.go	/^func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {$/;"	f
 RULE_RESULT_MAX	scanner/waf.h	28;"	d
 Rule	scanner/scanner.go	/^type Rule struct {$/;"	t
-Scan	scanner/hsmatcher.go	/^func (self *HSMatcher) Scan(HSCtx interface{}) (err error) {$/;"	f
 Scan	scanner/scan_worker.go	/^func (w *ScanWorker) Scan(scanWorkerCtx interface{}) (res interface{}) {$/;"	f
 Scan	scanner/scanner.go	/^func (self *Scanner) Scan(scannerCtx interface{}) (err error) {$/;"	f
 ScanWorker	scanner/scan_worker.go	/^type ScanWorker struct {$/;"	t

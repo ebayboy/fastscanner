@@ -83,7 +83,7 @@ func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *
 	return matcher, nil
 }
 
-func (self *HSMatcher) Scan(HSCtx interface{}) (err error) {
+func (self *HSMatcher) Match(HSCtx interface{}) (err error) {
 	ctx := HSCtx.(*HSContext)
 
 	if err = self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx); err != nil {

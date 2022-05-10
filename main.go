@@ -91,14 +91,12 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
 	distCtx := scanner.DistWorkerContext{DistWorker: distWorker}
-	distCtx.Data = map[string]interface{}{
+	distCtx.Data = map[string][]byte{
 		"request_method":  ctx.Method(),
 		"request_uri":     ctx.RequestURI(),
 		"http_referer":    ctx.Referer(),
 		"http_user_agent": ctx.UserAgent(),
 		"request_body":    ctx.PostBody(),
-		"args":            ctx.QueryArgs(),
-		"request":         &ctx.Request,
 	}
 	res, err := distWorker.Pool.ProcessTimed(&distCtx, time.Second*5)
 	if err == tunny.ErrJobTimedOut {
