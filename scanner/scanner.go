@@ -54,7 +54,7 @@ type Conf struct {
 
 func (self *Conf) ConfOutput() {
 	for k, v := range self.RulesMap {
-		log.WithFields(log.Fields{"MZ": k, "Rules": v}).Info()
+		log.WithFields(log.Fields{"MZ": k, "Rules": v}).Debug()
 	}
 }
 
@@ -66,7 +66,7 @@ func (self *Conf) BuildRules() {
 	}
 
 	for _, rule := range self.HSConfig.Rules {
-		log.Info("+New Rule Parse:", rule.MZ)
+		log.Debug("+New Rule Parse:", rule.MZ)
 
 		MZs := strings.Split(rule.MZ, ",")
 		for _, MZ := range MZs {
@@ -81,7 +81,7 @@ func (self *Conf) BuildRules() {
 	}
 
 	for mz, rules := range self.RulesMap {
-		log.Info("== MZ:", mz, "   Rules:", rules)
+		log.Debug("== MZ:", mz, "   Rules:", rules)
 	}
 }
 
@@ -100,9 +100,9 @@ func ConfParse(content []byte) (*Conf, error) {
 }
 
 func (self *Scanner) Output() {
-	log.Info("Matcher count:", len(self.Matchers))
+	log.Debug("Matcher count:", len(self.Matchers))
 	for k, v := range self.Matchers {
-		log.WithField("Matcher", v).Info("Matcher:", k)
+		log.WithField("Matcher", v).Debug("Matcher:", k)
 	}
 }
 
@@ -140,7 +140,7 @@ func (self *Scanner) init() {
 			continue
 		}
 		self.Matchers[mz] = matcher
-		log.WithField("count", len(self.Matchers)).Info("Add matcher:", matcher.MZ)
+		log.WithField("count", len(self.Matchers)).Debug("Add matcher:", matcher.MZ)
 	}
 
 	self.Output()
@@ -166,12 +166,12 @@ func (self *Scanner) Scan(scannerCtx interface{}) (err error) {
 		log.Error(errStr, " Matchers:", self.Matchers)
 	}
 
-	log.Info("matcher.Match: hsCtx:", ctx.HSCtx)
+	log.Debug("matcher.Match: hsCtx:", ctx.HSCtx)
 	if err = matcher.Match(&ctx.HSCtx); err != nil {
 		log.Error("Error: matcher.Scan! err:", err.Error())
 		return err
 	}
 
-	log.WithFields(log.Fields{"ctx": ctx}).Info("Scanner.Scan done!")
+	log.WithFields(log.Fields{"ctx": ctx}).Debug("Scanner.Scan done!")
 	return nil
 }

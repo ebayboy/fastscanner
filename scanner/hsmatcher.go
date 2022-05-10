@@ -32,7 +32,7 @@ func HSContextsShow(ctxs []HSContext) {
 
 func (self *HSMatcher) Output() {
 	for _, v := range self.Patterns {
-		log.Info("pattern:", v)
+		log.Debug("pattern:", v)
 	}
 }
 
@@ -43,7 +43,7 @@ func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
 	hsctx.From = from
 	hsctx.To = to
 
-	log.WithFields(log.Fields{"MZ": hsctx.MZ, "Data": hsctx.Data, "id": hsctx.Id, "from": hsctx.From, "to": hsctx.To}).Info("onMatch")
+	log.WithFields(log.Fields{"MZ": hsctx.MZ, "Data": hsctx.Data, "id": hsctx.Id, "from": hsctx.From, "to": hsctx.To}).Debug("onMatch")
 
 	return nil
 }
@@ -53,7 +53,7 @@ func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *
 	matcher := new(HSMatcher)
 	matcher.MZ = mz
 
-	log.Info("NewHSMatcher rules:", rules)
+	log.Debug("NewHSMatcher rules:", rules)
 
 	for _, rule := range rules {
 		//TODO: rule hs_flag ...
@@ -72,7 +72,7 @@ func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *
 			log.WithField("err", err.Error()).Error("Error: hyperscan.NewBlockDatabase")
 			return nil, err
 		}
-		log.Info("New db:", matcher.HSDB)
+		log.Debug("New db:", matcher.HSDB)
 	}
 
 	if scratch == nil {
@@ -82,7 +82,7 @@ func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *
 			log.WithField("err", err.Error()).Error("Error: hyperscan.NewScratch")
 			return nil, err
 		}
-		log.Info("new matcher.HSScratch:", matcher.HSScratch)
+		log.Debug("new matcher.HSScratch:", matcher.HSScratch)
 	} else {
 		//clone
 		matcher.HSScratch, err = scratch.Clone()
@@ -90,7 +90,7 @@ func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *
 			log.WithField("err", err.Error()).Error("Error: HSScratch.Clone")
 			return nil, err
 		}
-		log.Info("clone matcher:", matcher.HSScratch)
+		log.Debug("clone matcher:", matcher.HSScratch)
 	}
 
 	return matcher, nil
@@ -103,7 +103,7 @@ func (self *HSMatcher) Match(HSCtx interface{}) (err error) {
 		log.WithFields(log.Fields{"err": err.Error(), "ctx": ctx}).Error("ERROR: Unable to scan input buffer. Exiting.")
 		return err
 	}
-	log.WithFields(log.Fields{"ctx.Data": string(ctx.Data), "Id": ctx.Id, "MZ": ctx.MZ}).Info("Match done!")
+	log.WithFields(log.Fields{"ctx.Data": string(ctx.Data), "Id": ctx.Id, "MZ": ctx.MZ}).Debug("Match done!")
 
 	return err
 }

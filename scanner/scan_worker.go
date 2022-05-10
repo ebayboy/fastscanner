@@ -33,7 +33,7 @@ type ScanWorkerContext struct {
 func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {
 
 	ctx := scanWorkerCtx.(*ScanWorkerContext)
-	log.Info("ScanWorker.Process ctx:", ctx)
+	log.Debug("ScanWorker.Process ctx:", ctx)
 
 	//TODO: forr k, v map , 此处的v是引用吗
 	ctxData := ctx.Data.(map[string][]byte)
@@ -60,7 +60,7 @@ func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {
 		}
 	}
 
-	log.Info("ScanWorker.Process Res:", ctx.Res)
+	log.Debug("ScanWorker.Process Res:", ctx.Res)
 
 	return nil
 }
@@ -73,7 +73,7 @@ func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {
 func (w *ScanWorker) Scan(scanWorkerCtx interface{}) (res interface{}) {
 
 	ctx := scanWorkerCtx.(*ScanWorkerContext)
-	log.Info("====write to jobChan ... ScanWorkerCtx:", ctx, " w.reqChan:", w.reqChan)
+	log.Debug("====write to jobChan ... ScanWorkerCtx:", ctx, " w.reqChan:", w.reqChan)
 
 	//将ctx.Data 找到对应的MZ, 输出数据到给scanner, scanner做hyperscan匹配
 	//1. wait && read request
@@ -83,11 +83,11 @@ func (w *ScanWorker) Scan(scanWorkerCtx interface{}) (res interface{}) {
 		return nil
 	}
 
-	log.Info("ScanWorker.Scan get request:", request)
+	log.Debug("ScanWorker.Scan get request:", request)
 	//2.1 write payload to request.jobChan
 	request.JobChan <- ctx
 
-	log.Info("ScanWorker.Scan write to request.JobChan:", request.JobChan)
+	log.Debug("ScanWorker.Scan write to request.JobChan:", request.JobChan)
 
 	//2.2 wait && read payload from request.retChan
 	res, open = <-request.RetChan
@@ -95,19 +95,19 @@ func (w *ScanWorker) Scan(scanWorkerCtx interface{}) (res interface{}) {
 		log.Error("ErrWorkerClosed")
 		return nil
 	}
-	log.Info("====read from retChan, res:", ctx.Res)
+	log.Debug("====read from retChan, res:", ctx.Res)
 
 	return nil
 }
 
 func (w *ScanWorker) BlockUntilReady() {
-	log.Println("ScanWorker BlockUntilReady, WorkerWrappe reqChan:", w.wWraper.ReqChan)
+	log.Debug("ScanWorker BlockUntilReady, WorkerWrappe reqChan:", w.wWraper.ReqChan)
 }
 func (w *ScanWorker) Interrupt() {
-	log.Println("ScanWorker Interrupt")
+	log.Debug("ScanWorker Interrupt")
 }
 func (w *ScanWorker) Terminate() {
-	log.Println("ScanWorker Terminate")
+	log.Debug("ScanWorker Terminate")
 }
 
 func NewScanWorker(confData []byte, mctx *context.Context, cf *Conf) (*ScanWorker, error) {
@@ -120,7 +120,7 @@ func NewScanWorker(confData []byte, mctx *context.Context, cf *Conf) (*ScanWorke
 	if err != nil {
 		return nil, err
 	}
-	log.Info("worker.WorkRequest: ", w, " w.wWraper.ReqChan:", w.wWraper.ReqChan)
+	log.Debug("worker.WorkRequest: ", w, " w.wWraper.ReqChan:", w.wWraper.ReqChan)
 
 	return w, nil
 }

@@ -1,5 +1,5 @@
 {
-    "debug":true,
+    "debug":false,
     "version": "v1.0.0",
     "cpunum": 1,
     "procnum": 1,

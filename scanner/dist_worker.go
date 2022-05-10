@@ -23,7 +23,7 @@ type DistWorker struct {
 //main -> dist_worker -> scanner_worker -> scanner -> matcher
 func distWorkerCallback(distWorkerContext interface{}) (err interface{}) {
 
-	log.Info("distWorkerCallback...")
+	log.Debug("distWorkerCallback...")
 
 	ctx := distWorkerContext.(*DistWorkerContext)
 	scanCtx := ScanWorkerContext{Data: ctx.Data}
@@ -56,9 +56,10 @@ func NewDistWorker(numScanWorker int, confData []byte, mctx *context.Context, cf
 	return dist, nil
 }
 
+//TODO: 好像没走到这个函数
 func (w *DistWorker) Process(distWorkerCtx interface{}) (res interface{}) {
 
-	log.Info("DistWorker.Process...")
+	log.Debug("DistWorker.Process...")
 
 	res = w.Pool.Process(distWorkerCtx)
 

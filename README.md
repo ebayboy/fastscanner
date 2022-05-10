@@ -16,7 +16,11 @@ fasthttp + hyperscan
 + fasthttp: contain fasthttp goroutine pool
 + go-cache
 
+## BufFix:
++ 解决多规则命中只打印一个规则问题
+
 ## TODO
++ 守护进程实现
 + 每个scanworker对一组matchers, 有多个scanworker
 + 一个数据包分发distworker对应多个scanworker对应
     +  distworker :qa
