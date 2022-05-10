@@ -91,19 +91,32 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 
 	distCtx := scanner.DistWorkerContext{DistWorker: distWorker}
-	distCtx.Data = map[string][]byte{
-		"request_method":  ctx.Method(),
-		"request_uri":     ctx.RequestURI(),
-		"http_referer":    ctx.Referer(),
-		"http_user_agent": ctx.UserAgent(),
-		"request_body":    ctx.PostBody(),
+	distCtx.Data = make(map[string][]byte)
+
+	if len(ctx.Method()) > 0 {
+		distCtx.Data["request_method"] = ctx.Method()
 	}
+	if len(ctx.RequestURI()) > 0 {
+		distCtx.Data["request_uri"] = ctx.RequestURI()
+	}
+	if len(ctx.Referer()) > 0 {
+		distCtx.Data["http_referer"] = ctx.Referer()
+	}
+	if len(ctx.UserAgent()) > 0 {
+		distCtx.Data["http_user_agent"] = ctx.UserAgent()
+	}
+	if len(ctx.PostBody()) > 0 {
+		distCtx.Data["request_body"] = ctx.PostBody()
+	}
+
 	res, err := distWorker.Pool.ProcessTimed(&distCtx, time.Second*5)
 	if err == tunny.ErrJobTimedOut {
 		log.WithFields(log.Fields{"hsCtx": distCtx, "rerr": err.Error()}).Error("Error: Request timed out!")
 		return
 	}
-	log.WithFields(log.Fields{"swCtx": distCtx, "res": res}).Info()
+
+	//TODO: 目前无结果输出
+	log.WithFields(log.Fields{"====swCtx": distCtx, "res": res}).Info()
 
 	/*
 		hsctx := HSContext{Data: ctx.RequestURI()}

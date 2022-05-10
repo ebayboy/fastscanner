@@ -36,8 +36,8 @@ fasthttp + hyperscan
 + 实现逻辑引擎LogicEngine(govaluate)
 + 多match对输入数据包（URI、BODY、HEADER等）集中快速查找匹配问题
 + matcher 前面增加流式函数插件处理, 以及开关(spider_ip_rdns/router)
-+ 原文匹配
-+ 解码匹配
++ 原文匹配支持
++ 解码匹配支持 $u__
 + 自适应匹配
 + 协程池tunny实现对同一个matcher的匹配
 + 异步：通过通道传递数据到matcher的多个协程

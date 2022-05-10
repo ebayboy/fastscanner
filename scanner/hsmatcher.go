@@ -29,10 +29,13 @@ func (self *HSMatcher) Output() {
 }
 
 func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
+
 	hsctx := context.(*HSContext)
 	hsctx.Id = id
 	hsctx.From = from
 	hsctx.To = to
+
+	log.WithFields(log.Fields{"MZ": hsctx.MZ, "Data": hsctx.Data, "id": hsctx.Id, "from": hsctx.From, "to": hsctx.To}).Info("onMatch")
 
 	return nil
 }
@@ -89,10 +92,10 @@ func (self *HSMatcher) Match(HSCtx interface{}) (err error) {
 	ctx := HSCtx.(*HSContext)
 
 	if err = self.HSDB.Scan(ctx.Data, self.HSScratch, onMatch, ctx); err != nil {
-		log.WithField("err", err.Error()).Error("ERROR: Unable to scan input buffer. Exiting.")
+		log.WithFields(log.Fields{"err": err.Error(), "ctx": ctx}).Error("ERROR: Unable to scan input buffer. Exiting.")
 		return err
 	}
-	log.WithFields(log.Fields{"ctx.Data": ctx.Data}).Info("HSMatcher.Scran ok!")
+	log.WithFields(log.Fields{"ctx.Data": string(ctx.Data), "Id": ctx.Id, "MZ": ctx.MZ}).Info("Match done!")
 
 	return err
 }

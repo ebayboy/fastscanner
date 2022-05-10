@@ -3,7 +3,6 @@ package scanner
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -155,7 +154,7 @@ func (self *Scanner) Stop() {
 	log.Debug("Stop scanner done!")
 }
 
-//ScanWorker -> Scanner
+//distWorker -> select scanner_worker -> ScanWorker -> Scanner -> HSMatcher
 func (self *Scanner) Scan(scannerCtx interface{}) (err error) {
 
 	//选择匹配域对应的matcher， 执行匹配
@@ -165,12 +164,9 @@ func (self *Scanner) Scan(scannerCtx interface{}) (err error) {
 	if !exist {
 		errStr := "Error: matcher not exist:" + ctx.MZ
 		log.Error(errStr, " Matchers:", self.Matchers)
-		for k, v := range self.Matchers {
-			log.Error(k, ":", v)
-		}
-		return errors.New(errStr)
 	}
 
+	log.Info("matcher.Match: hsCtx:", ctx.HSCtx)
 	if err = matcher.Match(&ctx.HSCtx); err != nil {
 		log.Error("Error: matcher.Scan! err:", err.Error())
 		return err

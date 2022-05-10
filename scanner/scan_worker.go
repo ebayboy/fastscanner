@@ -2,7 +2,6 @@ package scanner
 
 import (
 	"context"
-	"errors"
 
 	"github.com/fastscanner/worker"
 	log "github.com/sirupsen/logrus"
@@ -29,8 +28,8 @@ type ScanWorkerContext struct {
 	Res  []HSContext
 }
 
-/* Process Flow: payload -> jobChan -> Process -> res -> retChan */
-//not call directly, this func is workerWrapper's callback func
+// Process Flow: payload -> jobChan -> Process -> res -> retChan
+// Don't call this function directly, this func is workerWrapper's callback func
 func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {
 
 	ctx := scanWorkerCtx.(*ScanWorkerContext)
@@ -81,7 +80,7 @@ func (w *ScanWorker) Scan(scanWorkerCtx interface{}) (res interface{}) {
 	request, open := <-w.reqChan
 	if !open {
 		log.Error("ErrNotRunning")
-		return errors.New("ErrNotRunning")
+		return nil
 	}
 
 	log.Info("ScanWorker.Scan get request:", request)
@@ -93,10 +92,10 @@ func (w *ScanWorker) Scan(scanWorkerCtx interface{}) (res interface{}) {
 	//2.2 wait && read payload from request.retChan
 	res, open = <-request.RetChan
 	if !open {
-		log.Panic("ErrWorkerClosed")
-		return errors.New("ErrWorkerClosed")
+		log.Error("ErrWorkerClosed")
+		return nil
 	}
-	log.Info("====read from retChan")
+	log.Info("====read from retChan, res:", ctx.Res)
 
 	return nil
 }

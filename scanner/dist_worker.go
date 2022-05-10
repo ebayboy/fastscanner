@@ -9,7 +9,7 @@ import (
 )
 
 type DistWorkerContext struct {
-	Data       interface{} //map[data_key]data
+	Data       map[string][]byte //map[data_key]data
 	DistWorker *DistWorker
 }
 
@@ -22,13 +22,17 @@ type DistWorker struct {
 //tunny.pool 多协程同时调用此函数, 要保证线程安全
 func selectScanWorker(distWorkerContext interface{}) (res interface{}) {
 
-	ctx := distWorkerContext.(*DistWorkerContext)
-	idx := rand.Intn(ctx.DistWorker.NumScanWorker)
+	log.Info("selectScanWorker...")
 
+	ctx := distWorkerContext.(*DistWorkerContext)
 	scanCtx := ScanWorkerContext{Data: ctx.Data}
+
+	//随机分发到scanner_worker
+	idx := rand.Intn(ctx.DistWorker.NumScanWorker)
 	res = ctx.DistWorker.ScanWorkers[idx].Scan(&scanCtx)
 
 	log.WithFields(log.Fields{"idx:": idx, "ctx": ctx, "res": res}).Info("selectScanWorker")
+
 	return res
 }
 
@@ -49,7 +53,11 @@ func NewDistWorker(numScanWorker int, confData []byte, mctx *context.Context, cf
 }
 
 func (w *DistWorker) Process(distWorkerCtx interface{}) (res interface{}) {
+
+	log.Info("DistWorker.Process...")
+
 	res = w.Pool.Process(distWorkerCtx)
+
 	return res
 }
 
