@@ -42,12 +42,14 @@ func NewHSMatcher(rules []Rule, mz string, db hyperscan.BlockDatabase, scratch *
 	matcher := new(HSMatcher)
 	matcher.MZ = mz
 
+	log.Info("NewHSMatcher rules:", rules)
+
 	for _, rule := range rules {
 		//TODO: rule hs_flag ...
 		pattern := hyperscan.NewPattern(rule.RX, hyperscan.DotAll|hyperscan.SomLeftMost)
 		pattern.Id, err = strconv.Atoi(rule.ID)
 		if err != nil {
-			log.WithField("rule.Id", rule.ID).Error("Error: strconv.Atoi rule.Id")
+			log.WithField("rule", rule).Error("Error: strconv.Atoi rule.Id")
 			continue
 		}
 		matcher.Patterns = append(matcher.Patterns, pattern)

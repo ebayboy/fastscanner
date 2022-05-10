@@ -9,8 +9,8 @@
         "rules": [
             {
                 "id": "10001",
-                "mz": "$request",
-                "rx": "request "
+                "mz": "$request_uri",
+                "rx": "request_uri "
             },
             {
                 "id": "10002",

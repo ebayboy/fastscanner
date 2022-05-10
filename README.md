@@ -4,6 +4,7 @@ fasthttp + hyperscan
 
 ## 架构
 + Data flow: dist_worker -> scan_worker -> scanners -> matchers
++ 一共有N个不同的matcher, 一个matcher对应一组规则,
 
 ## golang libs
 + 逻辑表达式计算:

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -48,8 +49,8 @@ type HSConfig struct {
 }
 
 type Conf struct {
-	HSConfig HSConfig `json:"hsconfig"`
-	RulesMap map[string][]Rule
+	HSConfig HSConfig          `json:"hsconfig"`
+	RulesMap map[string][]Rule //all rules
 }
 
 func (self *Conf) ConfOutput() {
@@ -66,14 +67,22 @@ func (self *Conf) BuildRules() {
 	}
 
 	for _, rule := range self.HSConfig.Rules {
-		if _, exist := self.RulesMap[rule.MZ]; exist {
-			log.WithField("MZ", rule.MZ).Debug("Append rule:", rule)
-			self.RulesMap[rule.MZ] = append(self.RulesMap[rule.MZ], rule)
-		} else {
-			log.WithField("MZ", rule.MZ).Debug("New rule:", rule)
-			rules := []Rule{rule}
-			self.RulesMap[rule.MZ] = rules
+		log.Info("+New Rule Parse:", rule.MZ)
+
+		MZs := strings.Split(rule.MZ, ",")
+		for _, MZ := range MZs {
+			_, exist := self.RulesMap[MZ]
+			if !exist {
+				log.WithField("MZ", MZ).Debug("New MZ:", rule)
+				self.RulesMap[MZ] = make([]Rule, 0)
+			}
+			self.RulesMap[MZ] = append(self.RulesMap[MZ], rule)
+			log.WithField("MZ", MZ).Debug("Append rule:", rule)
 		}
+	}
+
+	for mz, rules := range self.RulesMap {
+		log.Info("== MZ:", mz, "   Rules:", rules)
 	}
 }
 
@@ -124,13 +133,20 @@ func (self *Scanner) init() {
 	if self.Matchers == nil {
 		self.Matchers = make(map[string]*HSMatcher, 0)
 	}
+
+	//Add rules to matcher
 	for mz, rules := range self.Conf.RulesMap {
-		matcher, err := NewHSMatcher(rules, mz, nil, nil)
-		if err != nil {
-			log.WithField("MZ:", mz).Error("Error: NewHSMatcher")
-			continue
+
+		matcher, exist := self.Matchers[mz]
+		if !exist {
+			matcher, err := NewHSMatcher(rules, mz, nil, nil)
+			if err != nil {
+				log.WithField("MZ:", mz).Error("Error: NewHSMatcher")
+				continue
+			}
+			self.Matchers[mz] = matcher
 		}
-		self.Matchers[mz] = matcher
+
 		log.WithField("count", len(self.Matchers)).Info("Add matcher:", matcher.MZ)
 	}
 
