@@ -306,6 +306,7 @@ getScratchSize	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    siz
 get_original	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    const string &get_original(unsigned index) const {$/;"	f	class:Sigdata
 hamming_distance	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned hamming_distance;$/;"	m	struct:hs_expr_ext
 hash	scanner/waf.h	/^    unsigned int hash; $/;"	m	struct:__anon7
+help	bin/control	/^help()$/;"	f
 higher_is_better	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^static bool higher_is_better(Criterion c) {$/;"	f	file:
 hs_alloc_t	libs/hyperscan/include/hs/hs_common.h	/^typedef void *(HS_CDECL *hs_alloc_t)(size_t size);$/;"	t
 hs_compile_error	libs/hyperscan/include/hs/hs_compile.h	/^typedef struct hs_compile_error {$/;"	s
@@ -324,6 +325,7 @@ hs_stream_t	libs/hyperscan/include/hs/hs_runtime.h	/^typedef struct hs_stream hs
 ids	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<unsigned> ids;$/;"	m	class:Sigdata	file:
 init	main.go	/^func init() {$/;"	f
 init	scanner/scanner.go	/^func (self *Scanner) init() {$/;"	f
+initSetLimit	main.go	/^func initSetLimit(cpu_max uint64, core_max uint64) error {$/;"	f
 init_result	scanner/waf.h	/^    int init_result;$/;"	m	struct:__anon7
 is_copy	scanner/waf.h	/^    int is_copy;$/;"	m	struct:__anon7
 isdev	main.go	/^	isdev    bool$/;"	v
@@ -438,10 +440,12 @@ srcAddr	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned i
 srcAddr	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int srcAddr;$/;"	m	struct:FiveTuple	file:
 srcPort	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    unsigned int srcPort;$/;"	m	struct:FiveTuple	file:
 srcPort	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    unsigned int srcPort;$/;"	m	struct:FiveTuple	file:
+start	bin/control	/^start()$/;"	f
 start	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void start() {$/;"	f	class:Clock
 start	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void start() {$/;"	f	class:Clock
 start	scanner/waf.h	/^    char          *start;$/;"	m	struct:__anon4
 start_ori	scanner/waf.h	/^    char          *start_ori;$/;"	m	struct:__anon4
+stop	bin/control	/^stop()$/;"	f
 stop	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    void stop() {$/;"	f	class:Clock
 stop	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    void stop() {$/;"	f	class:Clock
 stream_ids	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    vector<size_t> stream_ids;$/;"	m	class:Benchmark	file:

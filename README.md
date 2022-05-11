@@ -21,6 +21,10 @@ fasthttp + hyperscan
 ## BufFix:
 + 解决多规则命中只打印一个规则问题
 
+## golang 生成core文件
++ exoprt指令设置环境变量或执行时使用env指令设置： env GOTRACEBACK=crash ./testgotraceback  (注意GOTRACEBACK=all不能生成core文件)
++ 开启core文件： ulimit -c unlimited (-c 代表core) ,设置后可以通过ulimited -a看到, 可以通过程序设置
+
 ## TODO
 + pid写入到文件， 防止启动多个
 + 性能优化： 目前开启性能从7w下降到2w

@@ -1,0 +1,32 @@
+#! /bin/sh
+
+proc="fastscanner"
+
+help()
+{
+    echo "${0} <start|stop>"
+    exit 1
+}
+
+start()
+{
+    env GOTRACEBACK=crash ./$proc
+}
+
+stop()
+{
+    echo "stop..."
+}
+
+case "${1}" in
+start)
+    start
+    ;;
+stop)
+    stop
+    ;;
+*)
+    help
+    ;;
+esac
+

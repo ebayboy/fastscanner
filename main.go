@@ -33,6 +33,31 @@ var (
 	pidFile  string = "fastscanner.pid"
 )
 
+func initSetLimit(cpu_max uint64, core_max uint64) error {
+	var rlimit syscall.Rlimit
+
+	// 限制cpu个数
+	rlimit.Cur = 1
+	rlimit.Max = cpu_max
+	syscall.Setrlimit(syscall.RLIMIT_CPU, &rlimit)
+	err := syscall.Getrlimit(syscall.RLIMIT_CPU, &rlimit)
+	if err != nil {
+		return err
+	}
+
+	//set core limit
+	rlimit.Cur = 100 //以字节为单位
+	rlimit.Max = rlimit.Cur + core_max
+	if err := syscall.Setrlimit(syscall.RLIMIT_CORE, &rlimit); err != nil {
+		return err
+	}
+	if err := syscall.Getrlimit(syscall.RLIMIT_CORE, &rlimit); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func init() {
 
 	//parse flag
@@ -207,6 +232,11 @@ var fastScanner FastScanner
 var distWorker *scanner.DistWorker
 
 func main() {
+
+	//init  cpu && core limit
+	if err := initSetLimit(2, 2*1024*1024); err != nil {
+		log.Error("Error:", err.Error())
+	}
 
 	//启动dev模式
 	if !isdev {
