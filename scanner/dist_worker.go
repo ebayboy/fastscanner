@@ -30,8 +30,8 @@ func distWorkerCallback(distWorkerContext interface{}) (err interface{}) {
 
 	//随机分发到scanner_worker
 	idx := rand.Intn(ctx.DistWorker.NumScanWorker)
-	err = ctx.DistWorker.ScanWorkers[idx].Scan(&scanCtx)
-	if err != nil {
+	log.Debugf("Select ScanWorkers[%d]", idx)
+	if err = ctx.DistWorker.ScanWorkers[idx].Scan(&scanCtx); err != nil {
 		log.Error("Error! err:", err.(error).Error())
 		return nil
 	}
@@ -50,6 +50,7 @@ func NewDistWorker(numScanWorker int, confData []byte, mctx *context.Context, cf
 			return nil, err
 		}
 		dist.ScanWorkers = append(dist.ScanWorkers, scan_worker)
+		log.Infof("NewScanWorker[%d]", i)
 	}
 
 	return dist, nil

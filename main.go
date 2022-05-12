@@ -71,10 +71,8 @@ func initSetLimit(cpu_max uint64, core_max uint64) error {
 		log.Fatal("err:", err.Error())
 	}
 
-	//set procs && cpu nums use
-	if fastScanner.conf.CPUNum > 0 {
-		runtime.GOMAXPROCS(int(fastScanner.conf.CPUNum))
-	}
+	//set procs && cpu nums use;  If n < 1, it does not change the current setting
+	runtime.GOMAXPROCS(int(fastScanner.conf.CPUNum))
 
 	return nil
 }
@@ -218,9 +216,10 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 
 type Conf struct {
 	//Debug    bool   `json:"debug"`
-	Version  string `json:"version"`
-	LogLevel int    `json:"loglevel"`
-	CPUNum   int    `json:"cpunum"`
+	Version    string `json:"version"`
+	LogLevel   int    `json:"loglevel"`
+	CPUNum     int    `json:"cpunum"`
+	ScannerNum int    `json:"scannernum"`
 	//ProcNum  int    `json:"procnum"`
 }
 
@@ -324,7 +323,7 @@ func main() {
 
 	log.WithFields(log.Fields{"version": fastScanner.conf.Version, "LogLevel": fastScanner.conf.LogLevel}).Info()
 
-	distWorker, err = scanner.NewDistWorker(1, confData, &mctx, nil)
+	distWorker, err = scanner.NewDistWorker(fastScanner.conf.ScannerNum, confData, &mctx, nil)
 	if err != nil {
 		log.Fatalln("Error: scanner.NewDistWorker! err:", err.Error())
 	}

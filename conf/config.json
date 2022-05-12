@@ -1,9 +1,8 @@
 {
     "version": "v1.0.0",
     "loglevel": 4,
-    "cpunum": 1,
-    "procnum": 1,
-    "scannernum": 1,
+    "cpunum": 0,
+    "scannernum": 4,
     "hsconfig": {
         "debug":"1",
         "rules": [
