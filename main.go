@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -61,6 +62,20 @@ func initSetLimit(cpu_max uint64, core_max uint64) error {
 		return err
 	}
 
+	//set nofile rlimit
+	var rLimit syscall.Rlimit
+	rLimit.Cur = 65535
+	rLimit.Max = 65535
+	err := syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit)
+	if err != nil {
+		log.Fatal("err:", err.Error())
+	}
+
+	//set procs && cpu nums use
+	if fastScanner.conf.CPUNum > 0 {
+		runtime.GOMAXPROCS(int(fastScanner.conf.CPUNum))
+	}
+
 	return nil
 }
 
@@ -101,17 +116,6 @@ func init() {
 		log.SetLevel(log.InfoLevel)
 	}
 
-	//set rlimit
-	var rLimit syscall.Rlimit
-	rLimit.Cur = 65535
-	rLimit.Max = 65535
-	err := syscall.Setrlimit(syscall.RLIMIT_NOFILE, &rLimit)
-	if err != nil {
-		log.Fatal("err:", err.Error())
-	}
-
-	//set procs
-	runtime.GOMAXPROCS(int(fastScanner.conf.CPUNum))
 }
 
 //run in fasthttp goroutine
@@ -172,9 +176,12 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 		hitRes = append(hitRes, r)
 	}
 
-	hitResJson, err := json.Marshal(hitRes)
-	if err != nil {
-		log.WithFields(log.Fields{"waf-request-id": request_id, "Error": err.Error()}).Error("Error:")
+	var hitResJson []byte
+	if len(hitRes) > 0 {
+		hitResJson, err = json.Marshal(hitRes)
+		if err != nil {
+			log.WithFields(log.Fields{"waf-request-id": request_id, "Error": err.Error()}).Error("Error:")
+		}
 	}
 
 	status_code := 200
@@ -183,14 +190,19 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 		status_code = 403
 		ctx.Response.Header.Set("anti-type", "secrule")
 		ctx.Response.SetStatusCode(status_code)
-	}
-	if isdev {
-		if hitResJson != nil {
-			ctx.Response.Header.Set("waf-hit-rules", string(hitResJson))
+		if isdev {
+			if len(hitResJson) > 0 {
+				ctx.Response.Header.Set("waf-hit-rules", string(hitResJson))
+			}
 		}
 	}
 
-	log.WithFields(log.Fields{"waf-request-id": request_id, "waf-hit-rules": string(hitResJson), "status": status_code}).Info("secrule")
+	tmpStr := fmt.Sprintf("waf-request-id:%s status:%d", request_id, status_code)
+	if len(hitResJson) > 0 {
+		tmpStr = tmpStr + " waf-hit-rules:" + string(hitResJson)
+	}
+
+	log.Info(tmpStr)
 
 	//Set Waf-Header
 	ctx.SetContentType("text/plain; charset=utf8")
@@ -209,7 +221,7 @@ type Conf struct {
 	Version  string `json:"version"`
 	LogLevel int    `json:"loglevel"`
 	CPUNum   int    `json:"cpunum"`
-	ProcNum  int    `json:"procnum"`
+	//ProcNum  int    `json:"procnum"`
 }
 
 type FastScanner struct {
@@ -276,7 +288,7 @@ func main() {
 	once_pid, started := common.PidfileExit(pathDir + "/" + pidFile)
 	if started {
 		if once_pid > 0 {
-			log.Error("exec already exist:%d\n", once_pid)
+			log.Error("exec already exist:", once_pid)
 			return
 		}
 	} else {
