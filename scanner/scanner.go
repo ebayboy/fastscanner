@@ -166,6 +166,7 @@ func (self *Scanner) Scan(scannerCtx interface{}) (err error) {
 		log.Error(errStr, " Matchers:", self.Matchers)
 	}
 
+	//TODO: 一份数据可能命中多个id
 	log.Debug("matcher.Match: hsCtx:", ctx.HSCtx)
 	if err = matcher.Match(&ctx.HSCtx); err != nil {
 		log.Error("Error: matcher.Scan! err:", err.Error())

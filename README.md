@@ -7,6 +7,40 @@ fasthttp + hyperscan
 ## 架构
 + Data flow: dist_worker -> scan_worker -> scanners -> matchers
 + 一共有N个不同的matcher, 一个matcher对应一组规则,
++ 命中结果集输出:
+referer
+    "results": [
+    {
+        "mz": "$request_uri",
+        "rules" :[
+        {
+            "id": "1001",
+            "from": 0,
+            "to": 10
+        },
+        {
+            "id": "1002",
+            "from": 0,
+            "to": 10
+        }
+        ]
+    },
+    {
+        "mz": "$request_referer",
+        "rules" :[
+        {
+            "id": "1001",
+            "from": 0,
+            "to": 10
+        },
+        {
+            "id": "1002",
+            "from": 0,
+            "to": 10
+        }
+        ]
+    }
+}
 
 ## golang libs
 + 逻辑表达式计算:

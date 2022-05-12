@@ -14,19 +14,28 @@ type HSMatcher struct {
 	MZ        string
 }
 
+type HSContextResult struct {
+	Id   uint   `json:"id"`
+	From uint64 `json:"fromi"`
+	To   uint64 `json:"to"`
+}
+
 type HSContext struct {
-	Data []byte //input
-	MZ   string //input
-	Id   uint   //output
-	From uint64 //output
-	To   uint64 //output
+	Data    []byte            `json:"data"`
+	MZ      string            `json:"match_zone"`
+	Results []HSContextResult `json:"rules"`
 }
 
 func HSContextsShow(ctxs []HSContext) {
 	log.Debug("+++++++++++ HSContextsShow Start+++++++++++++")
+
 	for _, ctx := range ctxs {
-		log.WithFields(log.Fields{"MZ": ctx.MZ, "Data": string(ctx.Data), "Id": ctx.Id, "From": ctx.From, "To": ctx.To}).Debug("")
+		log.WithFields(log.Fields{"\tMZ": ctx.MZ, "Data": string(ctx.Data)}).Debug()
+		for _, r := range ctx.Results {
+			log.WithFields(log.Fields{"Id": r.Id, "From": r.From, "To": r.To}).Debug()
+		}
 	}
+
 	log.Debug("+++++++++++ HSContextsShow End+++++++++++++")
 }
 
@@ -39,11 +48,13 @@ func (self *HSMatcher) Output() {
 func onMatch(id uint, from, to uint64, flags uint, context interface{}) error {
 
 	hsctx := context.(*HSContext)
-	hsctx.Id = id
-	hsctx.From = from
-	hsctx.To = to
-
-	log.WithFields(log.Fields{"MZ": hsctx.MZ, "Data": hsctx.Data, "id": hsctx.Id, "from": hsctx.From, "to": hsctx.To}).Debug("onMatch")
+	result := HSContextResult{
+		Id:   id,
+		From: from,
+		To:   to,
+	}
+	hsctx.Results = append(hsctx.Results, result)
+	log.WithFields(log.Fields{"MZ": hsctx.MZ, "Data": hsctx.Data, "id": id, "from": from, "to": to}).Debug("onMatch")
 
 	return nil
 }
@@ -103,7 +114,7 @@ func (self *HSMatcher) Match(HSCtx interface{}) (err error) {
 		log.WithFields(log.Fields{"err": err.Error(), "ctx": ctx}).Error("ERROR: Unable to scan input buffer. Exiting.")
 		return err
 	}
-	log.WithFields(log.Fields{"ctx.Data": string(ctx.Data), "Id": ctx.Id, "MZ": ctx.MZ}).Debug("Match done!")
+	log.WithFields(log.Fields{"ctx.Data": string(ctx.Data), "Results": ctx.Results}).Debug("Match done!")
 
 	return err
 }

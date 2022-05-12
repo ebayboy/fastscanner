@@ -12,7 +12,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strconv"
-	"strings"
 	"syscall"
 	"time"
 
@@ -155,30 +154,24 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 
 	scanner.HSContextsShow(res.([]scanner.HSContext))
 
-	var hit_ids []string
-	var hit_payloads []string
-	for _, hsctx := range res.([]scanner.HSContext) {
-		if hsctx.Id == 0 {
+	var hitRes []scanner.HSContext
+	for _, r := range res.([]scanner.HSContext) {
+		if len(r.Results) == 0 {
 			continue
 		}
-		rule_id := strconv.Itoa(int(hsctx.Id))
-		if err != nil {
-			log.Error("Error: strconv.Atoi:", hsctx.Id)
-			continue
-		}
-		hit_ids = append(hit_ids, rule_id)
-		hit_payloads = append(hit_payloads, string(hsctx.Data[hsctx.From:hsctx.To]))
+		hitRes = append(hitRes, r)
 	}
-
+	hitResJson, err := json.Marshal(hitRes)
 	request_id := strconv.FormatUint(ctx.ID(), 10)
-	log.WithFields(log.Fields{"hit_ids": hit_ids, "hit_payloads": hit_payloads, "request_id": request_id}).Info("Res") //影响1.7w QPS
 
-	if len(hit_ids) > 0 {
+	if len(hitRes) > 0 {
+		log.WithFields(log.Fields{"waf-request-id": request_id, "waf-hit-rules": string(hitResJson)}).Info("WAF hit")
 		ctx.Response.Header.Set("waf-request-id", request_id)
-		ctx.Response.Header.Set("waf-hit-ids", strings.Join(hit_ids, ","))
-		ctx.Response.Header.Set("waf-hit-payloads", strings.Join(hit_payloads, ","))
+		ctx.Response.Header.Set("waf-hit-rules", string(hitResJson))
 		ctx.Response.SetStatusCode(403)
 	}
+
+	//Set Waf-Header
 
 	ctx.SetContentType("text/plain; charset=utf8")
 
