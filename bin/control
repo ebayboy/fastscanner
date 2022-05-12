@@ -1,4 +1,4 @@
-#! /bin/sh -x
+#!/bin/bash 
 
 proc="fastscanner"
 
@@ -16,7 +16,17 @@ start()
 stop()
 {
     echo "stop..."
-    killall fastscanner
+    if [ ! -f "./fastscanner.pid" ]; then
+        echo "Error: ./fastscanner.pid not exist!"
+        exit 1
+    fi
+
+    PID=$(cat ./fastscanner.pid)
+    if [ "$PID" == "" ] ; then
+        echo "Error: PID not exist!"
+        exit 1
+    fi
+    kill -SIGTERM $PID
 }
 
 case "${1}" in
