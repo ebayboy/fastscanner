@@ -172,17 +172,15 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 	}
 
 	//Set Waf-Header
-
 	ctx.SetContentType("text/plain; charset=utf8")
 
-	// Set arbitrary headers
-	ctx.Response.Header.Set("X-My-Header", "my-header-value")
-
-	// Set cookies
-	var c fasthttp.Cookie
-	c.SetKey("cookie-name")
-	c.SetValue("cookie-value")
-	ctx.Response.Header.SetCookie(&c)
+	/*
+		// Set cookies
+		var c fasthttp.Cookie
+		c.SetKey("cookie-name")
+		c.SetValue("cookie-value")
+		ctx.Response.Header.SetCookie(&c)
+	*/
 }
 
 type Conf struct {
