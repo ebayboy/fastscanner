@@ -193,7 +193,7 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 }
 
 type Conf struct {
-	Debug    bool   `json:"debug"`
+	//Debug    bool   `json:"debug"`
 	Version  string `json:"version"`
 	LogLevel int    `json:"loglevel"`
 	CPUNum   int    `json:"cpunum"`
@@ -240,9 +240,8 @@ func main() {
 
 	//启动dev模式
 	if !isdev {
-		fmt.Println("Start with daemon...")
-		//Start daemon
-		//判 断当其是否是子进程，当父进程return之后，子进程会被 系统1 号进程接管
+		//Daemon
+		//判断当其是否是子进程，当父进程return之后，子进程会被 系统1 号进程接管
 		if os.Getppid() != 1 {
 			// 将命令行参数中执行文件路径转换成可用路径
 			filePath, _ := filepath.Abs(os.Args[0])
@@ -294,7 +293,7 @@ func main() {
 		log.Fatal("Parse main conf error!")
 	}
 
-	if fastScanner.conf.LogLevel > 0 {
+	if !isdev && fastScanner.conf.LogLevel > 0 {
 		log.SetLevel(log.Level(fastScanner.conf.LogLevel))
 		log.Info("Reset loglevel to:", fastScanner.conf.LogLevel)
 	}

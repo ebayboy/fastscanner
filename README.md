@@ -27,10 +27,9 @@ fasthttp + hyperscan
 + 条件取决于程序启动时刻这两项参数，启动后再修改不生效;
 
 ## TODO
-+ pid写入到文件， 防止启动多个
-+ 性能优化： 目前开启性能从7w下降到2w
-+ 守护进程实现
-+ 每个scanworker对一组matchers, 有多个scanworker
++ 策略引擎实现？  hyper5 logic ？or evalueate
++ 配置文件说明: procnum等
++ 性能优化： 目前开启WAF, 性能从7w下降到3w(白流量和黑流量一样)
 + 一个数据包分发distworker对应多个scanworker对应
     +  distworker :qa
 
@@ -65,6 +64,9 @@ fasthttp + hyperscan
 + 白名单功能
 
 ## DONE
++ 每个scanworker对一组matchers, 有多个scanworker
++ 守护进程实现
++ pid写入到文件， 防止启动多个
 + worker dev && test  [done]
 + logrus + file-rotatelogs
 + fasthttp + hyperscan 

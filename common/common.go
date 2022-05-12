@@ -71,12 +71,11 @@ func PidfileExit(pidfile string) (once_pid int, started bool) {
 			return
 		}
 		new_pid := os.Getpid()
-		n, err := pf.Write([]byte(fmt.Sprintf("%d", new_pid)))
+		_, err = pf.Write([]byte(fmt.Sprintf("%d", new_pid)))
 		if err != nil {
 			fmt.Println("write pid failed.")
 		} else {
 			once_pid = new_pid
-			fmt.Println("write pid ok success! pidfile:", pidfile, " pid:", once_pid, " size:", n)
 		}
 	}
 

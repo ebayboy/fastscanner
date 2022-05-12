@@ -2,24 +2,24 @@
     "debug":false, //开启debug模式
     "version": "v1.0.0",
     "loglevel": 4,  //日志级别 loglevel: Panic-0, FatalLevel-1, ErrorLeve-2, WarnLevel-3, InfoLevel-4, DebugLevel-5, TraceLevel-6
-    "cpunum": 2,
-    "procnum": 1,
-    "scannernum": 1,
+    "cpunum": 2, //?
+    "procnum": 1, //?
+    "scannernum": 1, //?
     "hsconfig": {
         "debug":"1",
         "rules": [
             {
-                "id": "10001",
+                "id": "101",
                 "mz": "$request_uri",
                 "rx": "request_uri "
             },
             {
-                "id": "10002",
+                "id": "102",
                 "mz": "$http_referer",
                 "rx": "referer"
             },
             {
-                "id": "12011",
+                "id": "103",
                 "mz": "$request_body,$request_uri,$http_user_agent,$http_referer,$request_method",
                 "rx": "request|request_body|request_uri|user_agent|referer|cookie|uri|arg_name"
             }
@@ -27,15 +27,15 @@
         "policies": [
             {
                 "id": "10001",
-                "policy": "10001"
+                "policy": "101"
             },
             {
                 "id": "10002",
-                "policy": "10002"
+                "policy": "102"
             },
             {
                 "id": "10003",
-                "policy": "10003"
+                "policy": "103"
             },
             {
                 "id": "10000",

@@ -1,5 +1,4 @@
 {
-    "debug":false,
     "version": "v1.0.0",
     "loglevel": 4,
     "cpunum": 1,
@@ -9,17 +8,17 @@
         "debug":"1",
         "rules": [
             {
-                "id": "10001",
+                "id": "101",
                 "mz": "$request_uri",
                 "rx": "request_uri "
             },
             {
-                "id": "10002",
+                "id": "102",
                 "mz": "$http_referer",
                 "rx": "referer"
             },
             {
-                "id": "12011",
+                "id": "103",
                 "mz": "$request_body,$request_uri,$http_user_agent,$http_referer,$request_method",
                 "rx": "request|request_body|request_uri|user_agent|referer|cookie|uri|arg_name"
             }
@@ -27,15 +26,15 @@
         "policies": [
             {
                 "id": "10001",
-                "policy": "10001"
+                "policy": "101"
             },
             {
                 "id": "10002",
-                "policy": "10002"
+                "policy": "102"
             },
             {
                 "id": "10003",
-                "policy": "10003"
+                "policy": "103"
             },
             {
                 "id": "10000",
