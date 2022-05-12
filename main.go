@@ -238,7 +238,7 @@ func main() {
 		log.Error("Error:", err.Error())
 	}
 
-	//启动dev模式
+	//Start Daemon
 	if !isdev {
 		//Daemon
 		//判断当其是否是子进程，当父进程return之后，子进程会被 系统1 号进程接管
@@ -255,7 +255,7 @@ func main() {
 		}
 	}
 
-	//check pid exist
+	//Check PID File
 	exDir, err := os.Executable()
 	if err != nil {
 		log.Fatal("Error:", err.Error())

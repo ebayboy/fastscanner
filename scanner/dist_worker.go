@@ -36,7 +36,6 @@ func distWorkerCallback(distWorkerContext interface{}) (err interface{}) {
 		return nil
 	}
 
-	HSContextsShow(scanCtx.Res)
 	return scanCtx.Res
 }
 
