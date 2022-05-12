@@ -132,6 +132,7 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 		fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
 	*/
 
+	request_id := strconv.FormatUint(ctx.ID(), 10)
 	distCtx := scanner.DistWorkerContext{DistWorker: distWorker}
 	distCtx.Data = make(map[string][]byte)
 
@@ -170,15 +171,26 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 		}
 		hitRes = append(hitRes, r)
 	}
-	hitResJson, err := json.Marshal(hitRes)
-	request_id := strconv.FormatUint(ctx.ID(), 10)
 
+	hitResJson, err := json.Marshal(hitRes)
+	if err != nil {
+		log.WithFields(log.Fields{"waf-request-id": request_id, "Error": err.Error()}).Error("Error:")
+	}
+
+	status_code := 200
 	ctx.Response.Header.Set("waf-request-id", request_id)
 	if len(hitRes) > 0 {
-		ctx.Response.Header.Set("waf-hit-rules", string(hitResJson))
-		ctx.Response.SetStatusCode(403)
+		status_code = 403
+		ctx.Response.Header.Set("anti-type", "secrule")
+		ctx.Response.SetStatusCode(status_code)
 	}
-	log.WithFields(log.Fields{"waf-request-id": request_id, "waf-hit-rules": string(hitResJson)}).Info("WAF-HIT")
+	if isdev {
+		if hitResJson != nil {
+			ctx.Response.Header.Set("waf-hit-rules", string(hitResJson))
+		}
+	}
+
+	log.WithFields(log.Fields{"waf-request-id": request_id, "waf-hit-rules": string(hitResJson), "status": status_code}).Info("secrule")
 
 	//Set Waf-Header
 	ctx.SetContentType("text/plain; charset=utf8")

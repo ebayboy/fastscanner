@@ -16,7 +16,7 @@ type HSMatcher struct {
 
 type HSContextResult struct {
 	Id   uint   `json:"id"`
-	From uint64 `json:"fromi"`
+	From uint64 `json:"from"`
 	To   uint64 `json:"to"`
 }
 
