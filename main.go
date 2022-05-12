@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -33,16 +32,24 @@ var (
 )
 
 func initSetLimit(cpu_max uint64, core_max uint64) error {
+
+	/*
+		cpuNum := runtime.NumCPU()
+		runtime.GOMAXPROCS(runtime.NumCPU() -1 )
+	*/
+
 	var rlimit syscall.Rlimit
 
-	// 限制cpu个数
-	rlimit.Cur = 1
-	rlimit.Max = cpu_max
-	syscall.Setrlimit(syscall.RLIMIT_CPU, &rlimit)
-	err := syscall.Getrlimit(syscall.RLIMIT_CPU, &rlimit)
-	if err != nil {
-		return err
-	}
+	// 限制cpu个数, 程序使用超过限制， 可能会导致程序被kill
+	/*
+		rlimit.Cur = 1
+		rlimit.Max = cpu_max
+		syscall.Setrlimit(syscall.RLIMIT_CPU, &rlimit)
+		err := syscall.Getrlimit(syscall.RLIMIT_CPU, &rlimit)
+		if err != nil {
+			return err
+		}
+	*/
 
 	//set core limit
 	rlimit.Cur = 100 //以字节为单位
@@ -110,18 +117,20 @@ func init() {
 //run in fasthttp goroutine
 func request_handler(ctx *fasthttp.RequestCtx) {
 
-	fmt.Fprintf(ctx, "Hello, world!\n\n")
-	fmt.Fprintf(ctx, "Request method is %q\n", ctx.Method())
-	fmt.Fprintf(ctx, "RequestURI is %q\n", ctx.RequestURI())
-	fmt.Fprintf(ctx, "Requested path is %q\n", ctx.Path())
-	fmt.Fprintf(ctx, "Host is %q\n", ctx.Host())
-	fmt.Fprintf(ctx, "Query string is %q\n", ctx.QueryArgs())
-	fmt.Fprintf(ctx, "User-Agent is %q\n", ctx.UserAgent())
-	fmt.Fprintf(ctx, "Connection has been established at %s\n", ctx.ConnTime())
-	fmt.Fprintf(ctx, "Request has been started at %s\n", ctx.Time())
-	fmt.Fprintf(ctx, "Serial request number for the current connection is %d\n", ctx.ConnRequestNum())
-	fmt.Fprintf(ctx, "Your ip is %q\n\n", ctx.RemoteIP())
-	fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
+	/*
+		fmt.Fprintf(ctx, "Hello, world!\n\n")
+		fmt.Fprintf(ctx, "Request method is %q\n", ctx.Method())
+		fmt.Fprintf(ctx, "RequestURI is %q\n", ctx.RequestURI())
+		fmt.Fprintf(ctx, "Requested path is %q\n", ctx.Path())
+		fmt.Fprintf(ctx, "Host is %q\n", ctx.Host())
+		fmt.Fprintf(ctx, "Query string is %q\n", ctx.QueryArgs())
+		fmt.Fprintf(ctx, "User-Agent is %q\n", ctx.UserAgent())
+		fmt.Fprintf(ctx, "Connection has been established at %s\n", ctx.ConnTime())
+		fmt.Fprintf(ctx, "Request has been started at %s\n", ctx.Time())
+		fmt.Fprintf(ctx, "Serial request number for the current connection is %d\n", ctx.ConnRequestNum())
+		fmt.Fprintf(ctx, "Your ip is %q\n\n", ctx.RemoteIP())
+		fmt.Fprintf(ctx, "Raw request is:\n---CUT---\n%s\n---CUT---", &ctx.Request)
+	*/
 
 	distCtx := scanner.DistWorkerContext{DistWorker: distWorker}
 	distCtx.Data = make(map[string][]byte)
@@ -164,12 +173,12 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 	hitResJson, err := json.Marshal(hitRes)
 	request_id := strconv.FormatUint(ctx.ID(), 10)
 
+	ctx.Response.Header.Set("waf-request-id", request_id)
 	if len(hitRes) > 0 {
-		log.WithFields(log.Fields{"waf-request-id": request_id, "waf-hit-rules": string(hitResJson)}).Info("WAF hit")
-		ctx.Response.Header.Set("waf-request-id", request_id)
 		ctx.Response.Header.Set("waf-hit-rules", string(hitResJson))
 		ctx.Response.SetStatusCode(403)
 	}
+	log.WithFields(log.Fields{"waf-request-id": request_id, "waf-hit-rules": string(hitResJson)}).Info("WAF-HIT")
 
 	//Set Waf-Header
 	ctx.SetContentType("text/plain; charset=utf8")
