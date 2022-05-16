@@ -29,6 +29,7 @@ var (
 	logFile  string
 	confFile string
 	addr     string
+	unix     string
 	pidFile  string = "fastscanner.pid"
 )
 
@@ -85,6 +86,7 @@ func init() {
 	flag.StringVar(&logFile, "log", "./logs/fastscanner.log", "error.log")
 	flag.StringVar(&confFile, "conf", "./conf/config.json", "config file")
 	flag.StringVar(&addr, "addr", ":9999", "TCP address to listen to")
+	flag.StringVar(&unix, "unix", "/tmp/fasthttp_hyperscan.sock", "Unix domain to listen to")
 	flag.Parse()
 
 	//log init
@@ -232,13 +234,17 @@ func ServeStart(mctx *context.Context) {
 
 	//start server
 	go func() {
-		h := request_handler
-		if err := fasthttp.ListenAndServe(addr, h); err != nil {
-			log.WithField("err", err.Error()).Fatal("Error: fasthttp.ListenAndServe")
+		if len(unix) > 0 {
+			if err := fasthttp.ListenAndServeUNIX(unix, 0666, request_handler); err != nil {
+				log.WithField("err", err.Error()).Fatal("Error: fasthttp.ListenAndServeUNIX")
+			}
+			log.Info("Start server done! Listen on:", unix)
+		} else {
+			if err := fasthttp.ListenAndServe(addr, request_handler); err != nil {
+				log.WithField("err", err.Error()).Fatal("Error: fasthttp.ListenAndServe")
+			}
 		}
 	}()
-
-	log.Info("Start server done! Listen on:", addr)
 
 	//exit before main exit
 	for {

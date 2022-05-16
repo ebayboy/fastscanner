@@ -461,6 +461,7 @@ time_start	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^    std::ch
 time_start	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^    std::chrono::time_point<std::chrono::system_clock> time_start, time_end;$/;"	m	class:Clock	file:
 to	scanner/waf.h	/^    unsigned int  to; $/;"	m	struct:__anon4
 tune	libs/hyperscan/include/hs/hs_compile.h	/^    unsigned int tune;$/;"	m	struct:hs_platform_info
+unix	main.go	/^	unix     string$/;"	v
 unordered_matches	libs/hyperscan/include/hs/hs_compile.h	/^    char unordered_matches;$/;"	m	struct:hs_expr_info
 usage	libs/hyperscan/share/doc/hyperscan/examples/patbench.cc	/^void usage(const char *) {$/;"	f	file:
 usage	libs/hyperscan/share/doc/hyperscan/examples/pcapscan.cc	/^static void usage(const char *prog) {$/;"	f	file:

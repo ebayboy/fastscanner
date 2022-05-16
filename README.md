@@ -4,6 +4,9 @@ fasthttp + hyperscan
 
 ## Loglevel
 
+## Usage:
+- 如果 -unix "", 则使用 -addr 启动服务
+
 ## 架构
 + Data flow: dist_worker -> scan_worker -> scanners -> matchers
 + 一共有N个不同的matcher, 一个matcher对应一组规则,
@@ -62,14 +65,12 @@ referer
 
 ## TODO
 + nginx流量如何转发到waf
++ 实现逻辑引擎LogicEngine(govaluate)
 + 日志的时间不对
 + hyperscan 规则 flag优化
 + 策略引擎实现？  hyper5 logic ？or evalueate
-+ 配置文件说明: procnum等
 + 性能优化： 目前开启WAF, 性能从7w下降到3w(白流量和黑流量一样)
 + policiers封装实现 valueate
-+ 支持变量： nginx原版变量
-
 + 匹配域matcher实现： 每个匹配域对应一个pool，可以配置worker数量(也不行， matcher需要单例的scratch）
 + json config 解析 及 模块化
     + 移植 statbot mutl goroutine model
@@ -77,8 +78,6 @@ referer
     + RulesConfig : Match zone && regex && flag && logic
     + HSMatcher 模块化 
 + 实现规则引擎RuleEngine
-+ 实现逻辑引擎LogicEngine(govaluate)
-+ 多match对输入数据包（URI、BODY、HEADER等）集中快速查找匹配问题
 + matcher 前面增加流式函数插件处理, 以及开关(spider_ip_rdns/router)
 + 原文匹配支持
 + 解码匹配支持 $u__
@@ -96,6 +95,9 @@ referer
 + 白名单功能
 
 ## DONE
++ 配置文件说明: procnum等
++ 多match对输入数据包（URI、BODY、HEADER等）集中快速查找匹配问题
++ 支持变量： nginx原版变量
 + 并发处理： 函数调用方式（同步） &&  通道方式(异步)
 + 通道方式： 每个协程 +  一个通道 +  一个scratch
 + 一个数据包分发distworker对应多个scanworker对应 +  distworker :qa
