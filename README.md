@@ -56,7 +56,6 @@ referer
 + go-cache
 
 ## BufFix:
-+ 解决多规则命中只打印一个规则问题
 
 ## golang 生成core文件
 + rule1:开启core文件： ulimit -c unlimited (-c 代表core) ,设置后可以通过ulimited -a看到, 可以通过程序设置
@@ -65,10 +64,10 @@ referer
 
 ## TODO
 + nginx流量如何转发到waf
++ 策略引擎实现？  hyper5 logic ？or evalueate
 + 实现逻辑引擎LogicEngine(govaluate)
 + 日志的时间不对
 + hyperscan 规则 flag优化
-+ 策略引擎实现？  hyper5 logic ？or evalueate
 + 性能优化： 目前开启WAF, 性能从7w下降到3w(白流量和黑流量一样)
 + policiers封装实现 valueate
 + 匹配域matcher实现： 每个匹配域对应一个pool，可以配置worker数量(也不行， matcher需要单例的scratch）
@@ -95,6 +94,7 @@ referer
 + 白名单功能
 
 ## DONE
++ 解决多规则命中只打印一个规则问题
 + 配置文件说明: procnum等
 + 多match对输入数据包（URI、BODY、HEADER等）集中快速查找匹配问题
 + 支持变量： nginx原版变量
