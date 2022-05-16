@@ -61,6 +61,7 @@ referer
 + 条件取决于程序启动时刻这两项参数，启动后再修改不生效;
 
 ## TODO
++ nginx流量如何转发到waf
 + 日志的时间不对
 + hyperscan 规则 flag优化
 + 策略引擎实现？  hyper5 logic ？or evalueate
