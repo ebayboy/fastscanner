@@ -143,15 +143,18 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 	if len(ctx.Method()) > 0 {
 		distCtx.Data["request_method"] = ctx.Method()
 	}
+
 	if len(ctx.RequestURI()) > 0 {
 		distCtx.Data["request_uri"] = ctx.RequestURI()
 	}
 	if len(ctx.Referer()) > 0 {
 		distCtx.Data["http_referer"] = ctx.Referer()
 	}
+
 	if len(ctx.UserAgent()) > 0 {
 		distCtx.Data["http_user_agent"] = ctx.UserAgent()
 	}
+
 	if len(ctx.PostBody()) > 0 {
 		distCtx.Data["request_body"] = ctx.PostBody()
 	}

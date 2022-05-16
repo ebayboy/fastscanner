@@ -130,3 +130,6 @@ referer
     + export PKG_CONFIG_PATH=/usrl/local/hyperscan
     + 多个协程使用一个scratch会报错： ERROR: Unable to scan input buffer. Exiting. err: The scratch region was already in use.
 
+
+
+## 配置 
