@@ -64,6 +64,7 @@ referer
 
 ## TODO
 + nginx流量如何转发到waf
+    + openresty ngx.location.capture http2 (是否支持http2)
 + 策略引擎实现？  hyper5 logic ？or evalueate
 + 实现逻辑引擎LogicEngine(govaluate)
 + 日志的时间不对
