@@ -1,0 +1,1 @@
+./fastscanner  -d -unix ""
