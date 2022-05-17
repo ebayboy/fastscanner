@@ -62,6 +62,7 @@ referer
 + 条件取决于程序启动时刻这两项参数，启动后再修改不生效;
 
 ## TODO
++ nginx内部sleep是否会block其他请求
 + nginx流量如何转发到waf
     + openresty ngx.location.capture http2 (是否支持http2)
 + 策略引擎实现？  hyper5 logic ？or evalueate
@@ -137,4 +138,5 @@ referer
 
 ## Note:
 + go build -gcflags=all="-N -l"  ## 必须这样编译，才能用gdb打印出变量，第二个是小写的L，不是大写的i
++ 流量转发到waf: 使用resty.http连接waf模块
 

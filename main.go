@@ -144,9 +144,30 @@ func request_handler(ctx *fasthttp.RequestCtx) {
 		distCtx.Data["request_method"] = ctx.Method()
 	}
 
-	if len(ctx.RequestURI()) > 0 {
-		distCtx.Data["request_uri"] = ctx.RequestURI()
+	//For ngx mirror
+	//X-Real-IP
+	x_real_ip := ctx.Request.Header.Peek("X-Real-IP")
+	if len(x_real_ip) > 0 {
+		distCtx.Data["x_real_ip"] = x_real_ip
 	}
+
+	//Host
+	host := ctx.Request.Header.Peek("Host")
+	if len(host) > 0 {
+		distCtx.Data["host"] = x_real_ip
+	}
+
+	//X-Original-URI
+	request_uri := ctx.Request.Header.Peek("X-Original-URI")
+	if len(request_uri) > 0 {
+		distCtx.Data["request_uri"] = request_uri
+	}
+
+	/*
+		if len(ctx.RequestURI()) > 0 {
+			distCtx.Data["request_uri"] = ctx.RequestURI()
+		}
+	*/
 	if len(ctx.Referer()) > 0 {
 		distCtx.Data["http_referer"] = ctx.Referer()
 	}

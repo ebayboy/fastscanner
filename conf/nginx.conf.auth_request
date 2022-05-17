@@ -1,0 +1,117 @@
+
+#user  nobody;
+worker_processes  1;
+#worker_processes  auto;
+worker_rlimit_nofile 65535;
+
+error_log  logs/error.log error;
+
+#pid        logs/nginx.pid;
+
+events {
+    worker_connections  65535;
+}
+
+
+http {
+    upstream tomcat {
+        server localhost:8080;
+    }
+ 
+    upstream bakend {
+        server localhost:9999;
+        #server localhost:8080;
+    }
+
+    include       mime.types;
+    default_type  application/octet-stream;
+
+   log_format local_http_format '$time_iso8601 d-ofhccesm7c ece1caaad262498c8a2f8af8c56156b5 alb-i01vat7ibo '
+        '$remote_addr $remote_port $server_addr $server_port $upstream_addr '
+       '"scheme:": $scheme\n'
+       '"request:": $request\n'
+       '"request_body:": $request_body\n'
+       '"request_id:": $request_id\n'
+       '"request_method:": $request_method\n'
+       '"request_uri:": $request_uri\n'
+       '"args:": $args\n'
+       '"arg_name:": $arg_name\n'
+       '"document_uri:": $document_uri\n'
+       '"host:": $host\n'
+       '"http_user_agent:": $http_user_agent\n'
+       '"http_referer:": $http_referer\n'
+       '"http_cookie:": $http_cookie\n'
+       '"uri:": $uri';
+
+    access_log logs/access.log local_http_format;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+    #
+    server {
+        listen       80;
+        server_name  localhost;
+
+        #location / {
+        #    root   html;
+        #    index  index.html index.htm;
+        #}
+
+        location / {
+            auth_request /auth;
+            proxy_pass   http://tomcat;
+        }
+
+        location = /auth {
+            internal;
+            proxy_pass http://unix:/tmp/fasthttp_hyperscan.sock;
+            proxy_pass_request_body off;
+            proxy_set_header Content-Length "";
+            proxy_set_header X-Original-URI $request_uri;
+        }
+
+        #location / {
+        #    mirror /mirror;
+        #    mirror_request_body on;
+       #     #mirror off;
+       #     proxy_pass   http://tomcat;
+       # }
+
+       # location /mirror {
+       #     internal;
+            #proxy_pass http://log_backend;  #for log
+            #proxy_pass_request_body off;
+       #     proxy_set_header Host $host;
+       #     proxy_set_header X-Real-IP $remote_addr;
+       #     proxy_set_header X-Original-URI $request_uri;
+       #     proxy_pass http://unix:/tmp/fasthttp_hyperscan.sock;
+       # }
+
+
+        #location /status {
+        #    stub_status on;
+        #}
+    }
+
+    server {
+        listen       9999;
+
+        #location / {
+        #    root   html;
+        #    index  index.html index.htm;
+        #}
+
+
+        location /test {
+            proxy_pass http://tomcat/test.html;
+        }
+        location / {
+            proxy_pass http://tomcat/;
+        }
+    }
+}
