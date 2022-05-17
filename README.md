@@ -138,7 +138,7 @@ referer
 
 ## Note:
 + go build -gcflags=all="-N -l"  ## 必须这样编译，才能用gdb打印出变量，第二个是小写的L，不是大写的i
-+ 流量转发到waf: 使用resty.http连接waf模块(非异步，同时lua慢)
++ 流量转发到waf: 使用resty.http连接waf模块(非异步，同时lua慢, waf请求没处理完会block其他请求, 可以通过waf_matc sleep来验证)
 + nginx 可以listen unix domain socket
 
 
