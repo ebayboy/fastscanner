@@ -62,9 +62,8 @@ referer
 + 条件取决于程序启动时刻这两项参数，启动后再修改不生效;
 
 ## TODO
++ 引擎CC worker、白名单worker等实现
 + nginx内部sleep是否会block其他请求
-+ nginx流量如何转发到waf
-    + openresty ngx.location.capture http2 (是否支持http2)
 + 策略引擎实现？  hyper5 logic ？or evalueate
 + 实现逻辑引擎LogicEngine(govaluate)
 + 日志的时间不对
@@ -95,6 +94,7 @@ referer
 + 白名单功能
 
 ## DONE
++ nginx流量如何转发到waf[auth request模块]
 + 解决多规则命中只打印一个规则问题
 + 配置文件说明: procnum等
 + 多match对输入数据包（URI、BODY、HEADER等）集中快速查找匹配问题
