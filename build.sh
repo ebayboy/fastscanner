@@ -6,4 +6,6 @@ if [ ! -d "/usrl/local/hyperscan" ];then
     export PKG_CONFIG_PATH=/usrl/local/hyperscan
 fi
 
-go build
+go build -gcflags=all="-N -l"
+
+

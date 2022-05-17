@@ -7,8 +7,7 @@ fasthttp + hyperscan
 ## Usage:
 - 如果 -unix "", 则使用 -addr 启动服务
 
-## 架构
-+ Data flow: dist_worker -> scan_worker -> scanners -> matchers
+## 架构 + Data flow: dist_worker -> scan_worker -> scanners -> matchers
 + 一共有N个不同的matcher, 一个matcher对应一组规则,
 + 命中结果集输出:
 referer
@@ -134,3 +133,8 @@ referer
 
 
 ## 配置 
+
+
+## Note:
++ go build -gcflags=all="-N -l"  ## 必须这样编译，才能用gdb打印出变量，第二个是小写的L，不是大写的i
+
