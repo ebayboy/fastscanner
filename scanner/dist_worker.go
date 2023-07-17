@@ -15,12 +15,13 @@ type DistWorkerContext struct {
 
 type DistWorker struct {
 	NumScanWorker int
-	ScanWorkers   []*ScanWorker
-	Pool          *tunny.Pool
+	ScanWorkers   []*ScanWorker  //scanWorker -> scanner
+	Pool          *tunny.Pool 
 }
 
 //tunny.pool 多协程同时调用此函数, 要保证线程安全
 //main -> dist_worker -> scanner_worker -> scanner -> matcher
+//w.Pool.Process -> distWorkerCallback
 func distWorkerCallback(distWorkerContext interface{}) (err interface{}) {
 
 	log.Debug("distWorkerCallback...")
@@ -28,7 +29,7 @@ func distWorkerCallback(distWorkerContext interface{}) (err interface{}) {
 	ctx := distWorkerContext.(*DistWorkerContext)
 	scanCtx := ScanWorkerContext{Data: ctx.Data}
 
-	//随机分发到scanner_worker
+	//将任务随机分发到scanner_worker
 	idx := rand.Intn(ctx.DistWorker.NumScanWorker)
 	log.Debugf("Select ScanWorkers[%d]", idx)
 	if err = ctx.DistWorker.ScanWorkers[idx].Scan(&scanCtx); err != nil {
@@ -42,6 +43,8 @@ func distWorkerCallback(distWorkerContext interface{}) (err interface{}) {
 func NewDistWorker(numScanWorker int, confData []byte, mctx *context.Context, cf *Conf) (*DistWorker, error) {
 
 	dist := &DistWorker{NumScanWorker: numScanWorker}
+	
+	//初始化goroute协程池
 	dist.Pool = tunny.NewFunc(numScanWorker, distWorkerCallback)
 
 	for i := 0; i < numScanWorker; i++ {
@@ -61,7 +64,8 @@ func (w *DistWorker) Process(distWorkerCtx interface{}) (res interface{}) {
 
 	log.Debug("DistWorker.Process...")
 
-	res = w.Pool.Process(distWorkerCtx)
+	//从协程池中自动选择协程执行回调函数distWorkerCallback
+	res = w.Pool.Process(distWorkerCtx)  // w.Pool.Process -> distWorkerCallback
 
 	return res
 }

@@ -28,7 +28,7 @@ type ScanWorkerContext struct {
 	Res  []HSContext
 }
 
-// Process Flow: payload -> jobChan -> Process -> res -> retChan
+// Process Flow: payload -> jobChan -> Process -> scanner->Scan -> res -> retChan
 // Don't call this function directly, this func is workerWrapper's callback func
 func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {
 
@@ -65,7 +65,7 @@ func (w *ScanWorker) Process(scanWorkerCtx interface{}) interface{} {
 	return nil
 }
 
-//发送数据到jobChan通道, 读取retChan结果
+// 发送数据到jobChan通道, 读取retChan结果
 // http -> jobChan -> hyperscan -> retChan
 // distWoker -> scanWorker -> scanner -> hyperscan
 //TODO: 此处会block

@@ -353,6 +353,7 @@ func main() {
 
 	log.WithFields(log.Fields{"version": fastScanner.conf.Version, "LogLevel": fastScanner.conf.LogLevel}).Info()
 
+	// distWorker is called in request_handler
 	distWorker, err = scanner.NewDistWorker(fastScanner.conf.ScannerNum, confData, &mctx, nil)
 	if err != nil {
 		log.Fatalln("Error: scanner.NewDistWorker! err:", err.Error())
